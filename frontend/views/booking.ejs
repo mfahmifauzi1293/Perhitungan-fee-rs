@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Pasien - RS Sakti Mandra Guna</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  
+  <style>
+    :root {
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --sidebar-bg: #161b22;
+      --border-color: #30363d;
+      --accent-green: #2ea043;
+      --accent-green-neon: #39FF14;
+      --text-main: #c9d1d9;
+      --text-heading: #ffffff;
+      --text-sub: #8b949e;
+    }
+
+    body, html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR NAVIGASI */
+    .sidebar {
+      width: 250px;
+      min-height: 100vh;
+      background: var(--sidebar-bg);
+      color: #ffffff;
+      border-right: 1px solid var(--border-color);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      background: #010409;
+      color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      padding: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 1px;
+    }
+
+    .logo-menu {
+      height: 30px;
+      width: auto;
+    }
+
+    .nav-section-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--accent-green-neon);
+      padding: 14px 20px 4px;
+    }
+
+    .sidebar nav a {
+      color: var(--text-sub);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar nav a:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+    }
+
+    .sidebar nav a.active {
+      background: rgba(46, 160, 67, 0.15);
+      color: var(--accent-green-neon);
+      border-left-color: var(--accent-green-neon);
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 14px 18px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border-color);
+      background: #010409;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex-grow: 1;
+      position: relative;
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+    }
+
+    .header-rs-center {
+      background: var(--card-bg);
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .logo-header {
+      height: 48px;
+      width: auto;
+    }
+
+    .header-title {
+      color: var(--accent-green-neon);
+      font-weight: 700;
+      font-size: 1.35rem;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .header-subtitle {
+      color: var(--text-sub);
+      font-size: 0.72rem;
+      margin: 2px 0 0 0;
+      letter-spacing: 1px;
+    }
+
+    .content-body {
+      padding: 24px;
+      position: relative;
+    }
+
+    /* WATERMARK LOGO DI BACKGROUND CONTENT */
+    .watermark-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 450px;
+      max-width: 70%;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* WIDGET CONTAINER & CARDS */
+    .widget-container {
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .widget-header {
+      background-color: rgba(255, 255, 255, 0.02);
+      color: var(--text-heading);
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* TABEL CUSTOM DARK */
+    .table-dark-custom {
+      --bs-table-bg: transparent !important;
+      --bs-table-color: var(--text-main) !important;
+      width: 100%;
+      margin-bottom: 0;
+      font-size: 0.875rem;
+    }
+
+    .table-dark-custom th {
+      background-color: rgba(0, 0, 0, 0.25) !important;
+      color: var(--accent-green-neon) !important;
+      border-bottom: 1px solid var(--border-color) !important;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .table-dark-custom td {
+      border-bottom: 1px solid var(--border-color) !important;
+      padding: 12px 16px;
+    }
+
+    /* MODAL STYLES */
+    .modal-content-dark {
+      background-color: #161b22;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: 12px;
+    }
+
+    .modal-header-dark {
+      background-color: #010409;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-heading);
+    }
+
+    .modal-footer-dark {
+      background-color: #010409;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .form-control-dark, .form-select-dark {
+      background-color: #0d1117;
+      border: 1px solid var(--border-color);
+      color: #ffffff;
+      font-size: 0.875rem;
+    }
+
+    .form-control-dark:focus, .form-select-dark:focus {
+      background-color: #0d1117;
+      border-color: var(--accent-green);
+      color: #ffffff;
+      box-shadow: 0 0 0 0.25rem rgba(46, 160, 67, 0.25);
+    }
+
+    /* BUTTONS */
+    .btn-green-neon {
+      background-color: var(--accent-green);
+      color: #ffffff;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+
+    .btn-green-neon:hover {
+      background-color: #2c974b;
+      color: #ffffff;
+    }
+
+    .btn-outline-neon {
+      border: 1px solid var(--accent-green-neon);
+      color: var(--accent-green-neon);
+      background: transparent;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .btn-outline-neon:hover {
+      background-color: var(--accent-green-neon);
+      color: #000000;
+    }
+
+    .btn-outline-warning-custom {
+      border: 1px solid #d29922;
+      color: #d29922;
+      background: transparent;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .btn-outline-warning-custom:hover {
+      background-color: #d29922;
+      color: #000000;
+    }
+
+    .btn-outline-danger-custom {
+      border: 1px solid #f85149;
+      color: #f85149;
+      background: transparent;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .btn-outline-danger-custom:hover {
+      background-color: #f85149;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR NAVIGASI ADMINISTRATOR -->
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-header">
+          <img src="/image/logors.png" alt="Logo RS" class="logo-menu" onerror="this.style.display='none'">
+          <span>MENU UTAMA</span>
+        </div>
+        <nav>
+          <a href="/"><i class="bi bi-house-door"></i> Beranda</a>
+          <a href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+          <a href="/booking" class="active"><i class="bi bi-calendar-check"></i> Booking / Pemesanan</a>
+          <a href="/finalisasi"><i class="bi bi-check2-square"></i> Finalisasi</a>
+          <a href="/riwayat-transaksi"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a>
+          <a href="/riwayat-pasien"><i class="bi bi-person-lines-fill"></i> Riwayat Pasien</a>
+          <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
+          <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
+          <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
+        </nav>
+      </div>
+      
+      <!-- SIDEBAR FOOTER DENGAN DYNAMIC USER LOGIN & TOMBOL LOGOUT PRESISI DASHBOARD -->
+      <div class="sidebar-footer d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
+          <i class="bi bi-person-circle text-success me-1"></i>
+          <strong class="text-white text-truncate" title="<%= typeof user !== 'undefined' && user ? (user.nama || user.username) : 'Administrator' %>">
+            <%= typeof user !== 'undefined' && user ? (user.nama || user.username) : 'Administrator' %>
+          </strong>
+        </div>
+        <a href="/logout" class="text-danger text-decoration-none" title="Keluar">
+          <i class="bi bi-box-arrow-right fs-6"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- KONTEN UTAMA -->
+    <div class="main-content">
+      <!-- HEADER NAMA RUMAH SAKIT -->
+      <div class="header-rs-center">
+        <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
+        <div class="text-center">
+          <h1 class="header-title">RS. SAKTI MANDRA GUNA</h1>
+          <p class="header-subtitle">KHUSUS BEDAH PLASTIK, KECANTIKAN & TREATMENT</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <!-- WATERMARK LOGO DI BACKGROUND CONTENT -->
+        <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
+
+        <!-- WIDGET CONTAINER DATA BOOKING -->
+        <div class="widget-container">
+          <div class="widget-header">
+            <span><i class="bi bi-calendar-plus text-success me-2"></i>Daftar Pasien Booking</span>
+            <button type="button" class="btn btn-green-neon" data-bs-toggle="modal" data-bs-target="#modalBooking">
+              <i class="bi bi-plus-circle me-1"></i> Tambah Booking
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-dark-custom align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 9%;">Tgl Booking</th>
+                  <th style="width: 9%;">Tgl Tindakan</th>
+                  <th style="width: 14%;">Nama Pasien</th>
+                  <th style="width: 14%;">Tindakan</th>
+                  <th style="width: 12%;">Dokter</th>
+                  <th style="width: 9%;" class="text-end">DP Paid</th>
+                  <th style="width: 9%;" class="text-end">Pelunasan</th>
+                  <th style="width: 9%;" class="text-end">Kurang Bayar</th>
+                  <th style="width: 7%;" class="text-center">Status</th>
+                  <th style="width: 18%; text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (typeof transaksis === 'undefined' || transaksis.length === 0) { %>
+                  <tr>
+                    <td colspan="10" class="text-center py-4 text-muted">
+                      Belum ada data booking pasien. Klik tombol <strong>+ Tambah Booking</strong> di atas.
+                    </td>
+                  </tr>
+                <% } else { %>
+                  <% transaksis.forEach(t => { %>
+                    <% 
+                      const itemId = t._id || t.id; 
+                      const dp = Number(t.dp || 0);
+                      const pelunasan = Number(t.pelunasan || 0);
+                      const kurangBayar = Number(t.sisa_bayar || 0);
+                      const hargaTotal = Number(t.harga_bruto || t.harga || 0);
+                    %>
+                    <tr>
+                      <td><%= t.tanggal_booking ? new Date(t.tanggal_booking).toLocaleDateString('id-ID') : '-' %></td>
+                      <td><%= new Date(t.tanggal_tindakan).toLocaleDateString('id-ID') %></td>
+                      <td><strong class="text-white"><%= t.nama_pasien %></strong></td>
+                      <td><%= t.jenis_tindakan %></td>
+                      <td><%= t.nama_dokter || '-' %></td>
+                      
+                      <!-- DP Paid -->
+                      <td class="text-end text-success font-monospace">
+                        Rp <%= dp.toLocaleString('id-ID') %>
+                      </td>
+
+                      <!-- Nominal Pelunasan Masuk -->
+                      <td class="text-end text-info font-monospace">
+                        Rp <%= pelunasan.toLocaleString('id-ID') %>
+                      </td>
+
+                      <!-- Kurang Bayar -->
+                      <td class="text-end text-danger font-monospace">
+                        Rp <%= kurangBayar.toLocaleString('id-ID') %>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="text-center">
+                        <% if (t.status_pembayaran === 'CANCELLED' || t.status_pembayaran === 'CANCEL') { %>
+                          <span class="badge bg-danger">Cancel</span>
+                        <% } else if (t.status_pembayaran === 'LUNAS') { %>
+                          <span class="badge bg-success">Lunas</span>
+                        <% } else { %>
+                          <span class="badge bg-warning text-dark">DP Paid</span>
+                        <% } %>
+                      </td>
+
+                      <!-- Aksi -->
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-1">
+                          <!-- Tombol Invoice -->
+                          <a href="/invoice/<%= itemId %>" target="_blank" class="btn btn-outline-neon" title="Cetak Invoice Booking">
+                            <i class="bi bi-printer me-1"></i> Invoice
+                          </a>
+
+                          <!-- Tombol Bayar / Pelunasan -->
+                          <% if (t.status_pembayaran !== 'CANCELLED' && t.status_pembayaran !== 'CANCEL' && t.status_pembayaran !== 'LUNAS' && kurangBayar > 0) { %>
+                            <button type="button" 
+                                    class="btn btn-outline-warning-custom btn-bayar" 
+                                    title="Proses Pelunasan Pasien"
+                                    data-id="<%= itemId %>"
+                                    data-nama="<%= t.nama_pasien %>"
+                                    data-sisa="<%= kurangBayar %>"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#modalPelunasan">
+                              <i class="bi bi-cash-stack me-1"></i> Bayar
+                            </button>
+                          <% } %>
+
+                          <!-- Tombol Refund -->
+                          <% if (t.status_pembayaran !== 'CANCELLED' && t.status_pembayaran !== 'CANCEL') { %>
+                            <button type="button" 
+                                    class="btn btn-outline-danger-custom" 
+                                    title="Refund Booking"
+                                    onclick="openRefundModal({
+                                      id: '<%= itemId %>',
+                                      nama_pasien: '<%= t.nama_pasien %>',
+                                      tindakan: '<%= t.jenis_tindakan %>',
+                                      harga: <%= hargaTotal %>,
+                                      dp_paid: <%= dp %>,
+                                      pelunasan: <%= pelunasan %>
+                                    })">
+                              <i class="bi bi-arrow-counterclockwise"></i> Refund
+                            </button>
+                          <% } %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL INPUT BOOKING PASIEN BARU -->
+  <div class="modal fade" id="modalBooking" tabindex="-1" aria-labelledby="modalBookingLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content modal-content-dark">
+        <div class="modal-header modal-header-dark">
+          <h5 class="modal-title fs-6" id="modalBookingLabel">
+            <i class="bi bi-file-earmark-medical me-2 text-success"></i> Input Data Booking Pasien Baru
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/booking/simpan" method="POST">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Nama Pasien</label>
+                <input type="text" name="nama_pasien" class="form-control form-control-dark" placeholder="Nama lengkap pasien" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Tanggal Booking</label>
+                <input type="date" name="tanggal_booking" class="form-control form-control-dark" value="<%= new Date().toISOString().split('T')[0] %>" required>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label small text-success fw-bold">Alamat Pasien</label>
+                <textarea name="alamat_pasien" class="form-control form-control-dark" rows="2" placeholder="Alamat rumah / domisili pasien"></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Tanggal Rencana Tindakan</label>
+                <input type="date" name="tanggal_tindakan" class="form-control form-control-dark" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Nama Tindakan</label>
+                <select id="jenis_tindakan" name="jenis_tindakan" class="form-select form-select-dark" onchange="updateHargaTindakan(this)" required>
+                  <option value="">-- Pilih Nama Tindakan --</option>
+                  <% if (typeof tindakans !== 'undefined' && tindakans.length > 0) { %>
+                    <% tindakans.forEach(function(item) { %>
+                      <option value="<%= item.nama_tindakan %>" data-harga="<%= item.harga_standar %>">
+                        <%= item.nama_tindakan %>
+                      </option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Harga Bruto (Rp)</label>
+                <input type="number" id="harga_bruto" name="harga_bruto" class="form-control form-control-dark" value="0" readonly>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Nama Dokter Operator</label>
+                <select name="dokter_id" class="form-select form-select-dark" required>
+                  <option value="">-- Pilih Dokter Operator --</option>
+                  <% if (typeof dokters !== 'undefined' && dokters.length > 0) { %>
+                    <% dokters.forEach(function(doc) { %>
+                      <option value="<%= doc._id || doc.id %>"><%= doc.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">Diskon (Rp)</label>
+                <input type="number" name="diskon" class="form-control form-control-dark" value="0" min="0">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small text-success fw-bold">DP / Down Payment (Rp)</label>
+                <input type="number" name="dp" class="form-control form-control-dark" value="0" min="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer modal-footer-dark">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-green-neon">
+              <i class="bi bi-floppy me-1"></i> Simpan Data
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL PROSES PELUNASAN -->
+  <div class="modal fade" id="modalPelunasan" tabindex="-1" aria-labelledby="modalPelunasanLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-dark">
+        <div class="modal-header modal-header-dark">
+          <h5 class="modal-title fs-6" id="modalPelunasanLabel">
+            <i class="bi bi-wallet2 me-2 text-warning"></i> Input Pembayaran Pelunasan Pasien
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/booking/pelunasan" method="POST">
+          <div class="modal-body">
+            <input type="hidden" name="transaksi_id" id="modal_transaksi_id">
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">Nama Pasien</label>
+              <input type="text" id="modal_nama_pasien" class="form-control form-control-dark fw-bold text-white" readonly>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">Sisa Tagihan Saat Ini</label>
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-danger">Rp</span>
+                <input type="text" id="modal_sisa_bayar_text" class="form-control form-control-dark text-danger fw-bold fs-5" readonly>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-warning fw-bold">Nominal Pembayaran Baru (Rp)</label>
+              <input type="number" name="nominal_bayar" id="modal_nominal_bayar" class="form-control form-control-dark border-warning text-warning fw-bold fs-5" placeholder="Masukkan nominal pembayaran" required min="1">
+              <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">*Nominal default diisi sesuai sisa tagihan untuk pelunasan langsung.</small>
+            </div>
+          </div>
+
+          <div class="modal-footer modal-footer-dark">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-warning btn-sm text-dark fw-bold">
+              <i class="bi bi-check-circle me-1"></i> Simpan Pembayaran
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL REFUND -->
+  <div class="modal fade" id="modalRefund" tabindex="-1" aria-labelledby="modalRefundLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-dark">
+        <div class="modal-header modal-header-dark">
+          <h5 class="modal-title fs-6 text-danger" id="modalRefundLabel">
+            <i class="bi bi-arrow-counterclockwise me-2"></i> Konfirmasi Refund Transaksi
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formRefund" action="" method="POST">
+          <div class="modal-body">
+            <p class="text-muted small mb-3">
+              Apakah Anda yakin ingin melakukan refund transaksi ini? Ketika disimpan, status booking akan berubah menjadi <span class="badge bg-danger">Cancel</span>.
+            </p>
+
+            <div class="p-3 mb-3 rounded" style="background-color: rgba(0,0,0,0.25); border: 1px solid var(--border-color);">
+              <div class="row g-2 small">
+                <div class="col-5 text-muted">Nama Pasien:</div>
+                <div class="col-7 fw-bold text-white" id="rfNamaPasien">-</div>
+
+                <div class="col-5 text-muted">Tindakan:</div>
+                <div class="col-7 fw-bold text-info" id="rfTindakan">-</div>
+
+                <div class="col-5 text-muted">Harga Total:</div>
+                <div class="col-7 text-white" id="rfHargaTotal">Rp 0</div>
+
+                <div class="col-5 text-muted">Nominal Dibayarkan:</div>
+                <div class="col-7 text-success fw-bold" id="rfTotalPaid">Rp 0</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-danger fw-bold">Nominal yang Di-Refund (Rp)</label>
+              <input type="number" name="nominal_refund" id="rfNominalInput" class="form-control form-control-dark border-danger text-danger fw-bold fs-5" required min="0">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label small text-muted">Alasan / Catatan Refund</label>
+              <textarea name="alasan_refund" class="form-control form-control-dark" rows="2" placeholder="Masukkan alasan refund / pembatalan"></textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer modal-footer-dark">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-danger btn-sm fw-bold">
+              <i class="bi bi-check-circle me-1"></i> Simpan & Ubah Status Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function updateHargaTindakan(selectObj) {
+      const selectedOption = selectObj.options[selectObj.selectedIndex];
+      const harga = selectedOption.getAttribute('data-harga');
+      const inputHarga = document.getElementById('harga_bruto');
+      
+      if (harga) {
+        inputHarga.value = harga;
+      } else {
+        inputHarga.value = 0;
+      }
+    }
+
+    // Modal Refund Handler
+    function openRefundModal(data) {
+      document.getElementById('formRefund').action = '/booking/refund/' + data.id;
+
+      document.getElementById('rfNamaPasien').innerText = data.nama_pasien;
+      document.getElementById('rfTindakan').innerText = data.tindakan;
+      document.getElementById('rfHargaTotal').innerText = 'Rp ' + Number(data.harga || 0).toLocaleString('id-ID');
+      
+      const totalPaid = Number(data.dp_paid || 0) + Number(data.pelunasan || 0);
+      document.getElementById('rfTotalPaid').innerText = 'Rp ' + totalPaid.toLocaleString('id-ID');
+
+      // Default nominal refund terisi otomatis sebesar total nominal yang telah dibayarkan
+      const inputRefund = document.getElementById('rfNominalInput');
+      inputRefund.value = totalPaid;
+      inputRefund.setAttribute('max', totalPaid);
+
+      const modalRefund = new bootstrap.Modal(document.getElementById('modalRefund'));
+      modalRefund.show();
+    }
+
+    // Script Autofill Data Pasien ke Modal Pelunasan
+    document.addEventListener('DOMContentLoaded', function() {
+      const btnBayarList = document.querySelectorAll('.btn-bayar');
+      btnBayarList.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const nama = this.getAttribute('data-nama');
+          const sisa = Number(this.getAttribute('data-sisa'));
+
+          document.getElementById('modal_transaksi_id').value = id;
+          document.getElementById('modal_nama_pasien').value = nama;
+          document.getElementById('modal_sisa_bayar_text').value = sisa.toLocaleString('id-ID');
+          
+          const inputNominal = document.getElementById('modal_nominal_bayar');
+          inputNominal.value = sisa;
+          inputNominal.setAttribute('max', sisa);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

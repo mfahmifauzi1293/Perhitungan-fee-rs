@@ -1,0 +1,25 @@
+{
+  "name": "fee_rs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "ejs": "^6.0.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "html-pdf-node": "^1.0.8",
+    "mysql2": "^3.24.4"
+  },
+  "allowScripts": {
+    "puppeteer@10.4.0": true
+  }
+}

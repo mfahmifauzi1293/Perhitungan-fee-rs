@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Slip Bagi Hasil - <%= t.nama_pasien %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 0.9rem; }
+    .slip-card { max-width: 850px; margin: auto; border: 2px solid #222; padding: 25px; border-radius: 6px; }
+    @media print {
+      .no-print { display: none !important; }
+      .slip-card { border: none; padding: 0; }
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <div class="no-print text-center mb-4">
+    <button onclick="window.print()" class="btn btn-success px-4">🖨️ Cetak Slip Fee / Save PDF</button>
+    <a href="/" class="btn btn-secondary ms-2">Kembali</a>
+  </div>
+
+  <div class="slip-card">
+    <div class="text-center pb-2 mb-3 border-bottom">
+      <h4 class="fw-bold mb-1">LAPORAN RINCIAN FEE SPLITTER MEDIS</h4>
+      <p class="text-muted mb-0">Dokumen Internal Finance & Pertanggungjawaban Pembagian Hasil</p>
+    </div>
+
+    <!-- DATA TRANSAKSI -->
+    <div class="row mb-3 bg-light p-2 rounded">
+      <div class="col-6">
+        <b>ID Transaksi:</b> TRX-<%= String(t.id).padStart(5, '0') %><br>
+        <b>Nama Pasien:</b> <%= t.nama_pasien %><br>
+        <b>Jenis Tindakan:</b> <%= t.jenis_tindakan %>
+      </div>
+      <div class="col-6 text-end">
+        <b>Tgl Tindakan:</b> <%= new Date(t.tanggal_tindakan).toLocaleDateString('id-ID') %><br>
+        <b>Dokter Utama:</b> <%= t.nama_dokter || '-' %><br>
+        <b>Dokter Anestesi:</b> <%= t.nama_dokter_anestesi || '-' %>
+      </div>
+    </div>
+
+    <!-- RINCIAN TIM OPERASI -->
+    <div class="mb-3">
+      <small class="fw-bold text-uppercase d-block mb-1">Tim Medis Pendamping:</small>
+      <ul class="mb-0">
+        <li>Suster Operasi: <%= [t.nama_suster1, t.nama_suster2, t.nama_suster3].filter(Boolean).join(', ') || '-' %></li>
+        <li>Suster Rawat: <%= t.nama_suster_rawat || '-' %></li>
+        <li>Durasi Kamar Operasi (OK): <%= t.durasi_operasi_jam %> Jam</li>
+      </ul>
+    </div>
+
+    <!-- PERHITUNGAN BIAYA & KOMPONEN -->
+    <table class="table table-sm table-bordered mb-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Rincian Biaya & Komponen Pemotong</th>
+          <th class="text-end">Nominal (Rp)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Total Tagihan Nett Pasien</b></td>
+          <td class="text-end fw-bold">Rp <%= Number(t.total_nett).toLocaleString('id-ID') %></td>
+        </tr>
+        <tr class="table-light"><td colspan="2"><i>Potongan Komponen Operasional:</i></td></tr>
+        <tr>
+          <td>- Biaya Dokter Anestesi (<%= t.tipe_anestesi %>)</td>
+          <td class="text-end text-danger">- Rp <%= Number(t.biaya_anestesi).toLocaleString('id-ID') %></td>
+        </tr>
+        <tr>
+          <td>- Biaya Sewa Ruang OK (<%= t.durasi_operasi_jam %> Jam x @500rb)</td>
+          <td class="text-end text-danger">- Rp <%= Number(t.biaya_ruang_operasi).toLocaleString('id-ID') %></td>
+        </tr>
+        <tr>
+          <td>- Fee Suster Pendamping OK</td>
+          <td class="text-end text-danger">- Rp <%= Number(t.biaya_suster_op).toLocaleString('id-ID') %></td>
+        </tr>
+        <tr>
+          <td>- Fee Suster Rawat Inap</td>
+          <td class="text-end text-danger">- Rp <%= Number(t.biaya_suster_rawat).toLocaleString('id-ID') %></td>
+        </tr>
+        <tr>
+          <td>- Biaya Obat / Implant / Alat Kesehatan</td>
+          <td class="text-end text-danger">- Rp <%= Number(t.biaya_obat).toLocaleString('id-ID') %></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="table-warning fw-bold fs-6">
+          <td>SISA PEMBAGIAN (NET BERSATU)</td>
+          <td class="text-end">Rp <%= Number(t.sisa_pembagian).toLocaleString('id-ID') %></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- HASIL BAGI HASIL -->
+    <div class="row g-2 mb-4">
+      <div class="col-6">
+        <div class="p-3 border rounded border-success bg-success-subtle text-center">
+          <small class="fw-bold d-block text-success">BAGIAN RUMAH SAKIT (30%)</small>
+          <h4 class="fw-bold text-success mb-0">Rp <%= Number(t.bagian_rs_30).toLocaleString('id-ID') %></h4>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="p-3 border rounded border-primary bg-primary-subtle text-center">
+          <small class="fw-bold d-block text-primary">BAGIAN DOKTER OPERATOR (70%)</small>
+          <h4 class="fw-bold text-primary mb-0">Rp <%= Number(t.bagian_dokter_70).toLocaleString('id-ID') %></h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pt-3">
+      <div class="col-6 text-center">
+        <small>Disetujui oleh Finance,</small><br><br><br>
+        <p class="mb-0">______________________</p>
+      </div>
+      <div class="col-6 text-center">
+        <small>Diterima oleh Dokter,</small><br><br><br>
+        <p class="mb-0">______________________</p>
+        <small>( <%= t.nama_dokter || 'Dokter Operator' %> )</small>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layanan & Tindakan - RS Sakti Mandra Guna</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --primary-color: #0d1117;
+      --card-bg: #161b22;
+      --border-color: #30363d;
+      --accent-green: #2ea043;
+      --accent-neon: #39FF14;
+      --text-main: #e6edf3;
+      --text-sub: #9198a1;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--primary-color);
+      color: var(--text-main);
+    }
+
+    .text-muted {
+      color: var(--text-sub) !important;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      background-color: #010409;
+      font-size: 0.8rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* NAVBAR */
+    .navbar-main {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-link {
+      color: #ffffff !important;
+      font-weight: 500;
+      padding: 8px 16px !important;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-neon) !important;
+    }
+
+    /* DROPDOWN HOVER STYLES */
+    @media (min-width: 992px) {
+      .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        animation: fadeIn 0.2s ease-in-out;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .custom-dropdown-menu {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 8px 0;
+    }
+
+    .custom-dropdown-item {
+      color: var(--text-main);
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .custom-dropdown-item:hover {
+      background-color: rgba(46, 160, 67, 0.15);
+      color: var(--accent-neon);
+      padding-left: 24px;
+    }
+
+    /* PAGE HEADER RINGKAS */
+    .page-header {
+      background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+      padding: 40px 0 25px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      color: #ffffff;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background: var(--accent-neon);
+      bottom: -8px;
+      left: 25%;
+    }
+
+    /* STYLE KOTAK-KOTAK TINDAKAN */
+    .action-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-green);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .action-badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .badge-bedah {
+      background-color: rgba(220, 53, 69, 0.15);
+      color: #ff6b6b;
+      border: 1px solid rgba(220, 53, 69, 0.3);
+    }
+
+    .badge-treatment {
+      background-color: rgba(13, 202, 240, 0.15);
+      color: #0dcaf0;
+      border: 1px solid rgba(13, 202, 240, 0.3);
+    }
+
+    .badge-konsultasi, .badge-kontrol {
+      background-color: rgba(255, 193, 7, 0.15);
+      color: #ffc107;
+      border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .badge-default {
+      background-color: rgba(46, 160, 67, 0.15);
+      color: var(--accent-neon);
+      border: 1px solid rgba(46, 160, 67, 0.3);
+    }
+
+    /* FILTER TABS */
+    .nav-pills-custom .nav-link {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main) !important;
+      border-radius: 20px;
+      padding: 8px 20px !important;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-pills-custom .nav-link.active,
+    .nav-pills-custom .nav-link:hover {
+      background-color: var(--accent-green) !important;
+      color: #ffffff !important;
+      border-color: var(--accent-green);
+    }
+
+    .btn-neon {
+      background-color: var(--accent-green);
+      color: #ffffff;
+      font-weight: 600;
+      border: none;
+    }
+
+    .btn-neon:hover {
+      background-color: #2c974b;
+      color: #ffffff;
+    }
+
+    .btn-outline-neon {
+      border: 1px solid var(--accent-green);
+      color: var(--accent-neon);
+    }
+
+    .btn-outline-neon:hover {
+      background-color: var(--accent-green);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar py-2 text-white-50">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-telephone-fill text-success me-2"></i> Emergency Call: <strong>(021) 555-9999</strong>
+        <span class="mx-3 d-none d-md-inline">|</span>
+        <span class="d-none d-md-inline"><i class="bi bi-clock-fill text-success me-2"></i> 24 Jam Pelayanan Darurat & Konsultasi</span>
+      </div>
+      <div>
+        <a href="/login" class="btn btn-sm btn-outline-neon fw-semibold px-3">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Login Sistem
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR UTAMA -->
+  <nav class="navbar navbar-expand-lg navbar-main sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="/image/logors.png" alt="Logo RS" height="42" class="me-3">
+        <div>
+          <span class="fw-bold text-white fs-5 d-block">RS SAKTI MANDRA GUNA</span>
+          <small class="text-muted" style="font-size: 0.65rem; letter-spacing: 1px;">BEDAH PLASTIK & KECANTIKAN</small>
+        </div>
+      </a>
+      <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
+          
+          <!-- LAYANAN DROPDOWN HOVER -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="/layanan" id="navbarLayanan" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Layanan
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarLayanan">
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/layanan?kategori=bedah">
+                  <i class="bi bi-scissors text-success"></i> Bedah
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/layanan?kategori=treatment">
+                  <i class="bi bi-stars text-success"></i> Treatment
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/layanan?kategori=konsultasi">
+                  <i class="bi bi-chat-heart text-success"></i> Konsultasi / Kontrol
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="/cek-dokter">Cek Dokter</a></li>
+          <li class="nav-item"><a class="nav-link" href="/fasilitas">Fasilitas</a></li>
+          <li class="nav-item ms-lg-3">
+            <a href="/booking" class="btn btn-neon btn-sm px-3"><i class="bi bi-calendar-check me-1"></i> Buat Janji Temu</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header text-center">
+    <div class="container">
+      <h2 class="section-title">Daftar Layanan & Tindakan Medis</h2>
+      <p class="text-muted mt-3 mb-0">Pilih kategori tindakan medis untuk melihat daftar prosedur serta deskripsi layanan.</p>
+    </div>
+  </div>
+
+  <!-- SEKSI DAFTAR TINDAKAN KOTAK-KOTAK -->
+  <section class="py-5">
+    <div class="container">
+
+      <!-- FILTER TAB KATEGORI -->
+      <ul class="nav nav-pills nav-pills-custom justify-content-center gap-2 mb-5" id="layananTab">
+        <li class="nav-item">
+          <button class="nav-link active" id="tab-all" onclick="selectTab('all')">
+            <i class="bi bi-grid-fill me-1"></i> Semua Layanan
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-bedah" onclick="selectTab('bedah')">
+            <i class="bi bi-scissors me-1"></i> Bedah (Surgical)
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-treatment" onclick="selectTab('treatment')">
+            <i class="bi bi-stars me-1"></i> Treatment (Non-Surgical)
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-konsultasi" onclick="selectTab('konsultasi')">
+            <i class="bi bi-chat-heart me-1"></i> Konsultasi / Kontrol
+          </button>
+        </li>
+      </ul>
+
+      <!-- GRID KOTAK-KOTAK TINDAKAN (DINAMIS DARI DATABASE) -->
+      <div class="row g-4" id="tindakanGrid">
+
+        <% if (layanan && layanan.length > 0) { %>
+          <% layanan.forEach(item => { 
+            // Normalisasi nama kategori untuk class filter & badge icon
+            const katLower = item.kategori ? item.kategori.toLowerCase() : '';
+            
+            let classKategori = 'item-other';
+            let badgeStyle = 'badge-default';
+            let badgeIcon = 'bi-hospital';
+
+            if (katLower.includes('bedah')) {
+              classKategori = 'item-bedah';
+              badgeStyle = 'badge-bedah';
+              badgeIcon = 'bi-scissors';
+            } else if (katLower.includes('treatment')) {
+              classKategori = 'item-treatment';
+              badgeStyle = 'badge-treatment';
+              badgeIcon = 'bi-stars';
+            } else if (katLower.includes('konsultasi') || katLower.includes('kontrol')) {
+              classKategori = 'item-konsultasi';
+              badgeStyle = 'badge-konsultasi';
+              badgeIcon = 'bi-chat-heart';
+            }
+          %>
+            <div class="col-md-4 item-tindakan <%= classKategori %>">
+              <div class="action-card">
+                <div>
+                  <span class="action-badge <%= badgeStyle %>">
+                    <i class="bi <%= badgeIcon %> me-1"></i> <%= item.kategori %>
+                  </span>
+                  <h5 class="fw-bold text-white mb-2"><%= item.nama_tindakan %></h5>
+                  <p class="text-muted small mb-3">
+                    <%= item.deskripsi || 'Prosedur tindakan medis profesional oleh spesialis terpercaya.' %>
+                  </p>
+                </div>
+
+                <div>
+                  <% if (item.harga_standar) { %>
+                    <div class="d-flex justify-content-between align-items-center mb-3 pt-2 border-top border-secondary">
+                      <small class="text-white-50">Estimasi Biaya:</small>
+                      <span class="fw-bold text-warning">
+                        Rp <%= Number(item.harga_standar).toLocaleString('id-ID') %>
+                      </span>
+                    </div>
+                  <% } %>
+                  
+                  <a href="/booking?tindakan=<%= encodeURIComponent(item.nama_tindakan) %>" class="btn btn-outline-neon btn-sm w-100">
+                    <i class="bi bi-calendar-check me-1"></i> Booking Tindakan Ini
+                  </a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="col-12 text-center text-muted py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-3 text-secondary"></i>
+            <p class="fs-5">Belum ada data layanan yang tersedia saat ini.</p>
+          </div>
+        <% } %>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-white-50 pt-5 pb-3 border-top border-secondary">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <h5 class="text-white fw-bold mb-3">RS SAKTI MANDRA GUNA</h5>
+          <p class="small text-muted">Rumah Sakit Khusus Bedah Plastik, Rekonstruksi, dan Treatment Kecantikan Terpercaya dengan Standar Pelayanan Kesehatan Tinggi.</p>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-white fw-bold mb-3">Kontak & Lokasi</h6>
+          <p class="small mb-1 text-muted"><i class="bi bi-geo-alt me-2 text-success"></i> Jl. Sakti Mandra Guna No. 88, Bintaro Jaya</p>
+          <p class="small mb-1 text-muted"><i class="bi bi-envelope me-2 text-success"></i> info@saktimandraguna.co.id</p>
+          <p class="small text-muted"><i class="bi bi-telephone me-2 text-success"></i> (021) 555-8888</p>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-white fw-bold mb-3">Jam Operasional</h6>
+          <p class="small mb-1 text-muted">Poliklinik Spesialis: Senin - Sabtu (08.00 - 20.00)</p>
+          <p class="small text-success fw-bold">IGD & UGD: 24 Jam Non-Stop</p>
+        </div>
+      </div>
+      <hr class="border-secondary">
+      <div class="text-center small">
+        <p>&copy; 2026 RS Sakti Mandra Guna. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function selectTab(category) {
+      const items = document.querySelectorAll('.item-tindakan');
+      const tabs = document.querySelectorAll('#layananTab .nav-link');
+      
+      // Highlight tab
+      tabs.forEach(tab => tab.classList.remove('active'));
+      const activeTab = document.getElementById('tab-' + category);
+      if(activeTab) activeTab.classList.add('active');
+
+      // Tampilkan/Sembunyikan kartu berdasarkan kategori
+      items.forEach(item => {
+        if (category === 'all' || item.classList.contains('item-' + category)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Jalankan otomatis begitu halaman terbuka
+    window.addEventListener('DOMContentLoaded', () => {
+      window.scrollTo(0, 0);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('kategori') || 'all';
+      selectTab(category);
+    });
+  </script>
+</body>
+</html>

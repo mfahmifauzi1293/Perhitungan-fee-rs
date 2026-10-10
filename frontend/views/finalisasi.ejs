@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalisasi Tindakan Medis - RS Sakti Mandra Guna</title>
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+  <!-- CSS Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+ 
+  <style>
+    :root {
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --sidebar-bg: #161b22;
+      --border-color: #30363d;
+      --accent-green: #2ea043;
+      --accent-green-neon: #39FF14;
+      --text-main: #c9d1d9;
+      --text-heading: #ffffff;
+      --text-sub: #8b949e;
+    }
+
+    body, html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR NAVIGASI */
+    .sidebar {
+      width: 250px;
+      min-height: 100vh;
+      background: var(--sidebar-bg);
+      color: #ffffff;
+      border-right: 1px solid var(--border-color);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      background: #010409;
+      color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      padding: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 1px;
+    }
+
+    .logo-menu {
+      height: 30px;
+      width: auto;
+    }
+
+    .nav-section-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--accent-green-neon);
+      padding: 14px 20px 4px;
+    }
+
+    .sidebar nav a {
+      color: var(--text-sub);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar nav a:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+    }
+
+    .sidebar nav a.active {
+      background: rgba(46, 160, 67, 0.15);
+      color: var(--accent-green-neon);
+      border-left-color: var(--accent-green-neon);
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 14px 18px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border-color);
+      background: #010409;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex-grow: 1;
+      position: relative;
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+    }
+
+    .header-rs-center {
+      background: var(--card-bg);
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .logo-header {
+      height: 48px;
+      width: auto;
+    }
+
+    .header-title {
+      color: var(--accent-green-neon);
+      font-weight: 700;
+      font-size: 1.35rem;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .header-subtitle {
+      color: var(--text-sub);
+      font-size: 0.72rem;
+      margin: 2px 0 0 0;
+      letter-spacing: 1px;
+    }
+
+    .content-body {
+      padding: 24px;
+      position: relative;
+    }
+
+    /* WATERMARK LOGO DI BACKGROUND CONTENT */
+    .watermark-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 450px;
+      max-width: 70%;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* WIDGET CONTAINER & CARDS */
+    .widget-container {
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .widget-header {
+      background-color: rgba(255, 255, 255, 0.02);
+      color: var(--text-heading);
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* TABEL CUSTOM DARK */
+    .table-dark-custom {
+      --bs-table-bg: transparent !important;
+      --bs-table-color: var(--text-main) !important;
+      width: 100%;
+      margin-bottom: 0;
+      font-size: 0.875rem;
+    }
+
+    .table-dark-custom th {
+      background-color: rgba(0, 0, 0, 0.25) !important;
+      color: var(--accent-green-neon) !important;
+      border-bottom: 1px solid var(--border-color) !important;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .table-dark-custom td {
+      border-bottom: 1px solid var(--border-color) !important;
+      padding: 12px 16px;
+    }
+
+    /* MODAL STYLES */
+    .modal-content-dark {
+      background-color: #161b22;
+      border: 1px solid var(--border-color);
+      color: #ffffff;
+      border-radius: 12px;
+    }
+
+    .modal-header-dark {
+      background-color: #010409;
+      border-bottom: 1px solid var(--border-color);
+      color: #ffffff;
+    }
+
+    .modal-footer-dark {
+      background-color: #010409;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .modal-body label {
+      color: #d0d7de !important;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .form-control-dark, .form-select-dark {
+      background-color: #0d1117 !important;
+      border: 1px solid #30363d !important;
+      color: #ffffff !important;
+      font-size: 0.875rem;
+    }
+
+    .form-control-dark::placeholder {
+      color: #6e7681 !important;
+    }
+
+    .form-control-dark:focus, .form-select-dark:focus {
+      background-color: #0d1117 !important;
+      border-color: var(--accent-green) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 0 0.25rem rgba(46, 160, 67, 0.25);
+    }
+
+    .info-box-modal {
+      background-color: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: #e6edf3;
+    }
+
+    .btn-green-neon {
+      background-color: var(--accent-green);
+      color: #ffffff;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+
+    .btn-green-neon:hover {
+      background-color: #2c974b;
+      color: #ffffff;
+    }
+
+    .calc-card {
+      background: #090d12;
+      border: 1px dashed #30363d;
+      border-radius: 6px;
+      padding: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR NAVIGASI ADMINISTRATOR -->
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-header">
+          <img src="/image/logors.png" alt="Logo RS" class="logo-menu" onerror="this.style.display='none'">
+          <span>MENU UTAMA</span>
+        </div>
+        <nav>
+          <a href="/"><i class="bi bi-house-door"></i> Beranda</a>
+          <a href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+          <a href="/booking"><i class="bi bi-calendar-check"></i> Booking / Pemesanan</a>
+          <a href="/finalisasi" class="active"><i class="bi bi-check2-square"></i> Finalisasi</a>
+          <a href="/riwayat-transaksi"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a>
+          <a href="/riwayat-pasien"><i class="bi bi-person-lines-fill"></i> Riwayat Pasien</a>
+          <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
+          <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
+          <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
+        </nav>
+      </div>
+      
+      <!-- SIDEBAR FOOTER PRESISI 1:1 DASHBOARD & BOOKING -->
+      <div class="sidebar-footer d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
+          <i class="bi bi-person-circle text-success me-1"></i>
+          <strong class="text-white text-truncate" title="<%= typeof user !== 'undefined' && user ? (user.nama || user.username) : 'Administrator' %>">
+            <%= typeof user !== 'undefined' && user ? (user.nama || user.username) : 'Administrator' %>
+          </strong>
+        </div>
+        <a href="/logout" class="text-danger text-decoration-none" title="Keluar">
+          <i class="bi bi-box-arrow-right fs-6"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- KONTEN UTAMA -->
+    <div class="main-content">
+      <!-- HEADER NAMA RUMAH SAKIT -->
+      <div class="header-rs-center">
+        <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
+        <div class="text-center">
+          <h1 class="header-title">RS. SAKTI MANDRA GUNA</h1>
+          <p class="header-subtitle">KHUSUS BEDAH PLASTIK, KECANTIKAN & TREATMENT</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <!-- WATERMARK LOGO DI BACKGROUND CONTENT -->
+        <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
+
+        <!-- WIDGET CONTAINER DAFTAR PASIEN FINALISASI -->
+        <div class="widget-container">
+          <div class="widget-header">
+            <span><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Daftar Pasien Finalisasi Tindakan Medis</span>
+            <span class="badge bg-warning text-dark px-3 py-2">Antrean: <%= typeof transaksis !== 'undefined' ? transaksis.length : 0 %></span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-dark-custom align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 5%;">No</th>
+                  <th style="width: 12%;">Tgl Tindakan</th>
+                  <th style="width: 20%;">Nama Pasien</th>
+                  <th style="width: 18%;">Jenis Tindakan</th>
+                  <th style="width: 15%;">Total Nett</th>
+                  <th style="width: 14%; text-align: center;">Status Finalisasi</th>
+                  <th style="width: 16%; text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (typeof transaksis === 'undefined' || transaksis.length === 0) { %>
+                  <tr>
+                    <td colspan="7" class="text-center py-4 text-muted">
+                      Tidak ada antrean pasien yang perlu difinalisasi saat ini.
+                    </td>
+                  </tr>
+                <% } else { %>
+                  <% transaksis.forEach((t, index) => { %>
+                    <%
+                      const itemId = t.id || t._id;
+                      const totalNett = Number(t.total_nett || 0);
+                      const sisaBayar = Number(t.sisa_bayar || 0);
+                      const isDoneFinal = t.status_finalisasi === 'DONE_FINALISASI';
+                      const isLunas = t.status_pembayaran === 'LUNAS' || sisaBayar <= 0 || isDoneFinal;
+                      const kategoriTindakan = (t.kategori_tindakan || t.kategori || '').toUpperCase();
+                    %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= new Date(t.tanggal_tindakan).toLocaleDateString('id-ID') %></td>
+                      <td><strong class="text-white"><%= t.nama_pasien %></strong></td>
+                      <td><span class="badge bg-info text-dark"><%= t.jenis_tindakan %></span></td>
+                      <td class="text-success font-monospace fw-bold">Rp <%= totalNett.toLocaleString('id-ID') %></td>
+                     
+                      <!-- Status Tindakan / Finalisasi -->
+                      <td class="text-center">
+                        <% if (isDoneFinal) { %>
+                          <span class="badge bg-primary"><i class="bi bi-check-all me-1"></i>Selesai Finalisasi</span>
+                        <% } else if (isLunas) { %>
+                          <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Siap Finalisasi</span>
+                        <% } else { %>
+                          <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>Belum Lunas</span>
+                        <% } %>
+                      </td>
+
+                      <!-- Tombol Aksi -->
+                      <td class="text-center">
+                        <button type="button"
+                                class="btn <%= isDoneFinal ? 'btn-outline-info' : 'btn-green-neon' %> btn-sm"
+                                data-id="<%= itemId %>"
+                                data-nama-pasien="<%= t.nama_pasien %>"
+                                data-jenis-tindakan="<%= t.jenis_tindakan %>"
+                                data-kategori-tindakan="<%= kategoriTindakan %>"
+                                data-total-nett="<%= totalNett %>"
+                                data-sisa-bayar="<%= sisaBayar %>"
+                                data-is-lunas="<%= isLunas %>"
+                                data-is-done-final="<%= isDoneFinal %>"
+                                data-dokter-id="<%= t.dokter_id || '' %>"
+                                data-persen-dokter1="<%= t.persen_dokter1 || 100 %>"
+                                data-dokter2-id="<%= t.dokter2_id || '' %>"
+                                data-persen-dokter2="<%= t.persen_dokter2 || 0 %>"
+                                data-dokter-anestesi-id="<%= t.dokter_anestesi_id || '' %>"
+                                data-tipe-anestesi="<%= t.tipe_anestesi || '' %>"
+                                data-biaya-anestesi="<%= t.biaya_anestesi || 0 %>"
+                                data-durasi-ok="<%= t.durasi_ok || 0 %>"
+                                data-tarif-ok="<%= t.tarif_ok_per_jam || 0 %>"
+                                data-biaya-ok="<%= t.biaya_ruang_operasi || 0 %>"
+                                data-biaya-obat="<%= t.biaya_obat || 0 %>"
+                                data-biaya-suster-op="<%= t.biaya_suster_op || 0 %>"
+                                data-biaya-suster-rawat="<%= t.biaya_suster_rawat || 0 %>"
+                                data-suster-op1="<%= t.suster_op1_id || '' %>"
+                                data-suster-op2="<%= t.suster_op2_id || '' %>"
+                                data-suster-op3="<%= t.suster_op3_id || '' %>"
+                                data-suster-rawat="<%= t.suster_rawat_id || '' %>"
+                                onclick="handleProsesFinal(this)">
+                          <i class="bi <%= isDoneFinal ? 'bi-pencil-square' : 'bi-gear-fill' %> me-1"></i>
+                          <%= isDoneFinal ? 'Edit Finalisasi' : 'Proses Final' %>
+                        </button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL PROSES FINALISASI -->
+  <div class="modal fade" id="modalFinalisasi" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content modal-content-dark">
+        <div class="modal-header modal-header-dark">
+          <h5 class="modal-title fs-6 fw-bold text-white">
+            <i class="bi bi-check2-square text-success me-2"></i> Form Finalisasi Tindakan Medis
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formFinalisasi" action="" method="POST" onsubmit="return validatePersentase()">
+          <div class="modal-body">
+            <!-- Rincian Pasien Box -->
+            <div class="info-box-modal mb-3 small">
+              <span class="text-secondary">Pasien:</span> <strong id="fnNamaPasien" class="text-info me-3"></strong>
+              <span class="text-secondary">Tindakan:</span> <strong id="fnTindakan" class="text-warning me-3"></strong>
+              <span class="text-secondary">Total Nett:</span> <strong id="fnTotalNett" class="text-success font-monospace"></strong>
+            </div>
+
+            <div class="row g-3">
+              <!-- DOKTER OPERATOR 1 & PERSEN -->
+              <div class="col-md-8">
+                <label class="form-label small text-success-emphasis fw-bold">Dokter Operator Utama</label>
+                <select id="fnDokterId" class="form-select form-select-dark opacity-75" disabled>
+                  <option value="">-- Pilih Dokter Utama --</option>
+                  <% if (typeof dokters !== 'undefined' && dokters.length > 0) { %>
+                    <% dokters.forEach(function(d) { %>
+                      <option value="<%= d.id %>" data-fokus="<%= (d.fokus || '').toUpperCase() %>"><%= d.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+                <input type="hidden" name="dokter_id" id="fnDokterIdHidden">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-success-emphasis fw-bold">Bagian Dokter 1 (%)</label>
+                <input type="number" name="persen_dokter1" id="persenDokter1" class="form-control form-control-dark" value="100" min="0" max="100" required oninput="adjustPersenDokter2()">
+              </div>
+
+              <!-- DOKTER OPERATOR 2 & PERSEN -->
+              <div class="col-md-8">
+                <label class="form-label small">Dokter Operator 2 (Opsional)</label>
+                <select name="dokter2_id" id="selectDokter2" class="form-select form-select-dark">
+                  <option value="">-- Tanpa Dokter 2 --</option>
+                  <% if (typeof dokters !== 'undefined' && dokters.length > 0) { %>
+                    <% dokters.forEach(function(d) { %>
+                      <option value="<%= d.id %>" data-fokus="<%= (d.fokus || '').toUpperCase() %>"><%= d.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small">Bagian Dokter 2 (%)</label>
+                <input type="number" name="persen_dokter2" id="persenDokter2" class="form-control form-control-dark" value="0" min="0" max="100" oninput="adjustPersenDokter1()">
+              </div>
+
+              <!-- DOKTER ANESTESI & TIPE ANESTESI -->
+              <div class="col-md-6">
+                <label class="form-label small">Dokter Anestesi</label>
+                <select name="dokter_anestesi_id" id="selectDokterAnestesi" class="form-select form-select-dark">
+                  <option value="">-- Tanpa Dokter Anestesi --</option>
+                  <% if (typeof dokters !== 'undefined' && dokters.length > 0) { %>
+                    <% dokters.forEach(function(d) { %>
+                      <option value="<%= d.id %>" data-fokus="<%= (d.fokus || '').toUpperCase() %>"><%= d.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small">Tipe Anestesi</label>
+                <select name="tipe_anestesi" id="selectTipeAnestesi" class="form-select form-select-dark" onchange="updateBiayaAnestesi()">
+                  <option value="">-- Pilih Tipe Anestesi --</option>
+                  <option value="Lokal" data-biaya="5000000">Lokal (Rp 5.000.000)</option>
+                  <option value="Sedasi" data-biaya="10000000">Sedasi (Rp 10.000.000)</option>
+                  <option value="General" data-biaya="20000000">General (Rp 20.000.000)</option>
+                </select>
+              </div>
+
+              <!-- SUSTER OPERASI & SUSTER RAWAT -->
+              <div class="col-md-3">
+                <label class="form-label small">Suster OP 1</label>
+                <select name="suster_op1_id" id="selectSusterOp1" class="form-select form-select-dark">
+                  <option value="">-- Pilih Suster --</option>
+                  <% if (typeof susters !== 'undefined' && susters.length > 0) { %>
+                    <% susters.forEach(function(s) { %>
+                      <option value="<%= s.id %>"><%= s.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small">Suster OP 2</label>
+                <select name="suster_op2_id" id="selectSusterOp2" class="form-select form-select-dark">
+                  <option value="">-- Pilih Suster --</option>
+                  <% if (typeof susters !== 'undefined' && susters.length > 0) { %>
+                    <% susters.forEach(function(s) { %>
+                      <option value="<%= s.id %>"><%= s.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small">Suster OP 3</label>
+                <select name="suster_op3_id" id="selectSusterOp3" class="form-select form-select-dark">
+                  <option value="">-- Pilih Suster --</option>
+                  <% if (typeof susters !== 'undefined' && susters.length > 0) { %>
+                    <% susters.forEach(function(s) { %>
+                      <option value="<%= s.id %>"><%= s.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small">Suster Rawat</label>
+                <select name="suster_rawat_id" id="selectSusterRawat" class="form-select form-select-dark">
+                  <option value="">-- Pilih Suster --</option>
+                  <% if (typeof susters !== 'undefined' && susters.length > 0) { %>
+                    <% susters.forEach(function(s) { %>
+                      <option value="<%= s.id %>"><%= s.nama %></option>
+                    <% }); %>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- POTONGAN OPERASIONAL -->
+              <div class="col-12 mt-4">
+                <h6 class="text-success border-bottom border-secondary pb-2 small fw-bold tracking-wide">
+                  <i class="bi bi-calculator me-1"></i> RINCIAN BIAYA OPERASIONAL / POTONGAN (Rp)
+                </h6>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label small">Biaya Anestesi</label>
+                <input type="number" name="biaya_anestesi" id="inputBiayaAnestesi" class="form-control form-control-dark calc-trigger" value="0" min="0">
+              </div>
+
+              <!-- BIAYA RUANG OPERASI (OK) -->
+              <div class="col-12">
+                <div class="p-3 border border-secondary rounded bg-dark">
+                  <label class="form-label small text-info fw-bold mb-2">
+                    <i class="bi bi-door-open me-1"></i> Biaya Ruang Operasi (OK)
+                  </label>
+                  <div class="row g-2 align-items-center">
+                    <div class="col-md-3">
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-secondary text-white border-secondary">Durasi</span>
+                        <input type="number" step="0.5" name="durasi_ok" id="inputDurasiOK" class="form-control form-control-dark text-center" placeholder="0" value="0" min="0" oninput="calculateBiayaOK()">
+                        <span class="input-group-text bg-secondary text-white border-secondary">Jam</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-secondary text-white border-secondary">Tarif/Jam Rp</span>
+                        <input type="number" name="tarif_ok_per_jam" id="inputTarifOK" class="form-control form-control-dark" placeholder="3000000" value="0" min="0" oninput="calculateBiayaOK()">
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-success text-white border-success fw-bold">= Total Rp</span>
+                        <input type="number" name="biaya_ruang_operasi" id="inputBiayaOK" class="form-control form-control-dark font-monospace text-success fw-bold" value="0" min="0" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label small">Biaya Obat & Alkes</label>
+                <input type="number" name="biaya_obat" id="inputBiayaObat" class="form-control form-control-dark calc-trigger" value="0" min="0">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small">Biaya Suster OP</label>
+                <input type="number" name="biaya_suster_op" id="inputBiayaSusterOp" class="form-control form-control-dark calc-trigger" value="0" min="0">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small">Biaya Suster Rawat</label>
+                <input type="number" name="biaya_suster_rawat" id="inputBiayaSusterRawat" class="form-control form-control-dark calc-trigger" value="0" min="0">
+              </div>
+
+              <!-- RINGKASAN KALKULASI PORSI REAL-TIME -->
+              <div class="col-12 mt-3">
+                <div class="calc-card small">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="text-secondary">Bagian Rumah Sakit (30% Total Nett):</span>
+                    <strong class="text-info font-monospace" id="calcRS">Rp 0</strong>
+                  </div>
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="text-secondary">Total Bagian Dokter (70% Total Nett):</span>
+                    <strong class="text-success font-monospace" id="calcDokterTotal">Rp 0</strong>
+                  </div>
+                  <hr class="my-1 border-secondary">
+                  <div class="d-flex justify-content-between text-warning">
+                    <span>Dokter 1 (<span id="txtPersenD1">100</span>%): <strong id="calcDokter1">Rp 0</strong></span>
+                    <span>Dokter 2 (<span id="txtPersenD2">0</span>%): <strong id="calcDokter2">Rp 0</strong></span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="modal-footer modal-footer-dark">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-green-neon">
+              <i class="bi bi-check-circle me-1"></i> Simpan & Finalisasi Transaksi
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL PERINGATAN (LOCKED / BELUM LUNAS) -->
+  <div class="modal fade" id="modalWarningUnpaid" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-dark border-danger">
+        <div class="modal-header modal-header-dark bg-danger bg-opacity-10">
+          <h5 class="modal-title fs-6 text-danger fw-bold">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> Akses Finalisasi Dikunci!
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <i class="bi bi-shield-lock-fill text-danger display-3 mb-3 d-block"></i>
+          <h5 class="text-white fw-bold mb-2">Pasien Belum Melakukan Pelunasan!</h5>
+          <p class="text-secondary small mb-3">
+            Pasien <strong id="warnNamaPasien" class="text-warning"></strong> memiliki kekurangan bayar sebesar:
+          </p>
+          <div class="p-3 bg-dark rounded border border-danger mb-3">
+            <span class="fs-4 fw-bold text-danger font-monospace" id="warnSisaBayar">Rp 0</span>
+          </div>
+          <p class="text-secondary small">
+            Silakan selesaikan proses pembayaran/pelunasan pada menu <strong>Booking</strong> sebelum melanjutkan proses finalisasi tindakan medis.
+          </p>
+        </div>
+        <div class="modal-footer modal-footer-dark justify-content-center">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+          <a href="/booking" class="btn btn-warning btn-sm text-dark fw-bold">
+            <i class="bi bi-cash-stack me-1"></i> Ke Menu Booking (Lakukan Pelunasan)
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let currentTotalNett = 0;
+
+    function handleProsesFinal(element) {
+      const data = element.dataset;
+      const isLunas = data.isLunas === 'true';
+
+      if (!isLunas) {
+        document.getElementById('warnNamaPasien').innerText = data.namaPasien;
+        document.getElementById('warnSisaBayar').innerText = 'Rp ' + Number(data.sisaBayar).toLocaleString('id-ID');
+       
+        const modalWarning = new bootstrap.Modal(document.getElementById('modalWarningUnpaid'));
+        modalWarning.show();
+      } else {
+        currentTotalNett = Number(data.totalNett) || 0;
+
+        document.getElementById('formFinalisasi').action = '/finalisasi/proses/' + data.id;
+        document.getElementById('fnNamaPasien').innerText = data.namaPasien;
+        document.getElementById('fnTindakan').innerText = data.jenisTindakan;
+        document.getElementById('fnTotalNett').innerText = 'Rp ' + currentTotalNett.toLocaleString('id-ID');
+
+        // Populate Form Values (Mendukung Edit / Pre-fill)
+        document.getElementById('selectDokter2').value = data.dokter2Id || '';
+        document.getElementById('persenDokter1').value = data.persenDokter1 || 100;
+        document.getElementById('persenDokter2').value = data.persenDokter2 || 0;
+        document.getElementById('selectDokterAnestesi').value = data.dokterAnestesiId || '';
+        document.getElementById('selectTipeAnestesi').value = data.tipeAnestesi || '';
+        document.getElementById('inputBiayaAnestesi').value = data.biayaAnestesi || 0;
+       
+        // Handling Biaya Ruang Operasi OK
+        const durasi = Number(data.durasiOk) || 0;
+        const tarif = Number(data.tarifOk) || 0;
+        const totalOK = Number(data.biayaOk) || (durasi * tarif);
+
+        document.getElementById('inputDurasiOK').value = durasi;
+        document.getElementById('inputTarifOK').value = tarif;
+        document.getElementById('inputBiayaOK').value = totalOK;
+
+        document.getElementById('inputBiayaObat').value = data.biayaObat || 0;
+        document.getElementById('inputBiayaSusterOp').value = data.biayaSusterOp || 0;
+        document.getElementById('inputBiayaSusterRawat').value = data.biayaSusterRawat || 0;
+
+        document.getElementById('selectSusterOp1').value = data.susterOp1 || '';
+        document.getElementById('selectSusterOp2').value = data.susterOp2 || '';
+        document.getElementById('selectSusterOp3').value = data.susterOp3 || '';
+        document.getElementById('selectSusterRawat').value = data.susterRawat || '';
+
+        // Dokter Utama
+        if (data.dokterId) {
+          document.getElementById('fnDokterId').value = data.dokterId;
+          document.getElementById('fnDokterIdHidden').value = data.dokterId;
+        } else {
+          document.getElementById('fnDokterId').value = '';
+          document.getElementById('fnDokterIdHidden').value = '';
+        }
+
+        // Filter Pilihan Dokter Sesuai Kategori
+        filterDokterOptions(data.kategoriTindakan);
+
+        // Kalkulasi Porsi Real-time
+        recalculatePorsi();
+
+        const modalFinal = new bootstrap.Modal(document.getElementById('modalFinalisasi'));
+        modalFinal.show();
+      }
+    }
+
+    function calculateBiayaOK() {
+      const durasi = Number(document.getElementById('inputDurasiOK').value) || 0;
+      const tarif = Number(document.getElementById('inputTarifOK').value) || 0;
+      const total = durasi * tarif;
+     
+      document.getElementById('inputBiayaOK').value = total;
+      recalculatePorsi();
+    }
+
+    function updateBiayaAnestesi() {
+      const selectAnestesi = document.getElementById('selectTipeAnestesi');
+      const selectedOption = selectAnestesi.options[selectAnestesi.selectedIndex];
+      const biaya = selectedOption.getAttribute('data-biaya') || 0;
+     
+      document.getElementById('inputBiayaAnestesi').value = biaya;
+      recalculatePorsi();
+    }
+
+    function adjustPersenDokter2() {
+      let p1 = Number(document.getElementById('persenDokter1').value) || 0;
+      if (p1 > 100) p1 = 100;
+      if (p1 < 0) p1 = 0;
+      document.getElementById('persenDokter1').value = p1;
+      document.getElementById('persenDokter2').value = 100 - p1;
+      recalculatePorsi();
+    }
+
+    function adjustPersenDokter1() {
+      let p2 = Number(document.getElementById('persenDokter2').value) || 0;
+      if (p2 > 100) p2 = 100;
+      if (p2 < 0) p2 = 0;
+      document.getElementById('persenDokter2').value = p2;
+      document.getElementById('persenDokter1').value = 100 - p2;
+      recalculatePorsi();
+    }
+
+    function recalculatePorsi() {
+      const rs = currentTotalNett * 0.30;
+      const totalDokter = currentTotalNett * 0.70;
+     
+      const p1 = Number(document.getElementById('persenDokter1').value) || 0;
+      const p2 = Number(document.getElementById('persenDokter2').value) || 0;
+
+      const d1Val = totalDokter * (p1 / 100);
+      const d2Val = totalDokter * (p2 / 100);
+
+      document.getElementById('calcRS').innerText = 'Rp ' + Math.round(rs).toLocaleString('id-ID');
+      document.getElementById('calcDokterTotal').innerText = 'Rp ' + Math.round(totalDokter).toLocaleString('id-ID');
+      document.getElementById('calcDokter1').innerText = 'Rp ' + Math.round(d1Val).toLocaleString('id-ID');
+      document.getElementById('calcDokter2').innerText = 'Rp ' + Math.round(d2Val).toLocaleString('id-ID');
+
+      document.getElementById('txtPersenD1').innerText = p1;
+      document.getElementById('txtPersenD2').innerText = p2;
+    }
+
+    function validatePersentase() {
+      const p1 = Number(document.getElementById('persenDokter1').value) || 0;
+      const p2 = Number(document.getElementById('persenDokter2').value) || 0;
+     
+      if (p1 + p2 !== 100) {
+        alert('Total persentase Dokter 1 dan Dokter 2 harus tepat 100%!');
+        return false;
+      }
+      return true;
+    }
+
+    function filterDokterOptions(kategori) {
+      const kat = (kategori || '').toUpperCase();
+     
+      const selectDokter2 = document.getElementById('selectDokter2');
+
+      const isBedah = kat === 'BEDAH';
+      const isTreatment = kat === 'TREATMENT';
+
+      Array.from(selectDokter2.options).forEach(function(option) {
+        if (!option.value) return;
+
+        const fokus = (option.getAttribute('data-fokus') || '').toUpperCase();
+        let showOption = true;
+
+        if (isBedah) {
+          showOption = fokus.includes('BEDAH');
+        } else if (isTreatment) {
+          showOption = fokus.includes('TREATMENT');
+        } else {
+          showOption = !fokus.includes('ANESTESI');
+        }
+
+        option.hidden = !showOption;
+        option.disabled = !showOption;
+      });
+    }
+  </script>
+</body>
+</html>

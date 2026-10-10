@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Booking - RS Sakti Mandra GUNA</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 30px;
+      color: #333;
+    }
+
+    .invoice-card {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+
+    /* WATERMARK LUNAS */
+    .watermark-lunas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(39, 174, 96, 0.18);
+      border: 8px solid rgba(39, 174, 96, 0.22);
+      padding: 10px 40px;
+      border-radius: 16px;
+      letter-spacing: 12px;
+      text-transform: uppercase;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
+    }
+
+    /* WATERMARK DP PAID */
+    .watermark-dp {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: rgba(230, 126, 34, 0.20);
+      border: 8px solid rgba(230, 126, 34, 0.25);
+      padding: 10px 30px;
+      border-radius: 16px;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
+    }
+
+    /* HEADER & KOP RS */
+    .invoice-header {
+      background: linear-gradient(135deg, #a8e0e6 0%, #73c6b6 100%);
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #2980b9;
+    }
+
+    .title-area h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #1a4a5e;
+      letter-spacing: 1px;
+      font-weight: 800;
+    }
+
+    .title-area p {
+      margin: 5px 0 0 0;
+      font-size: 0.9rem;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .hospital-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .hospital-logo {
+      height: 55px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .hospital-name {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #1a4a5e;
+      line-height: 1.2;
+    }
+
+    /* BODY INVOICE */
+    .invoice-body {
+      padding: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* TABEL DATA PASIEN */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+    }
+
+    .info-table td {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #dcdde1;
+    }
+
+    .info-table td.label {
+      background-color: #eaf7f8;
+      font-weight: bold;
+      color: #1a4a5e;
+      width: 25%;
+    }
+
+    /* TABEL RINCIAN BIAYA */
+    .billing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+    }
+
+    .billing-table th {
+      background-color: #a8e0e6;
+      color: #1a4a5e;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      border: 1px solid #91d3dc;
+    }
+
+    .billing-table td {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #dcdde1;
+    }
+
+    .text-end { text-align: right; }
+    .fw-bold { font-weight: bold; }
+
+    /* SUMMARY TOTAL */
+    .summary-box {
+      width: 55%;
+      margin-left: auto;
+      margin-bottom: 30px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border-bottom: 1px dashed #ccc;
+    }
+
+    .summary-row.total-lunas {
+      border-top: 2px solid #27ae60;
+      border-bottom: 1px dashed #ccc;
+      font-weight: bold;
+      color: #27ae60;
+      background-color: #eafaf1;
+    }
+
+    .summary-row.outstanding {
+      font-weight: bold;
+      color: #c0392b;
+      background-color: #fdf2e9;
+      border-bottom: 2px solid #e67e22;
+    }
+
+    /* FOOTER & TANDA TANGAN */
+    .invoice-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-note {
+      font-size: 0.75rem;
+      color: #7f8c8d;
+      max-width: 60%;
+    }
+
+    .signature-area {
+      text-align: center;
+      width: 200px;
+    }
+
+    .signature-space {
+      height: 60px;
+    }
+
+    .signature-name {
+      font-weight: bold;
+      font-size: 0.85rem;
+      border-top: 1px solid #333;
+      padding-top: 4px;
+    }
+
+    /* TOMBOL PRINT */
+    .action-bar {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .btn-print {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    .btn-print:hover {
+      background-color: #219150;
+    }
+
+    /* CSS UNTUK PRINT / CETAK */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .invoice-card {
+        box-shadow: none;
+        border: none;
+      }
+      .action-bar {
+        display: none;
+      }
+      .watermark-lunas, .watermark-dp {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <% 
+    // PERHITUNGAN DINAMIS INVOICE
+    const totalHargaBruto = Number(invoice.harga_bruto || invoice.total_harga || 0);
+    const diskon = Number(invoice.diskon || 0);
+    const totalNett = Number(invoice.total_nett || (totalHargaBruto - diskon));
+    const dp = Number(invoice.dp || 0);
+
+    // Ambil nominal pelunasan dari database, atau 0 jika belum dilunasi
+    const pelunasan = Number(invoice.pelunasan || 0);
+
+    // Hitung sisa bayar / outstanding
+    const sisaBayar = invoice.sisa_bayar !== undefined 
+      ? Number(invoice.sisa_bayar) 
+      : Math.max(0, totalNett - dp - pelunasan);
+
+    // Cek Status Lunas
+    const isLunas = (invoice.status_pembayaran === 'LUNAS') || (sisaBayar <= 0 && totalNett > 0);
+  %>
+
+  <div class="invoice-card">
+
+    <% if (isLunas) { %>
+      <!-- WATERMARK LUNAS -->
+      <div class="watermark-lunas">LUNAS</div>
+    <% } else { %>
+      <!-- WATERMARK DP PAID -->
+      <div class="watermark-dp">DP PAID</div>
+    <% } %>
+
+    <!-- KOP HEADER RS -->
+    <div class="invoice-header">
+      <div class="title-area">
+        <h1>INVOICE TAGIHAN</h1>
+        <p>No. Transaksi: #<%= invoice.id || invoice._id %></p>
+      </div>
+      <div class="hospital-brand">
+        <!-- LOGO RS -->
+        <img src="/image/logors.png" alt="Logo RS" class="hospital-logo" onerror="this.onerror=null; this.src='/logors.png';">
+        <div class="hospital-name">
+          RS. SAKTI MANDRA GUNA<br>
+          <span style="font-weight: normal; font-size: 0.75rem;">Bedah Plastik & Treatment</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT BODY -->
+    <div class="invoice-body">
+      
+      <!-- INFORMASI PASIEN -->
+      <table class="info-table">
+        <tr>
+          <td class="label">Nama Pasien</td>
+          <td><strong><%= invoice.nama_pasien %></strong></td>
+          <td class="label">Tgl Booking</td>
+          <td><%= invoice.tanggal_booking ? new Date(invoice.tanggal_booking).toLocaleDateString('id-ID') : '-' %></td>
+        </tr>
+        <tr>
+          <td class="label">Alamat</td>
+          <td><%= invoice.alamat_pasien || '-' %></td>
+          <td class="label">Tgl Tindakan</td>
+          <td><%= invoice.tanggal_tindakan ? new Date(invoice.tanggal_tindakan).toLocaleDateString('id-ID') : '-' %></td>
+        </tr>
+      </table>
+
+      <!-- TABLE DETAIL BIAYA -->
+      <table class="billing-table">
+        <thead>
+          <tr>
+            <th>Deskripsi Tindakan</th>
+            <th class="text-end" style="width: 30%;">Total (Rp)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong><%= invoice.jenis_tindakan %></strong>
+            </td>
+            <td class="text-end">Rp <%= totalHargaBruto.toLocaleString('id-ID') %></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- RINCIAN PEMBAYARAN -->
+      <div class="summary-box">
+        <div class="summary-row">
+          <span>Total Harga (Bruto):</span>
+          <span>Rp <%= totalHargaBruto.toLocaleString('id-ID') %></span>
+        </div>
+        <div class="summary-row">
+          <span>Diskon:</span>
+          <span>Rp <%= diskon.toLocaleString('id-ID') %></span>
+        </div>
+        <div class="summary-row fw-bold">
+          <span>Total Nett:</span>
+          <span>Rp <%= totalNett.toLocaleString('id-ID') %></span>
+        </div>
+        
+        <!-- DP Paid -->
+        <div class="summary-row" style="color: #27ae60; font-weight: bold;">
+          <span>DP Paid:</span>
+          <span>Rp <%= dp.toLocaleString('id-ID') %></span>
+        </div>
+
+        <!-- Pelunasan -->
+        <div class="summary-row total-lunas">
+          <span>Pelunasan:</span>
+          <span>Rp <%= pelunasan.toLocaleString('id-ID') %></span>
+        </div>
+
+        <!-- Kurang Bayar / Outstanding -->
+        <div class="summary-row outstanding">
+          <span>Kurang Bayar / Outstanding:</span>
+          <span>Rp <%= sisaBayar.toLocaleString('id-ID') %></span>
+        </div>
+
+        <div class="summary-row" style="border: none; font-size: 0.85rem; color: #555; justify-content: flex-end; padding-top: 8px;">
+          Status: &nbsp;<strong style="color: <%= isLunas ? '#27ae60' : '#d35400' %>;"><%= isLunas ? 'LUNAS' : (invoice.status_pembayaran || 'DP PAID') %></strong>
+        </div>
+      </div>
+
+      <!-- FOOTER TANDA TANGAN -->
+      <div class="invoice-footer">
+        <div class="footer-note">
+          * Bukti pembayaran ini sah dan diproses oleh sistem RS Sakti Mandra Guna.<br>
+          * Mohon simpan bukti ini untuk proses pelunasan/tindakan.
+        </div>
+        <div class="signature-area">
+          <p style="margin: 0; font-size: 0.85rem;">Hormat Kami,</p>
+          <div class="signature-space"></div>
+          <div class="signature-name">Kasir / Finance RS</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOMBOL CETAK -->
+  <div class="action-bar">
+    <button onclick="window.print()" class="btn-print">🖨️ Cetak / Print Invoice</button>
+  </div>
+
+</body>
+</html>
