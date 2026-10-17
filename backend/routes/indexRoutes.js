@@ -7,6 +7,7 @@ router.get('/', indexController.getIndexPage);
 
 // 2. POST /register - Memproses Pendaftaran Akun Pasien Baru
 router.post('/register', indexController.registerPasien);
+router.post('/booking/simpan', indexController.simpanBooking);
 
 
 module.exports = router;

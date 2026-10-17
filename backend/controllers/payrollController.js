@@ -198,7 +198,7 @@ function hitungPph21DokterProgresif(dppBulanIni, dppKumulatifSebelumnya) {
   return Math.round(hitungPajakKumulatif(totalDppKumulatif) - hitungPajakKumulatif(dppKumulatifSebelumnya));
 }
 
-// Proses Kalkulasi Utama Menggunakan Tabel transaksi_fee_detail
+// Proses Kalkulasi Utama Menggunakan Tabel transaksi_fee_detail & master_lembur
 function processPayrollCalculation(periodeId, bulan, tahun, res) {
   const clearOld = `DELETE FROM payroll_detail WHERE payroll_periode_id = ?`;
   
@@ -206,6 +206,25 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
     if (err) console.error("Error clearing old payroll detail:", err);
 
     try {
+      // 0. Ambil Data Lembur Berdasarkan Tabel master_lembur untuk Bulan & Tahun Terkait
+      const lemburRes = await new Promise((resolve, reject) => {
+        const qLembur = `
+          SELECT nik, COALESCE(SUM(nominal_lembur), 0) AS total_lembur 
+          FROM master_lembur 
+          WHERE bulan = ? AND tahun = ? 
+          GROUP BY nik
+        `;
+        db.query(qLembur, [bulan, tahun], (err, rows) => {
+          if (err) reject(err); else resolve(rows || []);
+        });
+      });
+
+      // Pemetaan total lembur per NIK pegawai
+      const mapLembur = {};
+      lemburRes.forEach(row => {
+        mapLembur[row.nik] = Number(row.total_lembur || 0);
+      });
+
       // 1. Karyawan
       const karyawans = await new Promise((resolve, reject) => {
         db.query(`SELECT id, nik, nama_karyawan, jabatan, gaji_pokok, tunjangan_jabatan, status_ptkp FROM master_karyawan`, (err, rows) => {
@@ -270,14 +289,16 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
         pegawai_id: k.id, pegawai_tipe: 'KARYAWAN',
         nik: k.nik || '-', nama: k.nama_karyawan, jabatan: k.jabatan || 'Karyawan',
         gaji_pokok: Number(k.gaji_pokok || 0), tunjangan_jabatan: Number(k.tunjangan_jabatan || 0),
-        fee_tindakan: 0, status_ptkp: k.status_ptkp || 'TK/0', is_dokter: false
+        fee_tindakan: 0, status_ptkp: k.status_ptkp || 'TK/0', is_dokter: false,
+        lembur: mapLembur[k.nik] || 0
       }));
 
       const listSuster = susters.map(s => ({
         pegawai_id: s.suster_id, pegawai_tipe: 'SUSTER',
         nik: s.nik || '-', nama: s.nama, jabatan: s.jabatan,
         gaji_pokok: Number(s.gaji_pokok || 0), tunjangan_jabatan: Number(s.tunjangan_jabatan || 0),
-        fee_tindakan: Number(s.fee_tindakan || 0), status_ptkp: s.status_ptkp || 'TK/0', is_dokter: false
+        fee_tindakan: Number(s.fee_tindakan || 0), status_ptkp: s.status_ptkp || 'TK/0', is_dokter: false,
+        lembur: mapLembur[s.nik] || 0
       }));
 
       const listDokter = dokters.map(d => {
@@ -289,7 +310,8 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
           pegawai_id: d.dokter_id, pegawai_tipe: 'DOKTER',
           nik: '-', nama: d.nama, jabatan: d.jabatan,
           gaji_pokok: 0, tunjangan_jabatan: 0, fee_tindakan: feeTindakan,
-          status_ptkp: 'TK/0', is_dokter: true, potongan_pph21: pph21
+          status_ptkp: 'TK/0', is_dokter: true, potongan_pph21: pph21,
+          lembur: 0
         };
       });
 
@@ -297,7 +319,8 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
       if (semuaPegawai.length === 0) return res.redirect('/payroll/detail?periode_id=' + periodeId);
 
       for (const p of semuaPegawai) {
-        const pendapatanKotor = p.gaji_pokok + p.tunjangan_jabatan + p.fee_tindakan;
+        // Pendapatan kotor dihitung dari: Gaji Pokok + Tunjangan Jabatan + Fee Tindakan + Nominal Lembur
+        const pendapatanKotor = p.gaji_pokok + p.tunjangan_jabatan + p.fee_tindakan + p.lembur;
         const potonganBpjsKes = p.is_dokter ? 0 : Math.min(p.gaji_pokok, 12000000) * 0.01;
         const potonganBpjsTk = p.is_dokter ? 0 : Math.min(p.gaji_pokok, 11086300) * 0.03;
         const potonganPph21 = p.is_dokter ? p.potongan_pph21 : hitungTarifPph21Ter(p.gaji_pokok + p.tunjangan_jabatan, p.status_ptkp);
@@ -312,7 +335,7 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
 
         await new Promise((resolve) => {
           db.query(insertDetail, [
-            periodeId, p.pegawai_id, p.pegawai_tipe, p.nik, p.nama, p.jabatan, p.gaji_pokok, p.tunjangan_jabatan, p.fee_tindakan, 0, pendapatanKotor, potonganBpjsKes, potonganBpjsTk, potonganPph21, totalPotongan, takeHomePay
+            periodeId, p.pegawai_id, p.pegawai_tipe, p.nik, p.nama, p.jabatan, p.gaji_pokok, p.tunjangan_jabatan, p.fee_tindakan, p.lembur, pendapatanKotor, potonganBpjsKes, potonganBpjsTk, potonganPph21, totalPotongan, takeHomePay
           ], () => resolve());
         });
       }

@@ -75,3 +75,72 @@ exports.registerPasien = (req, res) => {
     });
   });
 };
+
+// 3. Memproses Simpan Booking Online ke Tabel transaksi_medis
+exports.simpanBooking = (req, res) => {
+  const { 
+    nama_pasien, 
+    no_ktp, nik, 
+    no_hp, 
+    dokter_id, 
+    jenis_tindakan, tindakan_id, 
+    tanggal_tindakan, tanggal_booking, 
+    alamat_pasien, keluhan 
+  } = req.body;
+
+  // Normalisasi variabel data dari form
+  const finalNik = no_ktp || nik || '';
+  const finalTindakan = jenis_tindakan || tindakan_id || '';
+  const finalTanggalTindakan = tanggal_tindakan || tanggal_booking;
+  const finalAlamat = alamat_pasien || keluhan || '';
+  const tglBookingHariIni = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+  // Validasi input
+  if (!nama_pasien || !finalNik || !no_hp || !dokter_id || !finalTindakan || !finalTanggalTindakan) {
+    return res.status(400).json({
+      success: false,
+      message: 'Harap lengkapi semua data formulir janji temu!'
+    });
+  }
+
+  // Query INSERT langsung ke tabel transaksi_medis
+  const queryInsert = `
+    INSERT INTO transaksi_medis (
+      no_ktp, 
+      nama_pasien, 
+      alamat_pasien, 
+      tanggal_booking, 
+      tanggal_tindakan, 
+      jenis_tindakan, 
+      dokter_id, 
+      status_pembayaran, 
+      status_finalisasi
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, 'SCHEDULED', 'BELUM_LUNAS')
+  `;
+
+  const values = [
+    finalNik,
+    nama_pasien,
+    finalAlamat,
+    tglBookingHariIni,
+    finalTanggalTindakan,
+    finalTindakan,
+    dokter_id
+  ];
+
+  db.query(queryInsert, values, (err, result) => {
+    if (err) {
+      console.error("Database Error (Insert transaksi_medis):", err);
+      return res.status(500).json({
+        success: false,
+        message: 'Gagal menyimpan janji temu ke database: ' + err.message
+      });
+    }
+
+    // Mengembalikan response JSON sukses untuk SweetAlert2
+    return res.json({
+      success: true,
+      message: 'Janji temu Anda berhasil dibuat dan terdaftar di transaksi medis admin!'
+    });
+  });
+};
