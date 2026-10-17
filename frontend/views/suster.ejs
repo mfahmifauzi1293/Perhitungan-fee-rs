@@ -12,7 +12,7 @@
   <!-- CSS Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  
+ 
   <style>
     :root {
       --bg-dark: #0d1117;
@@ -71,15 +71,6 @@
     .logo-menu {
       height: 30px;
       width: auto;
-    }
-
-    .nav-section-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--accent-green-neon);
-      padding: 14px 20px 4px;
     }
 
     .sidebar nav a {
@@ -158,7 +149,6 @@
       position: relative;
     }
 
-    /* WATERMARK LOGO DI BACKGROUND CONTENT */
     .watermark-bg {
       position: absolute;
       top: 50%;
@@ -171,40 +161,22 @@
       z-index: 0;
     }
 
-    /* WIDGET CONTAINER & CARDS */
     .widget-container {
       border: 1px solid var(--border-color);
       background-color: var(--card-bg);
       border-radius: 12px;
       overflow: hidden;
-      height: 100%;
       position: relative;
       z-index: 1;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .widget-header {
-      background-color: rgba(255, 255, 255, 0.02);
-      color: var(--text-heading);
-      padding: 14px 20px;
+    .modal-label-custom {
+      color: var(--accent-green-neon) !important;
       font-weight: 600;
-      font-size: 0.95rem;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .widget-body {
-      padding: 20px;
-    }
-
-    /* FORM STYLES */
-    .form-label {
-      color: var(--text-sub);
       font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+      display: block;
     }
 
     .form-control-dark, .form-select-dark {
@@ -216,22 +188,18 @@
 
     .form-control-dark:focus, .form-select-dark:focus {
       background-color: var(--input-bg) !important;
-      border-color: var(--accent-green) !important;
+      border-color: var(--accent-green-neon) !important;
       color: #ffffff !important;
-      box-shadow: 0 0 0 0.25rem rgba(46, 160, 67, 0.25);
-    }
-
-    .form-control-dark::placeholder {
-      color: #6e7681 !important;
+      box-shadow: 0 0 0 0.2rem rgba(57, 255, 20, 0.2);
     }
 
     .btn-green-neon {
       background-color: var(--accent-green);
       color: #ffffff;
       border: none;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      padding: 8px 16px;
+      padding: 6px 14px;
       border-radius: 6px;
     }
 
@@ -240,28 +208,61 @@
       color: #ffffff;
     }
 
-    /* TABEL CUSTOM DARK */
-    .table-dark-custom {
-      --bs-table-bg: transparent !important;
-      --bs-table-color: var(--text-main) !important;
-      width: 100%;
-      margin-bottom: 0;
-      font-size: 0.875rem;
+    .modal-content-dark {
+      background-color: #161b22;
+      color: #ffffff !important;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
     }
 
-    .table-dark-custom th {
-      background-color: rgba(0, 0, 0, 0.25) !important;
-      color: var(--accent-green-neon) !important;
-      border-bottom: 1px solid var(--border-color) !important;
-      padding: 12px 16px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    /* SUSTER CARD CLEAN LAYOUT */
+    .suster-card {
+      background-color: #0d1117;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
     }
 
-    .table-dark-custom td {
-      border-bottom: 1px solid var(--border-color) !important;
+    .suster-card:hover {
+      border-color: var(--accent-green);
+      box-shadow: 0 4px 15px rgba(46, 160, 67, 0.15);
+    }
+
+    .card-title-neon {
+      color: var(--accent-green-neon);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .suster-avatar-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent-green);
+      background-color: #161b22;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sub);
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* AREA TOMBOL AKSI DENGAN PEMISAH SENDIRI */
+    .card-footer-action {
+      background-color: rgba(255, 255, 255, 0.01);
+      border-top: 1px solid var(--border-color);
       padding: 10px 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
     }
   </style>
 </head>
@@ -285,11 +286,12 @@
           <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
           <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
           <a href="/suster" class="active"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/lembur"><i class="bi bi-stopwatch"></i> Input Lembur</a>
+          <a href="/payroll"><i class="bi bi-cash-stack"></i> Payroll / Gaji</a>
           <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
         </nav>
       </div>
-      
-      <!-- SIDEBAR FOOTER DENGAN DYNAMIC USER LOGIN & TOMBOL LOGOUT PRESISI DASHBOARD -->
+     
       <div class="sidebar-footer d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
           <i class="bi bi-person-circle text-success me-1"></i>
@@ -305,7 +307,6 @@
 
     <!-- KONTEN UTAMA -->
     <div class="main-content">
-      <!-- HEADER NAMA RUMAH SAKIT -->
       <div class="header-rs-center">
         <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
         <div class="text-center">
@@ -315,101 +316,172 @@
       </div>
 
       <div class="content-body">
-        <!-- WATERMARK LOGO DI BACKGROUND CONTENT -->
         <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
 
-        <div class="row g-4" style="position: relative; z-index: 1;">
-          <!-- FORM TAMBAH SUSTER -->
-          <div class="col-lg-4">
-            <div class="widget-container">
-              <div class="widget-header">
-                <span><i class="bi bi-person-plus-fill text-success me-2"></i> Tambah Suster Baru</span>
-              </div>
-              <div class="widget-body">
-                <form action="/suster/tambah" method="POST">
-                  <div class="mb-3">
-                    <label class="form-label">Nama Suster / Perawat</label>
-                    <input type="text" name="nama" class="form-control form-control-dark" required placeholder="Ns. Suster Jane">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label">Fokus Peran Utama</label>
-                    <select name="peran" class="form-select form-select-dark" required>
-                      <option value="OPERASI">Suster Operasi (OK)</option>
-                      <option value="TREATMENT">Suster Treatment</option>
-                      <option value="JAGA">Suster Jaga / Rawat Inap</option>
-                    </select>
-                  </div>
-                  <button type="submit" class="btn btn-green-neon w-100 fw-bold mt-2">
-                    <i class="bi bi-plus-lg me-1"></i> Tambah Suster
-                  </button>
-                </form>
-              </div>
+        <!-- WIDGET CONTAINER GRID SUSTER -->
+        <div class="widget-container p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
+            <div>
+              <h5 class="fw-bold text-white mb-1">
+                <i class="bi bi-heart-pulse-fill text-success me-2"></i>Daftar Suster & Perawat
+              </h5>
+              <p class="text-muted small mb-0">Kelola informasi perawat, fokus peran, dan foto profil staf medis rumah sakit.</p>
             </div>
+            <!-- Tombol Tambah Suster -->
+            <button type="button" class="btn btn-green-neon" data-bs-toggle="modal" data-bs-target="#modalTambahSuster">
+              <i class="bi bi-plus-circle me-1"></i> Tambah Suster
+            </button>
           </div>
 
-          <!-- TABEL DAFTAR SUSTER -->
-          <div class="col-lg-8">
-            <div class="widget-container">
-              <div class="widget-header">
-                <div>
-                  <i class="bi bi-person-heart text-info me-2"></i>
-                  <span>Daftar Suster & Perawat</span>
-                  <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 ms-2">
-                    Total: <%= (typeof susters !== 'undefined') ? susters.length : 0 %>
-                  </span>
+          <!-- GRID CONTAINER CARD SUSTER -->
+          <div class="row g-3">
+            <% if (typeof susters === 'undefined' || susters.length === 0) { %>
+              <div class="col-12 text-center py-5 text-muted">
+                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                Belum ada data suster.
+              </div>
+            <% } else { %>
+              <% susters.forEach(s => { %>
+                <% const itemId = s._id || s.id; %>
+                <div class="col-md-6 col-xl-4">
+                  <div class="suster-card">
+                    <!-- BAGIAN ATAS: FOTO & INFORMASI (PADDING KHUSUS) -->
+                    <div class="p-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <% if (s.foto) { %>
+                          <img src="/uploads/<%= s.foto %>" alt="Foto Suster" class="suster-avatar-lg">
+                        <% } else { %>
+                          <div class="suster-avatar-lg">
+                            <i class="bi bi-person-fill"></i>
+                          </div>
+                        <% } %>
+                        <div class="overflow-hidden">
+                          <span class="card-title-neon text-truncate d-block mb-1" title="<%= s.nama %>"><%= s.nama %></span>
+                          <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50">
+                            <%= s.peran || 'OPERASI' %>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- BAGIAN BAWAH: TOMBOL AKSI DENGAN GARIS PEMISAH KHUSUS DI FOOTER CARD -->
+                    <div class="card-footer-action">
+                      <button type="button" class="btn btn-sm btn-outline-success px-3" data-bs-toggle="modal" data-bs-target="#modalEditSuster<%= itemId %>">
+                        <i class="bi bi-pencil-square me-1"></i> Edit
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-danger px-2" data-bs-toggle="modal" data-bs-target="#modalHapusSuster<%= itemId %>" title="Hapus">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+            <% } %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMUA MODAL EDIT & HAPUS SUSTER -->
+  <% if (typeof susters !== 'undefined' && susters.length > 0) { %>
+    <% susters.forEach(s => { %>
+      <% const itemId = s._id || s.id; %>
+      
+      <!-- MODAL EDIT SUSTER -->
+      <div class="modal fade" id="modalEditSuster<%= itemId %>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content modal-content-dark">
+            <div class="modal-header border-secondary">
+              <h5 class="modal-title fw-bold text-success fs-6">
+                <i class="bi bi-pencil-square me-2"></i>Edit Data Suster
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/suster/update/<%= itemId %>" method="POST" enctype="multipart/form-data">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label class="modal-label-custom">Nama Suster / Perawat</label>
+                  <input type="text" name="nama" class="form-control form-control-dark fw-bold text-white" value="<%= s.nama %>" required>
+                </div>
+                <div class="mb-3">
+                  <label class="modal-label-custom">Fokus Peran Utama</label>
+                  <select name="peran" class="form-select form-select-dark" required>
+                    <option value="OPERASI" <%= s.peran === 'OPERASI' ? 'selected' : '' %>>OPERASI</option>
+                    <option value="TREATMENT" <%= s.peran === 'TREATMENT' ? 'selected' : '' %>>TREATMENT</option>
+                    <option value="JAGA" <%= s.peran === 'JAGA' ? 'selected' : '' %>>JAGA</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="modal-label-custom">Foto Profil Suster</label>
+                  <input type="file" name="foto" class="form-control form-control-dark text-white" accept="image/*">
+                  <small class="text-muted mt-1 d-block">Format: JPG, PNG, WEBP (Opsional)</small>
                 </div>
               </div>
+              <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-green-neon btn-sm px-4">Simpan Perubahan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
-              <div class="table-responsive">
-                <table class="table table-dark-custom align-middle">
-                  <thead>
-                    <tr>
-                      <th>Nama Suster</th>
-                      <th style="width: 220px;">Fokus Peran</th>
-                      <th style="width: 140px;" class="text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% if (typeof susters === 'undefined' || susters.length === 0) { %>
-                      <tr>
-                        <td colspan="3" class="text-center py-4 text-muted">Belum ada data suster.</td>
-                      </tr>
-                    <% } else { %>
-                      <% susters.forEach(s => { %>
-                        <% const itemId = s._id || s.id; %>
-                        <tr>
-                          <form action="/suster/update/<%= itemId %>" method="POST">
-                            <td>
-                              <input type="text" name="nama" class="form-control form-control-sm form-control-dark" value="<%= s.nama %>" required>
-                            </td>
-                            <td>
-                              <select name="peran" class="form-select form-select-sm form-select-dark">
-                                <option value="OPERASI" <%= s.peran === 'OPERASI' ? 'selected' : '' %>>OPERASI</option>
-                                <option value="TREATMENT" <%= s.peran === 'TREATMENT' ? 'selected' : '' %>>TREATMENT</option>
-                                <option value="JAGA" <%= s.peran === 'JAGA' ? 'selected' : '' %>>JAGA</option>
-                              </select>
-                            </td>
-                            <td class="text-center">
-                              <div class="d-flex justify-content-center gap-1">
-                                <button type="submit" class="btn btn-sm btn-success p-1 px-2" title="Simpan Perubahan">
-                                  <i class="bi bi-check-lg"></i> Simpan
-                                </button>
-                                <a href="/suster/hapus/<%= itemId %>" onclick="return confirm('Hapus suster ini?')" class="btn btn-sm btn-outline-danger p-1 px-2" title="Hapus">
-                                  <i class="bi bi-trash"></i>
-                                </a>
-                              </div>
-                            </td>
-                          </form>
-                        </tr>
-                      <% }); %>
-                    <% } %>
-                  </tbody>
-                </table>
+      <!-- MODAL KONFIRMASI HAPUS SUSTER -->
+      <div class="modal fade" id="modalHapusSuster<%= itemId %>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content modal-content-dark text-center p-3">
+            <div class="modal-body">
+              <i class="bi bi-exclamation-triangle text-warning fs-1 mb-2 d-block"></i>
+              <h6 class="fw-bold text-white mb-2">Konfirmasi Hapus</h6>
+              <p class="text-white small mb-3">Apakah Anda yakin ingin menghapus suster <strong class="text-success"><%= s.nama %></strong>?</p>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Tidak</button>
+                <a href="/suster/hapus/<%= itemId %>" class="btn btn-danger btn-sm px-3">Ya, Hapus</a>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    <% }); %>
+  <% } %>
 
+  <!-- MODAL TAMBAH SUSTER BARU -->
+  <div class="modal fade" id="modalTambahSuster" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-dark">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title fw-bold text-success fs-6" id="modalTambahLabel">
+            <i class="bi bi-person-plus-fill me-2"></i>Tambah Suster Baru
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/suster/tambah" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="modal-label-custom">Nama Suster / Perawat</label>
+              <input type="text" name="nama" class="form-control form-control-dark text-white" required placeholder="Ns. Suster Jane">
+            </div>
+            <div class="mb-3">
+              <label class="modal-label-custom">Fokus Peran Utama</label>
+              <select name="peran" class="form-select form-select-dark" required>
+                <option value="OPERASI">OPERASI</option>
+                <option value="TREATMENT">TREATMENT</option>
+                <option value="JAGA">JAGA</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="modal-label-custom">Foto Profil Suster</label>
+              <input type="file" name="foto" class="form-control form-control-dark text-white" accept="image/*">
+              <small class="text-muted mt-1 d-block">Format: JPG, PNG, WEBP (Opsional)</small>
+            </div>
+          </div>
+          <div class="modal-footer border-secondary">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-green-neon btn-sm px-4">Simpan Suster</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

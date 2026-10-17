@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rincian Payroll - RS Sakti Mandra Guna</title>
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+  <!-- CSS Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --sidebar-bg: #161b22;
+      --border-color: #30363d;
+      --accent-green: #2ea043;
+      --accent-green-neon: #39FF14;
+      --text-main: #c9d1d9;
+      --text-heading: #ffffff;
+      --text-sub: #8b949e;
+    }
+
+    body, html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .app-container { display: flex; min-height: 100vh; }
+    .sidebar { width: 250px; min-height: 100vh; background: var(--sidebar-bg); color: #ffffff; border-right: 1px solid var(--border-color); flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between; z-index: 20; }
+    .sidebar-header { background: #010409; color: #ffffff; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; padding: 16px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: 1px; }
+    .logo-menu { height: 30px; width: auto; }
+    .sidebar nav a { color: var(--text-sub); text-decoration: none; padding: 10px 20px; display: flex; align-items: center; gap: 12px; font-weight: 500; font-size: 0.875rem; transition: all 0.2s ease; border-left: 3px solid transparent; }
+    .sidebar nav a:hover { background: rgba(255, 255, 255, 0.03); color: #ffffff; }
+    .sidebar nav a.active { background: rgba(46, 160, 67, 0.15); color: var(--accent-green-neon); border-left-color: var(--accent-green-neon); font-weight: 600; }
+    .sidebar-footer { padding: 14px 18px; font-size: 0.8rem; color: var(--text-sub); border-top: 1px solid var(--border-color); background: #010409; }
+   
+    .main-content { flex-grow: 1; position: relative; min-height: 100vh; background-color: var(--bg-dark); overflow-x: hidden; }
+    .header-rs-center { background: var(--card-bg); padding: 18px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; gap: 15px; }
+    .logo-header { height: 48px; width: auto; }
+    .header-title { color: var(--accent-green-neon); font-weight: 700; font-size: 1.35rem; margin: 0; letter-spacing: 0.5px; }
+    .header-subtitle { color: var(--text-sub); font-size: 0.72rem; margin: 2px 0 0 0; letter-spacing: 1px; }
+    .content-body { padding: 24px; position: relative; }
+    .watermark-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 450px; max-width: 70%; opacity: 0.04; pointer-events: none; z-index: 0; }
+    
+    /* TAB NAVIGASI */
+    .nav-tabs-custom { border-bottom: none; gap: 10px; margin-bottom: 20px; }
+    .nav-tabs-custom .nav-link {
+      background-color: var(--card-bg);
+      color: var(--text-sub);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .nav-tabs-custom .nav-link:hover { color: #fff; background-color: rgba(255,255,255,0.05); }
+    .nav-tabs-custom .nav-link.active {
+      background-color: var(--accent-green);
+      color: #fff;
+      border-color: var(--accent-green);
+    }
+
+    .widget-container { border: 1px solid var(--border-color); background-color: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; z-index: 1; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+    .widget-header { background-color: rgba(255, 255, 255, 0.02); color: var(--text-heading); padding: 14px 20px; font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
+
+    .table-dark-custom { --bs-table-bg: transparent !important; --bs-table-color: var(--text-main) !important; width: 100%; margin-bottom: 0; font-size: 0.72rem; }
+    .table-dark-custom th { background-color: rgba(0, 0, 0, 0.25) !important; color: var(--accent-green-neon) !important; border-bottom: 1px solid var(--border-color) !important; padding: 8px 5px !important; font-size: 0.68rem; text-transform: uppercase; text-align: center; }
+    .table-dark-custom td { border-bottom: 1px solid var(--border-color) !important; padding: 8px 5px !important; vertical-align: middle; color: #e6edf3; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-header">
+          <img src="/image/logors.png" alt="Logo RS" class="logo-menu" onerror="this.style.display='none'">
+          <span>MENU UTAMA</span>
+        </div>
+        <nav>
+          <a href="/"><i class="bi bi-house-door"></i> Beranda</a>
+          <a href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+          <a href="/booking"><i class="bi bi-calendar-check"></i> Booking / Pemesanan</a>
+          <a href="/finalisasi"><i class="bi bi-check2-square"></i> Finalisasi</a>
+          <a href="/riwayat-transaksi"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a>
+          <a href="/riwayat-pasien"><i class="bi bi-person-lines-fill"></i> Riwayat Pasien</a>
+          <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
+          <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
+          <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/lembur"><i class="bi bi-stopwatch"></i> Input Lembur</a>
+          <a href="/payroll" class="active"><i class="bi bi-cash-stack"></i> Payroll / Gaji</a>
+          <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
+        </nav>
+      </div>
+     
+      <div class="sidebar-footer d-flex align-items-center justify-content-between">
+        <div>
+          <i class="bi bi-person-circle text-success me-1"></i>
+          <strong class="text-white">Administrator</strong>
+        </div>
+        <a href="/logout" class="text-danger text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right fs-6"></i></a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="header-rs-center">
+        <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
+        <div class="text-center">
+          <h1 class="header-title">RS. SAKTI MANDRA GUNA</h1>
+          <p class="header-subtitle">KHUSUS BEDAH PLASTIK, KECANTIKAN & TREATMENT</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <% const namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]; %>
+            <h5 class="text-white m-0">
+              <i class="bi bi-file-earmark-text text-success me-2"></i> Rincian Gaji: <%= namaBulan[periode.bulan] || periode.bulan %> <%= periode.tahun %>
+            </h5>
+            <span class="badge <%= periode.status === 'LOCKED' ? 'bg-danger' : 'bg-success' %> mt-1" style="font-size: 0.7rem;">Status: <%= periode.status %></span>
+          </div>
+          <a href="/payroll" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size: 0.8rem;">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
+          </a>
+        </div>
+
+        <!-- TAB NAVIGASI -->
+        <ul class="nav nav-tabs nav-tabs-custom" id="payrollTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="karyawan-tab" data-bs-toggle="tab" data-bs-target="#karyawan-pane" type="button" role="tab">
+              <i class="bi bi-people-fill me-1"></i> Karyawan & Suster (<%= karyawans ? karyawans.length : 0 %>)
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dokter-tab" data-bs-toggle="tab" data-bs-target="#dokter-pane" type="button" role="tab">
+              <i class="bi bi-person-badge-fill me-1"></i> Dokter (<%= dokters ? dokters.length : 0 %>)
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="payrollTabContent">
+          <!-- PANE KARYAWAN & SUSTER -->
+          <div class="tab-pane fade show active" id="karyawan-pane" role="tabpanel">
+            <div class="widget-container">
+              <div class="widget-header py-2 px-3">
+                <span style="font-size: 0.85rem;"><i class="bi bi-table text-success me-2"></i> Tabel Rincian Gaji Karyawan & Suster</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-dark-custom align-middle">
+                  <thead>
+                    <tr>
+                      <th style="width: 30px;">No</th>
+                      <th class="text-center">NIK</th>
+                      <th class="text-start">Nama Pegawai</th>
+                      <th class="text-start">Jabatan</th>
+                      <th class="text-end">Gaji Pokok</th>
+                      <th class="text-end">Tunjangan</th>
+                      <th class="text-end">Fee</th>
+                      <th class="text-end">Lembur</th>
+                      <th class="text-end">Gaji Kotor</th>
+                      <th class="text-end">BPJS Kes</th>
+                      <th class="text-end">BPJS TK</th>
+                      <th class="text-end">PPh 21</th>
+                      <th class="text-end">Total Pot.</th>
+                      <th class="text-end text-success">Take Home Pay</th>
+                      <th class="text-center">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (!karyawans || karyawans.length === 0) { %>
+                      <tr><td colspan="15" class="text-center py-4 text-muted">Belum ada rincian data karyawan & suster untuk periode ini.</td></tr>
+                    <% } else { %>
+                      <% karyawans.forEach((d, idx) => { %>
+                        <tr>
+                          <td class="text-center"><%= idx + 1 %></td>
+                          <td class="text-center text-info fw-semibold"><%= d.nik %></td>
+                          <td><strong class="text-white"><%= d.nama_karyawan %></strong></td>
+                          <td class="text-light"><%= d.jabatan %></td>
+                          <td class="text-end"><%= Number(d.gaji_pokok || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end"><%= Number(d.tunjangan_jabatan || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-warning"><%= Number(d.fee_tindakan || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end"><%= Number(d.lembur || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end fw-bold text-white"><%= Number(d.pendapatan_kotor || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger"><%= Number(d.potongan_bpjs_kes || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger"><%= Number(d.potongan_bpjs_tk || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger"><%= Number(d.potongan_pph21 || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger fw-bold"><%= Number(d.total_potongan || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-success font-monospace fw-bold"><%= Number(d.take_home_pay || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-center">
+                            <a href="/payroll/cetak-slip?pegawai_id=<%= d.pegawai_id %>&pegawai_tipe=<%= d.pegawai_tipe %>&bulan=<%= periode.bulan %>&tahun=<%= periode.tahun %>" target="_blank" class="btn btn-sm btn-outline-info py-0 px-1" title="Cetak Slip Gaji" style="font-size: 0.7rem;">
+                              <i class="bi bi-printer"></i> Slip
+                            </a>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE DOKTER -->
+          <div class="tab-pane fade" id="dokter-pane" role="tabpanel">
+            <div class="widget-container">
+              <div class="widget-header py-2 px-3">
+                <span style="font-size: 0.85rem;"><i class="bi bi-table text-success me-2"></i> Tabel Rincian Gaji & Fee Dokter</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-dark-custom align-middle">
+                  <thead>
+                    <tr>
+                      <th style="width: 30px;">No</th>
+                      <th class="text-center">NIK</th>
+                      <th class="text-start">Nama Dokter</th>
+                      <th class="text-start">Spesialisasi / Jabatan</th>
+                      <th class="text-end">Gaji Pokok</th>
+                      <th class="text-end">Tunjangan</th>
+                      <th class="text-end text-warning">Fee Tindakan</th>
+                      <th class="text-end">Lembur</th>
+                      <th class="text-end">Gaji Kotor</th>
+                      <th class="text-end">BPJS Kes</th>
+                      <th class="text-end">BPJS TK</th>
+                      <th class="text-end">PPh 21 (Progresif)</th>
+                      <th class="text-end">Total Pot.</th>
+                      <th class="text-end text-success">Take Home Pay</th>
+                      <th class="text-center">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (!dokters || dokters.length === 0) { %>
+                      <tr><td colspan="15" class="text-center py-4 text-muted">Belum ada rincian data dokter untuk periode ini.</td></tr>
+                    <% } else { %>
+                      <% dokters.forEach((d, idx) => { %>
+                        <tr>
+                          <td class="text-center"><%= idx + 1 %></td>
+                          <td class="text-center text-info fw-semibold"><%= d.nik %></td>
+                          <td><strong class="text-white"><%= d.nama_karyawan %></strong></td>
+                          <td class="text-light"><%= d.jabatan %></td>
+                          <td class="text-end"><%= Number(d.gaji_pokok || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end"><%= Number(d.tunjangan_jabatan || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-warning fw-bold"><%= Number(d.fee_tindakan || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end"><%= Number(d.lembur || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end fw-bold text-white"><%= Number(d.pendapatan_kotor || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger"><%= Number(d.potongan_bpjs_kes || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger"><%= Number(d.potongan_bpjs_tk || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger"><%= Number(d.potongan_pph21 || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-danger fw-bold"><%= Number(d.total_potongan || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-end text-success font-monospace fw-bold"><%= Number(d.take_home_pay || 0).toLocaleString('id-ID') %></td>
+                          <td class="text-center">
+                            <a href="/payroll/cetak-slip?pegawai_id=<%= d.pegawai_id %>&pegawai_tipe=<%= d.pegawai_tipe %>&bulan=<%= periode.bulan %>&tahun=<%= periode.tahun %>" target="_blank" class="btn btn-sm btn-outline-info py-0 px-1" title="Cetak Slip Gaji" style="font-size: 0.7rem;">
+                              <i class="bi bi-printer"></i> Slip
+                            </a>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

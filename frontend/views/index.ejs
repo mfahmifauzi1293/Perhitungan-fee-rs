@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RS Sakti Mandra Guna - Bedah Plastik & Kecantikan</title>
- 
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
- 
+
   <!-- Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
- 
+
   <style>
     :root {
       --primary-color: #0d1117;
@@ -23,163 +23,103 @@
       --text-main: #e6edf3;
       --text-sub: #9198a1;
     }
- 
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--primary-color);
       color: var(--text-main);
     }
- 
-    .text-muted {
-      color: var(--text-sub) !important;
-    }
- 
-    /* TOP BAR */
+
+    .text-muted { color: var(--text-sub) !important; }
+
+    /* TOP BAR & NAVBAR */
     .top-bar {
       background-color: #010409;
       font-size: 0.8rem;
       border-bottom: 1px solid var(--border-color);
     }
- 
-    /* NAVBAR */
+
     .navbar-main {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border-color);
     }
- 
+
     .nav-link {
       color: #ffffff !important;
       font-weight: 500;
       padding: 8px 16px !important;
     }
- 
-    .nav-link:hover {
-      color: var(--accent-neon) !important;
-    }
- 
-    @media (min-width: 992px) {
-      .nav-item.dropdown:hover .dropdown-menu {
-        display: block;
-        margin-top: 0;
-        animation: fadeIn 0.2s ease-in-out;
-      }
-    }
- 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
- 
-    .custom-dropdown-menu {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border-radius: 8px;
-      padding: 8px 0;
-    }
- 
-    .custom-dropdown-item {
-      color: var(--text-main);
-      padding: 10px 20px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
- 
-    .custom-dropdown-item:hover {
-      background-color: rgba(46, 160, 67, 0.15);
-      color: var(--accent-neon);
-      padding-left: 24px;
-    }
- 
-    /* HERO SLIDER */
+
+    .nav-link:hover { color: var(--accent-neon) !important; }
+
+    /* HERO SECTION */
     .hero-section {
-      position: relative;
+      background: linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200') center/cover no-repeat;
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border-color);
     }
- 
-    .carousel-item {
-      height: 480px;
-      background-size: cover;
-      background-position: center;
+
+    .badge-hero {
+      background: rgba(46, 160, 67, 0.15);
+      color: var(--accent-neon);
+      border: 1px solid rgba(46, 160, 67, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
- 
-    .carousel-overlay {
-      background: linear-gradient(180deg, rgba(13,17,23,0.3) 0%, rgba(13,17,23,0.9) 100%);
-      height: 100%;
-      display: flex;
-      align-items: center;
-    }
- 
-    /* FLOATING QUICK ACCESS */
-    .quick-access-box {
-      margin-top: -50px;
-      position: relative;
-      z-index: 10;
-    }
- 
-    .quick-card {
+
+    /* ACTION BOXES */
+    .action-box {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      transition: transform 0.3s ease, border-color 0.3s ease;
-      cursor: pointer;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      height: 100%;
+      text-decoration: none;
+      display: block;
     }
- 
-    .quick-card:hover {
+
+    .action-box:hover {
       transform: translateY(-5px);
       border-color: var(--accent-green);
     }
- 
-    .section-title {
-      color: #ffffff;
-      font-weight: 700;
-      position: relative;
-      display: inline-block;
+
+    .action-box i {
+      font-size: 2.2rem;
+      color: var(--accent-green);
+      margin-bottom: 12px;
+      display: block;
     }
- 
-    .section-title::after {
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 3px;
-      background: var(--accent-neon);
-      bottom: -8px;
-      left: 0;
-    }
- 
-    .service-card {
-      background-color: var(--card-bg);
+
+    /* FEATURE CARDS */
+    .feature-card {
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
+      border-radius: 12px;
+      padding: 24px;
+      height: 100%;
     }
- 
-    .service-desc {
-      color: #d0d7de !important;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
- 
+
     .btn-neon {
       background-color: var(--accent-green);
       color: #ffffff;
       font-weight: 600;
       border: none;
     }
- 
+
     .btn-neon:hover {
       background-color: #2c974b;
       color: #ffffff;
     }
- 
+
     .btn-outline-neon {
       border: 1px solid var(--accent-green);
       color: var(--accent-neon);
     }
- 
+
     .btn-outline-neon:hover {
       background-color: var(--accent-green);
       color: #ffffff;
@@ -187,7 +127,7 @@
   </style>
 </head>
 <body>
- 
+
   <!-- TOP BAR -->
   <div class="top-bar py-2 text-white-50">
     <div class="container d-flex justify-content-between align-items-center">
@@ -198,15 +138,20 @@
       </div>
       <div>
         <% if (typeof user !== 'undefined' && user) { %>
-          <!-- TAMPILAN JIKA USER SUDAH LOGIN -->
           <div class="d-flex align-items-center gap-2">
-            <span class="small text-light me-2"><i class="bi bi-person-circle text-success me-1"></i> <%= user.nama || user.username %></span>
+            <!-- Tombol Pintasan Portal Admin -->
+            <% if (user.role === 'administrator' || user.role === 'admin' || user.role === 'finance' || user.role === 'kasir') { %>
+              <a href="/dashboard" class="btn btn-sm btn-success px-2 py-0 fs-7 fw-semibold" title="Portal Admin">
+                <i class="bi bi-speedometer2"></i> Portal Admin
+              </a>
+            <% } %>
+
+            <span class="small text-light ms-2 me-1"><i class="bi bi-person-circle text-success me-1"></i> <%= user.nama || user.username %></span>
             <a href="/logout" class="btn btn-sm btn-outline-danger px-2 py-0 fs-7" title="Keluar">
               <i class="bi bi-box-arrow-right"></i> Logout
             </a>
           </div>
         <% } else { %>
-          <!-- TOMBOL PEMICU MODAL LOGIN POP-UP JIKA BELUM LOGIN -->
           <button type="button" class="btn btn-sm btn-outline-neon fw-semibold px-3" data-bs-toggle="modal" data-bs-target="#loginModal">
             <i class="bi bi-box-arrow-in-right me-1"></i> Login Sistem
           </button>
@@ -214,7 +159,7 @@
       </div>
     </div>
   </div>
- 
+
   <!-- NAVBAR UTAMA -->
   <nav class="navbar navbar-expand-lg navbar-main sticky-top">
     <div class="container">
@@ -230,33 +175,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-         
-          <!-- LAYANAN DROPDOWN HOVER -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="/layanan" id="navbarLayanan" role="button" aria-expanded="false">
-              Layanan
-            </a>
-            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarLayanan">
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/layanan/bedah">
-                  <i class="bi bi-scissors text-success"></i> Bedah
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/layanan/treatment">
-                  <i class="bi bi-stars text-success"></i> Treatment
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/layanan/konsultasi">
-                  <i class="bi bi-chat-heart text-success"></i> Konsultasi / Kontrol
-                </a>
-              </li>
-            </ul>
-          </li>
- 
-          <li class="nav-item"><a class="nav-link" href="/cek-dokter">Cek Dokter</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" href="/layanan">Layanan & Treatment</a></li>
+          <li class="nav-item"><a class="nav-link" href="/cek-dokter">Cari Dokter</a></li>
           <li class="nav-item"><a class="nav-link" href="/fasilitas">Fasilitas</a></li>
           <li class="nav-item ms-lg-3">
             <% if (typeof user !== 'undefined' && user) { %>
@@ -273,150 +194,120 @@
       </div>
     </div>
   </nav>
- 
-  <!-- HERO CAROUSEL / BANNER -->
-  <div id="heroCarousel" class="carousel slide hero-section" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active" style="background-image: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1600');">
-        <div class="carousel-overlay">
-          <div class="container">
-            <div class="col-lg-7">
-              <span class="badge bg-success mb-2 px-3 py-2">Pusat Bedah Plastik & Aesthetic Utama</span>
-              <h1 class="display-4 fw-bold text-white mb-3">Layanan Spesialis Bedah Rekonstruksi & Estetika</h1>
-              <p class="lead text-light mb-4">Didukung oleh tim dokter berpengalaman dan teknologi medis terkini untuk memberikan perawatan aman dan presisi tinggi.</p>
-             
-              <!-- LOGIKA DINAMIS TOMBOL JANJI KONSULTASI -->
-              <% if (typeof user !== 'undefined' && user) { %>
-                <button type="button" class="btn btn-neon btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalBooking">
-                  <i class="bi bi-calendar-check me-1"></i> Janji Konsultasi
-                </button>
-              <% } else { %>
-                <button type="button" class="btn btn-neon btn-lg px-4" data-bs-toggle="modal" data-bs-target="#loginModal">
-                  <i class="bi bi-box-arrow-in-right me-1"></i> Janji Konsultasi
-                </button>
-              <% } %>
 
-            </div>
-          </div>
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container text-center text-lg-start">
+      <div class="row align-items-center">
+        <div class="col-lg-8 mx-auto text-center">
+          <span class="badge-hero mb-3 d-inline-block">Pusat Bedah Plastik & Aesthetic Utama</span>
+          <h1 class="display-5 fw-bold text-white mb-3">Layanan Spesialis Bedah Rekonstruksi & Estetika</h1>
+          <p class="text-muted lead mb-4">Didukung oleh tim dokter berpengalaman dan teknologi medis terkini untuk memberikan perawatan aman dan presisi tinggi.</p>
+          <% if (typeof user !== 'undefined' && user) { %>
+            <button type="button" class="btn btn-neon btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalBooking">
+              <i class="bi bi-calendar-check me-2"></i> Janji Konsultasi
+            </button>
+          <% } else { %>
+            <button type="button" class="btn btn-neon btn-lg px-4" data-bs-toggle="modal" data-bs-target="#loginModal">
+              <i class="bi bi-calendar-check me-2"></i> Janji Konsultasi
+            </button>
+          <% } %>
         </div>
       </div>
     </div>
-  </div>
- 
-  <!-- FLOATING QUICK ACCESS -->
-  <div class="container quick-access-box">
-    <div class="row g-3">
-      <div class="col-md-3">
-        <a href="/cek-dokter" class="text-decoration-none">
-          <div class="quick-card p-4 text-center">
-            <i class="bi bi-person-badge fs-1 text-success mb-2"></i>
+  </section>
+
+  <!-- QUICK ACTION GRID -->
+  <section class="py-5 bg-dark">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-3">
+          <a href="/cek-dokter" class="action-box">
+            <i class="bi bi-person-badge"></i>
             <h6 class="fw-bold text-white mb-1">Cek Dokter</h6>
             <small class="text-muted">Jadwal & Spesialisasi</small>
-          </div>
-        </a>
-      </div>
- 
-      <div class="col-md-3">
-        <% if (typeof user !== 'undefined' && user) { %>
-          <div class="quick-card p-4 text-center" data-bs-toggle="modal" data-bs-target="#modalBooking">
-            <i class="bi bi-calendar-plus fs-1 text-success mb-2"></i>
-            <h6 class="fw-bold text-white mb-1">Buat Janji Temu</h6>
-            <small class="text-muted">Booking Online Cepat</small>
-          </div>
-        <% } else { %>
-          <div class="quick-card p-4 text-center" data-bs-toggle="modal" data-bs-target="#loginModal">
-            <i class="bi bi-calendar-plus fs-1 text-success mb-2"></i>
-            <h6 class="fw-bold text-white mb-1">Buat Janji Temu</h6>
-            <small class="text-muted">Booking Online Cepat</small>
-          </div>
-        <% } %>
-      </div>
- 
-      <div class="col-md-3">
-        <a href="/layanan" class="text-decoration-none">
-          <div class="quick-card p-4 text-center">
-            <i class="bi bi-hospital fs-1 text-success mb-2"></i>
+          </a>
+        </div>
+        <div class="col-md-3">
+          <% if (typeof user !== 'undefined' && user) { %>
+            <a href="#" class="action-box" data-bs-toggle="modal" data-bs-target="#modalBooking">
+              <i class="bi bi-calendar-plus"></i>
+              <h6 class="fw-bold text-white mb-1">Buat Janji Temu</h6>
+              <small class="text-muted">Booking Online Cepat</small>
+            </a>
+          <% } else { %>
+            <a href="#" class="action-box" data-bs-toggle="modal" data-bs-target="#loginModal">
+              <i class="bi bi-calendar-plus"></i>
+              <h6 class="fw-bold text-white mb-1">Buat Janji Temu</h6>
+              <small class="text-muted">Booking Online Cepat</small>
+            </a>
+          <% } %>
+        </div>
+        <div class="col-md-3">
+          <a href="/layanan" class="action-box">
+            <i class="bi bi-clipboard2-pulse"></i>
             <h6 class="fw-bold text-white mb-1">Daftar Tindakan</h6>
             <small class="text-muted">Estimasi Tarif & Prosedur</small>
-          </div>
-        </a>
-      </div>
- 
-      <div class="col-md-3">
-        <a href="/riwayat-pasien" class="text-decoration-none">
-          <div class="quick-card p-4 text-center">
-            <i class="bi bi-file-earmark-medical fs-1 text-success mb-2"></i>
-            <h6 class="fw-bold text-white mb-1">Riwayat Pasien</h6>
-            <small class="text-muted">Cek Rekam Medis / Invoice</small>
-          </div>
-        </a>
+          </a>
+        </div>
+        <div class="col-md-3">
+          <a href="/fasilitas" class="action-box">
+            <i class="bi bi-hospital"></i>
+            <h6 class="fw-bold text-white mb-1">Fasilitas Rumah Sakit</h6>
+            <small class="text-muted">IGD, OK, & Rawat Inap</small>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
- 
-  <!-- SEKSI LAYANAN UNGGULAN -->
-  <section class="py-5 my-5">
+  </section>
+
+  <!-- SECTION EXCELLENCE -->
+  <section class="py-5">
     <div class="container">
-      <div class="mb-5 text-center">
-        <h2 class="section-title">Layanan & Center of Excellence</h2>
-        <p class="text-muted mt-3 fs-6">Perawatan medis eksklusif yang dirancang khusus sesuai kebutuhan kesehatan dan estetika Anda.</p>
+      <div class="text-center mb-5">
+        <h3 class="fw-bold text-white">Layanan & Center of Excellence</h3>
+        <p class="text-muted">Perawatan medis eksklusif yang dirancang khusus sesuai kebutuhan kesehatan dan estetika Anda.</p>
       </div>
- 
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="service-card p-4 h-100">
-            <i class="bi bi-scissors fs-1 text-success mb-3"></i>
+          <div class="feature-card">
+            <i class="bi bi-scissors text-success fs-2 mb-3 d-block"></i>
             <h5 class="fw-bold text-white mb-2">Bedah (Surgical)</h5>
-            <p class="service-desc">
-              Prosedur rekonstruksi dan estetika seperti Rhinoplasty, Facelift, Liposuction, dan Blepharoplasty dengan standar medis internasional.
-            </p>
+            <p class="text-muted small mb-0">Prosedur rekonstruksi dan estetika seperti Rhinoplasty, Facelift, Liposuction, dan Blepharoplasty dengan standar medis tertinggi.</p>
           </div>
         </div>
- 
         <div class="col-md-4">
-          <div class="service-card p-4 h-100">
-            <i class="bi bi-stars fs-1 text-success mb-3"></i>
+          <div class="feature-card">
+            <i class="bi bi-stars text-success fs-2 mb-3 d-block"></i>
             <h5 class="fw-bold text-white mb-2">Treatment (Non-Surgical)</h5>
-            <p class="service-desc">
-              Perawatan Laser Skin Rejuvenation, Botox, Filler, Skin Booster, dan Thread Lift tanpa pembedahan untuk hasil instan dan aman.
-            </p>
+            <p class="text-muted small mb-0">Perawatan Laser Skin Rejuvenation, Botox, Filler, Skin Booster, dan Thread Lift tanpa pembedahan untuk hasil instan dan aman.</p>
           </div>
         </div>
- 
         <div class="col-md-4">
-          <div class="service-card p-4 h-100">
-            <i class="bi bi-chat-heart fs-1 text-success mb-3"></i>
+          <div class="feature-card">
+            <i class="bi bi-chat-heart text-success fs-2 mb-3 d-block"></i>
             <h5 class="fw-bold text-white mb-2">Konsultasi / Kontrol</h5>
-            <p class="service-desc">
-              Layanan konsultasi pra-tindakan dengan Dokter Spesialis Bedah Plastik serta pendampingan kontrol paska bedah intensif.
-            </p>
+            <p class="text-muted small mb-0">Layanan konsultasi pra-tindakan dengan Dokter Spesialis Bedah Plastik serta pendampingan kontrol pasca-bedah intensif.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
- 
+
   <!-- MODAL LOGIN POP-UP -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content text-light" style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;">
-       
         <div class="modal-header border-bottom-0 pb-0">
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
- 
         <div class="modal-body px-4 pb-4">
-          <!-- Logo & Judul -->
           <div class="text-center mb-4">
             <img src="/image/logors.png" alt="Logo RS" height="50" class="mb-2" onerror="this.style.display='none'">
             <h5 class="fw-bold text-white mb-0">RS SAKTI MANDRA GUNA</h5>
             <small class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">BEDAH PLASTIK & KECANTIKAN</small>
           </div>
- 
-          <!-- Alert Error Pop-up Login -->
           <div id="loginAlert" class="alert alert-danger text-center py-2 fs-6 mb-3 d-none"></div>
- 
-          <!-- Form Login -->
           <form id="formLoginPopup">
             <div class="mb-3">
               <label class="form-label text-light small fw-semibold">Username / Email</label>
@@ -425,291 +316,175 @@
                 <input type="text" id="popupUsername" name="username" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan username" required>
               </div>
             </div>
- 
             <div class="mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label text-light small fw-semibold mb-0">Kata Sandi</label>
-              </div>
+              <label class="form-label text-light small fw-semibold mb-0">Kata Sandi</label>
               <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-lock"></i></span>
                 <input type="password" id="popupPassword" name="password" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan kata sandi" required>
               </div>
             </div>
- 
             <button type="submit" class="btn btn-neon w-100 py-2 fw-semibold mb-3">
               Masuk <i class="bi bi-box-arrow-in-right ms-1"></i>
             </button>
- 
-            <!-- TAUTAN AJAKAN DAFTAR (Pemicu Modal Register) -->
             <div class="text-center pt-3 border-top border-secondary">
               <span class="small text-muted">Belum memiliki akun?</span>
               <a href="#" class="small fw-bold text-success text-decoration-none ms-1" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Daftar Sekarang</a>
             </div>
           </form>
         </div>
- 
       </div>
     </div>
   </div>
-  
-  <!-- MODAL REGISTER POP-UP (PENDAFTARAN AKUN PASIEN) -->
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+
+  <!-- MODAL REGISTER POP-UP -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content text-light" style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;">
-       
         <div class="modal-header border-bottom-0 pb-0">
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-  
         <div class="modal-body px-4 pb-4">
-          <!-- Logo & Judul -->
           <div class="text-center mb-4">
             <img src="/image/logors.png" alt="Logo RS" height="50" class="mb-2" onerror="this.style.display='none'">
-            <h5 class="fw-bold text-white mb-0">PENDAFTARAN AKUN PASIEN</h5>
+            <h5 class="fw-bold text-white mb-0">PENDAFTARAN AKUN BARU</h5>
             <small class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">RS SAKTI MANDRA GUNA</small>
           </div>
-  
-          <!-- Alert Pop-up Register -->
-          <div id="registerAlert" class="alert text-center py-2 fs-6 mb-3 d-none"></div>
-  
-          <!-- Form Register -->
-          <form id="formRegisterPopup" action="/register" method="POST">
+          <div id="registerAlert" class="alert alert-danger text-center py-2 fs-6 mb-3 d-none"></div>
+          <form id="formRegisterPopup">
             <div class="mb-3">
-              <label class="form-label text-light small fw-semibold">Nama Lengkap Pasien</label>
-              <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person"></i></span>
-                <input type="text" id="regNama" name="nama" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan nama lengkap" required>
-              </div>
+              <label class="form-label text-light small fw-semibold">Nama Lengkap</label>
+              <input type="text" name="nama" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan nama lengkap" required>
             </div>
-  
             <div class="mb-3">
-              <label class="form-label text-light small fw-semibold">Username / Email</label>
-              <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-at"></i></span>
-                <input type="text" id="regUsername" name="username" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan username atau email" required>
-              </div>
+              <label class="form-label text-light small fw-semibold">Username</label>
+              <input type="text" name="username" class="form-control bg-dark border-secondary text-white" placeholder="Buat username" required>
             </div>
-  
-            <div class="mb-3">
-              <label class="form-label text-light small fw-semibold">Kata Sandi (Password)</label>
-              <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-lock"></i></span>
-                <input type="password" id="regPassword" name="password" class="form-control bg-dark border-secondary text-white" placeholder="Buat kata sandi baru" required>
-              </div>
-            </div>
-  
             <div class="mb-4">
-              <label class="form-label text-light small fw-semibold">Nomor HP / WhatsApp</label>
-              <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-whatsapp"></i></span>
-                <input type="tel" id="regNoHp" name="no_hp" class="form-control bg-dark border-secondary text-white" placeholder="08xxxxxxxxxx" required>
-              </div>
+              <label class="form-label text-light small fw-semibold">Kata Sandi</label>
+              <input type="password" name="password" class="form-control bg-dark border-secondary text-white" placeholder="Buat kata sandi" required>
             </div>
-  
             <button type="submit" class="btn btn-neon w-100 py-2 fw-semibold mb-3">
-              Daftar Akun Baru <i class="bi bi-person-plus ms-1"></i>
+              Daftar <i class="bi bi-person-plus ms-1"></i>
             </button>
-
-            <!-- TAUTAN KEMBALI KE LOGIN -->
             <div class="text-center pt-3 border-top border-secondary">
-              <span class="small text-muted">Sudah memiliki akun?</span>
-              <a href="#" class="small fw-bold text-success text-decoration-none ms-1" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Masuk / Login</a>
+              <span class="small text-muted">Sudah punya akun?</span>
+              <a href="#" class="small fw-bold text-success text-decoration-none ms-1" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Masuk di sini</a>
             </div>
           </form>
         </div>
-  
       </div>
     </div>
   </div>
- 
-  <!-- POP-UP MODAL BOOKING ONLINE (JIKA USER SUDAH LOGIN) -->
-  <div class="modal fade" id="modalBooking" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content text-light" style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;">
-        <div class="modal-header border-secondary">
-          <h5 class="modal-title fs-6 fw-bold text-white"><i class="bi bi-calendar-plus-fill text-success me-2"></i>Buat Janji Konsultasi Online</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/booking/simpan" method="POST">
-          <div class="modal-body">
-            <div class="row g-3">
-              
-              <!-- Nama Pasien -->
-              <div class="col-md-6">
-                <label class="form-label small text-muted">Nama Lengkap Pasien</label>
-                <input type="text" name="nama_pasien" class="form-control bg-dark text-white border-secondary" value="<%= typeof user !== 'undefined' && user ? (user.nama || user.username) : '' %>" placeholder="Masukkan nama lengkap" required>
-              </div>
 
-              <!-- Nomor KTP (NIK) -->
-              <div class="col-md-6">
-                <label class="form-label small text-muted">Nomor KTP (NIK)</label>
-                <input type="text" name="no_ktp" class="form-control bg-dark text-white border-secondary" maxlength="16" placeholder="Masukkan 16 digit NIK" required>
-              </div>
+  <!-- INCLUDE ONLINE BOOKING MODAL (PARSIAL TERPUSAT) -->
+  <%- include('onlinebooking') %>
 
-              <!-- Nomor HP / WhatsApp -->
-              <div class="col-md-6">
-                <label class="form-label small text-muted">Nomor HP / WhatsApp</label>
-                <input type="tel" name="no_hp" class="form-control bg-dark text-white border-secondary" value="<%= typeof user !== 'undefined' && user ? (user.no_hp || '') : '' %>" placeholder="08xxxxxxxxxx" required>
-              </div>
-
-              <!-- Tanggal Konsultasi -->
-              <div class="col-md-6">
-                <label class="form-label small text-muted">Tanggal Rencana Konsultasi/Tindakan</label>
-                <input type="date" name="tanggal_tindakan" class="form-control bg-dark text-white border-secondary" required>
-              </div>
-
-              <!-- Pilih Dokter -->
-              <div class="col-md-6">
-                <label class="form-label small text-muted">Pilih Dokter Spesialis</label>
-                <select name="dokter_id" class="form-select bg-dark text-white border-secondary" required>
-                  <option value="">-- Pilih Dokter --</option>
-                  <% if (typeof dokters !== 'undefined' && dokters.length > 0) { %>
-                    <% dokters.forEach(d => { %>
-                      <option value="<%= d.id %>"><%= d.nama %> (<%= d.spesialis %>)</option>
-                    <% }); %>
-                  <% } else { %>
-                    <option value="">Dokter tidak tersedia</option>
-                  <% } %>
-                </select>
-              </div>
-
-              <!-- Pilih Layanan / Tindakan -->
-              <div class="col-md-6">
-                <label class="form-label small text-muted">Pilih Layanan / Jenis Tindakan</label>
-                <select name="jenis_tindakan" class="form-select bg-dark text-white border-secondary" required>
-                  <option value="">-- Pilih Layanan --</option>
-                  <% if (typeof tindakans !== 'undefined' && tindakans.length > 0) { %>
-                    <% tindakans.forEach(t => { %>
-                      <option value="<%= t.nama_tindakan %>"><%= t.nama_tindakan %></option>
-                    <% }); %>
-                  <% } else { %>
-                    <option value="Konsultasi Bedah Plastik">Konsultasi Bedah Plastik</option>
-                    <option value="Treatment Estetika">Treatment Estetika</option>
-                  <% } %>
-                </select>
-              </div>
-
-              <!-- Alamat Domisili / Catatan -->
-              <div class="col-12">
-                <label class="form-label small text-muted">Alamat Domisili / Keluhan Singkat</label>
-                <textarea name="alamat_pasien" class="form-control bg-dark text-white border-secondary" rows="2" placeholder="Masukkan alamat domisili atau catatan keluhan..."></textarea>
-              </div>
-
-            </div>
-          </div>
-          <div class="modal-footer border-secondary">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-neon btn-sm px-4 fw-bold">Kirim Janji Temu</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
- 
   <!-- FOOTER -->
   <footer class="bg-dark text-white-50 pt-5 pb-3 border-top border-secondary">
-    <div class="container">
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <h5 class="text-white fw-bold mb-3">RS SAKTI MANDRA GUNA</h5>
-          <p class="small text-muted">Rumah Sakit Khusus Bedah Plastik, Rekonstruksi, dan Treatment Kecantikan Terpercaya dengan Standar Pelayanan Kesehatan Tinggi.</p>
-        </div>
-        <div class="col-md-4">
-          <h6 class="text-white fw-bold mb-3">Kontak & Lokasi</h6>
-          <p class="small mb-1 text-muted"><i class="bi bi-geo-alt me-2 text-success"></i> Jl. Sakti Mandra Guna No. 88, Bintaro Jaya</p>
-          <p class="small mb-1 text-muted"><i class="bi bi-envelope me-2 text-success"></i> info@saktimandraguna.co.id</p>
-          <p class="small text-muted"><i class="bi bi-telephone me-2 text-success"></i> (021) 555-8888</p>
-        </div>
-        <div class="col-md-4">
-          <h6 class="text-white fw-bold mb-3">Jam Operasional</h6>
-          <p class="small mb-1 text-muted">Poliklinik Spesialis: Senin - Sabtu (08.00 - 20.00)</p>
-          <p class="small text-success fw-bold">IGD & UGD: 24 Jam Non-Stop</p>
-        </div>
-      </div>
-      <hr class="border-secondary">
-      <div class="text-center small">
-        <p>&copy; 2026 RS Sakti Mandra Guna. All Rights Reserved.</p>
-      </div>
+    <div class="container text-center small">
+      <p>&copy; 2026 RS Sakti Mandra Guna. All Rights Reserved.</p>
     </div>
   </footer>
- 
+
+  <!-- JS: Bootstrap & SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
- 
-  <!-- SCRIPT HANDLING AJAX LOGIN & REGISTER -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
   <script>
-    // Handling AJAX Login
-    document.getElementById('formLoginPopup').addEventListener('submit', async function(e) {
-      e.preventDefault();
- 
-      const username = document.getElementById('popupUsername').value;
-      const password = document.getElementById('popupPassword').value;
-      const alertBox = document.getElementById('loginAlert');
- 
-      alertBox.classList.add('d-none');
- 
-      try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
- 
-        const result = await response.json();
- 
-        if (response.ok && result.success) {
-          window.location.href = result.redirectUrl;
-        } else {
-          alertBox.innerText = result.message || 'Username atau password salah.';
-          alertBox.classList.remove('d-none');
+    // Handling AJAX Login (Dialihkan kembali ke Homepage '/' setelah sukses login)
+    const formLoginPopup = document.getElementById('formLoginPopup');
+    if (formLoginPopup) {
+      formLoginPopup.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('popupUsername').value;
+        const password = document.getElementById('popupPassword').value;
+        const alertBox = document.getElementById('loginAlert');
+        if (alertBox) alertBox.classList.add('d-none');
+
+        try {
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            // Mengarahkan kembali ke homepage '/' (atau portal admin jika user administrator/admin khusus)
+            window.location.href = (result.redirectUrl && (result.redirectUrl.includes('/dashboard') && ['administrator', 'admin', 'finance', 'kasir'].includes(result.role))) ? result.redirectUrl : '/';
+          } else {
+            if (alertBox) {
+              alertBox.innerText = result.message || 'Username atau password salah.';
+              alertBox.classList.remove('d-none');
+            }
+          }
+        } catch (err) {
+          if (alertBox) {
+            alertBox.innerText = 'Terjadi kesalahan sistem server.';
+            alertBox.classList.remove('d-none');
+          }
         }
-      } catch (err) {
-        alertBox.innerText = 'Terjadi kesalahan sistem server.';
-        alertBox.classList.remove('d-none');
-      }
-    });
-  
-    // Handling AJAX Register (Pop-up)
-    document.getElementById('formRegisterPopup').addEventListener('submit', async function(e) {
-      e.preventDefault();
-  
-      const nama = document.getElementById('regNama').value;
-      const username = document.getElementById('regUsername').value;
-      const password = document.getElementById('regPassword').value;
-      const no_hp = document.getElementById('regNoHp').value;
-      const alertBox = document.getElementById('registerAlert');
-  
-      alertBox.classList.add('d-none');
-  
-      try {
-        const response = await fetch('/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nama, username, password, no_hp })
-        });
-  
-        const result = await response.json();
-  
-        if (response.ok && result.success) {
-          alertBox.className = 'alert alert-success text-center py-2 fs-6 mb-3';
-          alertBox.innerText = result.message || 'Pendaftaran berhasil! Silakan login.';
-          alertBox.classList.remove('d-none');
-         
-          setTimeout(() => {
+      });
+    }
+
+    // Handling AJAX Register dengan Event Delegation (Anti-Gagal / Mencegah Lari ke /register)
+    document.addEventListener('submit', async function(e) {
+      if (e.target && e.target.id === 'formRegisterPopup') {
+        e.preventDefault(); // Mencegah total perpindahan halaman atau reload otomatis
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const alertBox = document.getElementById('registerAlert');
+        if (alertBox) alertBox.classList.add('d-none');
+
+        try {
+          const response = await fetch('/register', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json', 
+              'Accept': 'application/json' 
+            },
+            body: JSON.stringify(data)
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok && result.success) {
+            // Tutup modal register
             const registerModalEl = document.getElementById('registerModal');
-            const registerModal = bootstrap.Modal.getInstance(registerModalEl);
-            if (registerModal) registerModal.hide();
-           
-            const loginModalEl = new bootstrap.Modal(document.getElementById('loginModal'));
-            loginModalEl.show();
-          }, 1500);
-        } else {
-          alertBox.className = 'alert alert-danger text-center py-2 fs-6 mb-3';
-          alertBox.innerText = result.message || 'Gagal mendaftar. Silakan coba lagi.';
-          alertBox.classList.remove('d-none');
+            if (registerModalEl) {
+              const registerModal = bootstrap.Modal.getInstance(registerModalEl);
+              if (registerModal) registerModal.hide();
+            }
+
+            // Tampilkan SweetAlert2 Dark Mode yang elegan
+            Swal.fire({
+              icon: 'success',
+              title: 'Pendaftaran Berhasil!',
+              text: result.message || 'Akun Anda berhasil dibuat. Silakan masuk.',
+              background: '#161b22',
+              color: '#c9d1d9',
+              confirmButtonColor: '#2ea043'
+            }).then(() => {
+              // Buka modal login otomatis setelah pop-up ditutup
+              const loginModalEl = document.getElementById('loginModal');
+              if (loginModalEl) {
+                const loginModal = new bootstrap.Modal(loginModalEl);
+                loginModal.show();
+              }
+            });
+          } else {
+            if (alertBox) {
+              alertBox.innerText = result.message || 'Gagal melakukan pendaftaran.';
+              alertBox.classList.remove('d-none');
+            }
+          }
+        } catch (err) {
+          if (alertBox) {
+            alertBox.innerText = 'Terjadi kesalahan pada sistem server.';
+            alertBox.classList.remove('d-none');
+          }
         }
-      } catch (err) {
-        // Fallback jika backend melakukan form post standar/redirect
-        this.submit();
       }
     });
   </script>

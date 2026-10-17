@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Layanan & Tindakan - RS Sakti Mandra Guna</title>
-  
+  <title>Layanan & Tindakan Medis - RS Sakti Mandra Guna</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <!-- Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -30,18 +30,15 @@
       color: var(--text-main);
     }
 
-    .text-muted {
-      color: var(--text-sub) !important;
-    }
+    .text-muted { color: var(--text-sub) !important; }
 
-    /* TOP BAR */
+    /* TOP BAR & NAVBAR */
     .top-bar {
       background-color: #010409;
       font-size: 0.8rem;
       border-bottom: 1px solid var(--border-color);
     }
 
-    /* NAVBAR */
     .navbar-main {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border-color);
@@ -53,50 +50,9 @@
       padding: 8px 16px !important;
     }
 
-    .nav-link:hover {
-      color: var(--accent-neon) !important;
-    }
+    .nav-link:hover { color: var(--accent-neon) !important; }
 
-    /* DROPDOWN HOVER STYLES */
-    @media (min-width: 992px) {
-      .nav-item.dropdown:hover .dropdown-menu {
-        display: block;
-        margin-top: 0;
-        animation: fadeIn 0.2s ease-in-out;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .custom-dropdown-menu {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border-radius: 8px;
-      padding: 8px 0;
-    }
-
-    .custom-dropdown-item {
-      color: var(--text-main);
-      padding: 10px 20px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .custom-dropdown-item:hover {
-      background-color: rgba(46, 160, 67, 0.15);
-      color: var(--accent-neon);
-      padding-left: 24px;
-    }
-
-    /* PAGE HEADER RINGKAS */
+    /* PAGE HEADER */
     .page-header {
       background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
       padding: 40px 0 25px 0;
@@ -120,8 +76,26 @@
       left: 25%;
     }
 
-    /* STYLE KOTAK-KOTAK TINDAKAN */
-    .action-card {
+    /* FILTER BUTTONS */
+    .filter-btn {
+      background-color: #21262d;
+      color: #e6edf3;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background-color: var(--accent-green);
+      color: #ffffff;
+      border-color: var(--accent-green);
+    }
+
+    /* SERVICE CARD STYLES */
+    .service-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
@@ -130,23 +104,22 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
-    .action-card:hover {
+    .service-card:hover {
       transform: translateY(-5px);
       border-color: var(--accent-green);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
     }
 
-    .action-badge {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 20px;
+    .badge-category {
+      font-size: 0.72rem;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 4px;
       display: inline-block;
-      margin-bottom: 12px;
-      width: fit-content;
     }
 
     .badge-bedah {
@@ -161,34 +134,10 @@
       border: 1px solid rgba(13, 202, 240, 0.3);
     }
 
-    .badge-konsultasi, .badge-kontrol {
+    .badge-konsultasi {
       background-color: rgba(255, 193, 7, 0.15);
       color: #ffc107;
       border: 1px solid rgba(255, 193, 7, 0.3);
-    }
-
-    .badge-default {
-      background-color: rgba(46, 160, 67, 0.15);
-      color: var(--accent-neon);
-      border: 1px solid rgba(46, 160, 67, 0.3);
-    }
-
-    /* FILTER TABS */
-    .nav-pills-custom .nav-link {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-main) !important;
-      border-radius: 20px;
-      padding: 8px 20px !important;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .nav-pills-custom .nav-link.active,
-    .nav-pills-custom .nav-link:hover {
-      background-color: var(--accent-green) !important;
-      color: #ffffff !important;
-      border-color: var(--accent-green);
     }
 
     .btn-neon {
@@ -225,9 +174,25 @@
         <span class="d-none d-md-inline"><i class="bi bi-clock-fill text-success me-2"></i> 24 Jam Pelayanan Darurat & Konsultasi</span>
       </div>
       <div>
-        <a href="/login" class="btn btn-sm btn-outline-neon fw-semibold px-3">
-          <i class="bi bi-box-arrow-in-right me-1"></i> Login Sistem
-        </a>
+        <% if (typeof user !== 'undefined' && user) { %>
+          <div class="d-flex align-items-center gap-2">
+            <!-- Tombol Pintasan Portal Admin -->
+            <% if (user.role === 'administrator' || user.role === 'admin' || user.role === 'finance' || user.role === 'kasir' || user.username === 'admin') { %>
+              <a href="/dashboard" class="btn btn-sm btn-success px-2 py-0 fs-7 fw-semibold" title="Portal Admin">
+                <i class="bi bi-speedometer2"></i> Portal Admin
+              </a>
+            <% } %>
+
+            <span class="small text-light ms-2 me-1"><i class="bi bi-person-circle text-success me-1"></i> <%= user.nama || user.username %></span>
+            <a href="/logout" class="btn btn-sm btn-outline-danger px-2 py-0 fs-7" title="Keluar">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </div>
+        <% } else { %>
+          <button type="button" class="btn btn-sm btn-outline-neon fw-semibold px-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Login Sistem
+          </button>
+        <% } %>
       </div>
     </div>
   </div>
@@ -236,7 +201,7 @@
   <nav class="navbar navbar-expand-lg navbar-main sticky-top">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="/">
-        <img src="/image/logors.png" alt="Logo RS" height="42" class="me-3">
+        <img src="/image/logors.png" alt="Logo RS" height="42" class="me-3" onerror="this.style.display='none'">
         <div>
           <span class="fw-bold text-white fs-5 d-block">RS SAKTI MANDRA GUNA</span>
           <small class="text-muted" style="font-size: 0.65rem; letter-spacing: 1px;">BEDAH PLASTIK & KECANTIKAN</small>
@@ -248,35 +213,19 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-          
-          <!-- LAYANAN DROPDOWN HOVER -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="/layanan" id="navbarLayanan" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Layanan
-            </a>
-            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarLayanan">
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/layanan?kategori=bedah">
-                  <i class="bi bi-scissors text-success"></i> Bedah
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/layanan?kategori=treatment">
-                  <i class="bi bi-stars text-success"></i> Treatment
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/layanan?kategori=konsultasi">
-                  <i class="bi bi-chat-heart text-success"></i> Konsultasi / Kontrol
-                </a>
-              </li>
-            </ul>
-          </li>
-
-          <li class="nav-item"><a class="nav-link" href="/cek-dokter">Cek Dokter</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/layanan">Layanan & Treatment</a></li>
+          <li class="nav-item"><a class="nav-link" href="/cek-dokter">Cari Dokter</a></li>
           <li class="nav-item"><a class="nav-link" href="/fasilitas">Fasilitas</a></li>
           <li class="nav-item ms-lg-3">
-            <a href="/booking" class="btn btn-neon btn-sm px-3"><i class="bi bi-calendar-check me-1"></i> Buat Janji Temu</a>
+            <% if (typeof user !== 'undefined' && user) { %>
+              <button type="button" class="btn btn-neon btn-sm px-3" data-bs-toggle="modal" data-bs-target="#modalBooking">
+                <i class="bi bi-calendar-check me-1"></i> Buat Janji Temu
+              </button>
+            <% } else { %>
+              <button type="button" class="btn btn-neon btn-sm px-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="bi bi-calendar-check me-1"></i> Buat Janji Temu
+              </button>
+            <% } %>
           </li>
         </ul>
       </div>
@@ -291,156 +240,229 @@
     </div>
   </div>
 
-  <!-- SEKSI DAFTAR TINDAKAN KOTAK-KOTAK -->
+  <!-- KONTEN LAYANAN GRID -->
   <section class="py-5">
     <div class="container">
 
-      <!-- FILTER TAB KATEGORI -->
-      <ul class="nav nav-pills nav-pills-custom justify-content-center gap-2 mb-5" id="layananTab">
-        <li class="nav-item">
-          <button class="nav-link active" id="tab-all" onclick="selectTab('all')">
-            <i class="bi bi-grid-fill me-1"></i> Semua Layanan
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="tab-bedah" onclick="selectTab('bedah')">
-            <i class="bi bi-scissors me-1"></i> Bedah (Surgical)
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="tab-treatment" onclick="selectTab('treatment')">
-            <i class="bi bi-stars me-1"></i> Treatment (Non-Surgical)
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="tab-konsultasi" onclick="selectTab('konsultasi')">
-            <i class="bi bi-chat-heart me-1"></i> Konsultasi / Kontrol
-          </button>
-        </li>
-      </ul>
+      <!-- FILTER KATEGORI -->
+      <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+        <button class="filter-btn active" data-filter="all">
+          <i class="bi bi-grid-fill me-1"></i> Semua Layanan
+        </button>
+        <button class="filter-btn" data-filter="Bedah">
+          <i class="bi bi-scissors me-1"></i> Bedah (Surgical)
+        </button>
+        <button class="filter-btn" data-filter="Treatment">
+          <i class="bi bi-stars me-1"></i> Treatment (Non-Surgical)
+        </button>
+        <button class="filter-btn" data-filter="Konsultasi">
+          <i class="bi bi-chat-heart me-1"></i> Konsultasi / Kontrol
+        </button>
+      </div>
 
-      <!-- GRID KOTAK-KOTAK TINDAKAN (DINAMIS DARI DATABASE) -->
-      <div class="row g-4" id="tindakanGrid">
+      <!-- KOTAK PENCARIAN -->
+      <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-white-50 border-secondary"><i class="bi bi-search"></i></span>
+            <input type="text" id="searchLayanan" class="form-control bg-dark text-white border-secondary" placeholder="Cari nama tindakan atau prosedur...">
+          </div>
+        </div>
+      </div>
 
-        <% if (layanan && layanan.length > 0) { %>
-          <% layanan.forEach(item => { 
-            // Normalisasi nama kategori untuk class filter & badge icon
-            const katLower = item.kategori ? item.kategori.toLowerCase() : '';
-            
-            let classKategori = 'item-other';
-            let badgeStyle = 'badge-default';
-            let badgeIcon = 'bi-hospital';
+      <!-- GRID LAYANAN CARD -->
+      <% const dataLayanan = (typeof layanan !== 'undefined' && layanan) ? layanan : ((typeof layananList !== 'undefined' && layananList) ? layananList : []); %>
+      
+      <div class="row g-4" id="gridLayanan">
+        <% if (dataLayanan && dataLayanan.length > 0) { %>
+          <% dataLayanan.forEach(item => { %>
+            <% 
+              let kat = item.kategori || 'Bedah';
+              let badgeClass = 'badge-bedah';
+              if (kat.toLowerCase().includes('treatment') || kat.toLowerCase().includes('non-surgical')) badgeClass = 'badge-treatment';
+              else if (kat.toLowerCase().includes('konsultasi') || kat.toLowerCase().includes('kontrol')) badgeClass = 'badge-konsultasi';
 
-            if (katLower.includes('bedah')) {
-              classKategori = 'item-bedah';
-              badgeStyle = 'badge-bedah';
-              badgeIcon = 'bi-scissors';
-            } else if (katLower.includes('treatment')) {
-              classKategori = 'item-treatment';
-              badgeStyle = 'badge-treatment';
-              badgeIcon = 'bi-stars';
-            } else if (katLower.includes('konsultasi') || katLower.includes('kontrol')) {
-              classKategori = 'item-konsultasi';
-              badgeStyle = 'badge-konsultasi';
-              badgeIcon = 'bi-chat-heart';
-            }
-          %>
-            <div class="col-md-4 item-tindakan <%= classKategori %>">
-              <div class="action-card">
+              // Mengambil harga standar dari database sesuai struktur tabel master_tindakan
+              let hargaItem = item.harga_standar || item.tarif || item.biaya || item.harga || 0;
+            %>
+            <div class="col-md-4 card-item" data-kategori="<%= kat %>">
+              <div class="service-card">
                 <div>
-                  <span class="action-badge <%= badgeStyle %>">
-                    <i class="bi <%= badgeIcon %> me-1"></i> <%= item.kategori %>
-                  </span>
-                  <h5 class="fw-bold text-white mb-2"><%= item.nama_tindakan %></h5>
-                  <p class="text-muted small mb-3">
-                    <%= item.deskripsi || 'Prosedur tindakan medis profesional oleh spesialis terpercaya.' %>
+                  <div class="mb-3">
+                    <span class="badge-category <%= badgeClass %>">
+                      <i class="bi bi-scissors me-1"></i> <%= kat %>
+                    </span>
+                  </div>
+                  <h4 class="fw-bold text-white mb-2" style="font-size: 1.25rem;"><%= item.nama_tindakan %></h4>
+                  <p class="text-muted small mb-4" style="font-size: 0.85rem; line-height: 1.6;">
+                    <%= item.deskripsi || item.prosedur || 'Prosedur medis spesialis yang ditangani langsung oleh dokter profesional berpengalaman dengan standar higienis dan keamanan terbaik.' %>
                   </p>
                 </div>
 
                 <div>
-                  <% if (item.harga_standar) { %>
-                    <div class="d-flex justify-content-between align-items-center mb-3 pt-2 border-top border-secondary">
-                      <small class="text-white-50">Estimasi Biaya:</small>
-                      <span class="fw-bold text-warning">
-                        Rp <%= Number(item.harga_standar).toLocaleString('id-ID') %>
-                      </span>
-                    </div>
+                  <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary mb-3">
+                    <span class="text-muted small">Estimasi Biaya:</span>
+                    <span class="fw-bold text-warning fs-5">
+                      Rp <%= Number(hargaItem).toLocaleString('id-ID') %>
+                    </span>
+                  </div>
+
+                  <% if (typeof user !== 'undefined' && user) { %>
+                    <button type="button" class="btn btn-outline-neon btn-sm w-100 py-2 fw-semibold btn-booking-tindakan" data-tindakan-id="<%= item.id %>" data-bs-toggle="modal" data-bs-target="#modalBooking">
+                      <i class="bi bi-calendar-check me-1"></i> Booking Tindakan Ini
+                    </button>
+                  <% } else { %>
+                    <button type="button" class="btn btn-outline-neon btn-sm w-100 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#loginModal">
+                      <i class="bi bi-box-arrow-in-right me-1"></i> Booking Tindakan Ini
+                    </button>
                   <% } %>
-                  
-                  <a href="/booking?tindakan=<%= encodeURIComponent(item.nama_tindakan) %>" class="btn btn-outline-neon btn-sm w-100">
-                    <i class="bi bi-calendar-check me-1"></i> Booking Tindakan Ini
-                  </a>
                 </div>
               </div>
             </div>
           <% }) %>
         <% } else { %>
           <div class="col-12 text-center text-muted py-5">
-            <i class="bi bi-inbox fs-1 d-block mb-3 text-secondary"></i>
-            <p class="fs-5">Belum ada data layanan yang tersedia saat ini.</p>
+            <i class="bi bi-folder2-open fs-1 d-block mb-3 text-secondary"></i>
+            <p class="fs-5">Belum ada data tindakan yang tersedia saat ini.</p>
           </div>
         <% } %>
-
       </div>
+
     </div>
   </section>
 
+  <!-- MODAL LOGIN POP-UP -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-light" style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;">
+        <div class="modal-header border-bottom-0 pb-0">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 pb-4">
+          <div class="text-center mb-4">
+            <img src="/image/logors.png" alt="Logo RS" height="50" class="mb-2" onerror="this.style.display='none'">
+            <h5 class="fw-bold text-white mb-0">RS SAKTI MANDRA GUNA</h5>
+            <small class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">BEDAH PLASTIK & KECANTIKAN</small>
+          </div>
+          <div id="loginAlert" class="alert alert-danger text-center py-2 fs-6 mb-3 d-none"></div>
+          <form id="formLoginPopup">
+            <div class="mb-3">
+              <label class="form-label text-light small fw-semibold">Username / Email</label>
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person"></i></span>
+                <input type="text" id="popupUsername" name="username" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan username" required>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label text-light small fw-semibold mb-0">Kata Sandi</label>
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-lock"></i></span>
+                <input type="password" id="popupPassword" name="password" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan kata sandi" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-neon w-100 py-2 fw-semibold mb-3">
+              Masuk <i class="bi bi-box-arrow-in-right ms-1"></i>
+            </button>
+            <div class="text-center pt-3 border-top border-secondary">
+              <span class="small text-muted">Belum memiliki akun?</span>
+              <a href="#" class="small fw-bold text-success text-decoration-none ms-1" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Daftar Sekarang</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCLUDE ONLINE BOOKING MODAL (PARSIAL TERPUSAT) -->
+  <%- include('onlinebooking') %>
+
   <!-- FOOTER -->
   <footer class="bg-dark text-white-50 pt-5 pb-3 border-top border-secondary">
-    <div class="container">
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <h5 class="text-white fw-bold mb-3">RS SAKTI MANDRA GUNA</h5>
-          <p class="small text-muted">Rumah Sakit Khusus Bedah Plastik, Rekonstruksi, dan Treatment Kecantikan Terpercaya dengan Standar Pelayanan Kesehatan Tinggi.</p>
-        </div>
-        <div class="col-md-4">
-          <h6 class="text-white fw-bold mb-3">Kontak & Lokasi</h6>
-          <p class="small mb-1 text-muted"><i class="bi bi-geo-alt me-2 text-success"></i> Jl. Sakti Mandra Guna No. 88, Bintaro Jaya</p>
-          <p class="small mb-1 text-muted"><i class="bi bi-envelope me-2 text-success"></i> info@saktimandraguna.co.id</p>
-          <p class="small text-muted"><i class="bi bi-telephone me-2 text-success"></i> (021) 555-8888</p>
-        </div>
-        <div class="col-md-4">
-          <h6 class="text-white fw-bold mb-3">Jam Operasional</h6>
-          <p class="small mb-1 text-muted">Poliklinik Spesialis: Senin - Sabtu (08.00 - 20.00)</p>
-          <p class="small text-success fw-bold">IGD & UGD: 24 Jam Non-Stop</p>
-        </div>
-      </div>
-      <hr class="border-secondary">
-      <div class="text-center small">
-        <p>&copy; 2026 RS Sakti Mandra Guna. All Rights Reserved.</p>
-      </div>
+    <div class="container text-center small">
+      <p>&copy; 2026 RS Sakti Mandra Guna. All Rights Reserved.</p>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    function selectTab(category) {
-      const items = document.querySelectorAll('.item-tindakan');
-      const tabs = document.querySelectorAll('#layananTab .nav-link');
-      
-      // Highlight tab
-      tabs.forEach(tab => tab.classList.remove('active'));
-      const activeTab = document.getElementById('tab-' + category);
-      if(activeTab) activeTab.classList.add('active');
+    // Filtering Kategori Layanan
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
 
-      // Tampilkan/Sembunyikan kartu berdasarkan kategori
-      items.forEach(item => {
-        if (category === 'all' || item.classList.contains('item-' + category)) {
-          item.style.display = 'block';
+        const filter = this.getAttribute('data-filter');
+        const cards = document.querySelectorAll('.card-item');
+
+        cards.forEach(card => {
+          const kat = card.getAttribute('data-kategori') || '';
+          if (filter === 'all' || kat.toLowerCase().includes(filter.toLowerCase())) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Live Search
+    document.getElementById('searchLayanan').addEventListener('input', function(e) {
+      const keyword = e.target.value.toLowerCase();
+      const cards = document.querySelectorAll('.card-item');
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(keyword)) {
+          card.style.display = 'block';
         } else {
-          item.style.display = 'none';
+          card.style.display = 'none';
+        }
+      });
+    });
+
+    // Otomatis pilih tindakan saat tombol Booking diklik
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.btn-booking-tindakan').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-tindakan-id');
+          const select = document.getElementById('selectTindakan');
+          if (select) {
+            select.value = id;
+            select.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+    });
+
+    // Handling AJAX Login
+    const formLoginPopup = document.getElementById('formLoginPopup');
+    if (formLoginPopup) {
+      formLoginPopup.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('popupUsername').value;
+        const password = document.getElementById('popupPassword').value;
+        const alertBox = document.getElementById('loginAlert');
+        alertBox.classList.add('d-none');
+
+        try {
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            window.location.reload();
+          } else {
+            alertBox.innerText = result.message || 'Username atau password salah.';
+            alertBox.classList.remove('d-none');
+          }
+        } catch (err) {
+          alertBox.innerText = 'Terjadi kesalahan sistem server.';
+          alertBox.classList.remove('d-none');
         }
       });
     }
-
-    // Jalankan otomatis begitu halaman terbuka
-    window.addEventListener('DOMContentLoaded', () => {
-      window.scrollTo(0, 0);
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const category = urlParams.get('kategori') || 'all';
-      selectTab(category);
-    });
   </script>
 </body>
 </html>

@@ -12,7 +12,7 @@
   <!-- CSS Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  
+ 
   <style>
     :root {
       --bg-dark: #0d1117;
@@ -70,15 +70,6 @@
     .logo-menu {
       height: 30px;
       width: auto;
-    }
-
-    .nav-section-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--accent-green-neon);
-      padding: 14px 20px 4px;
     }
 
     .sidebar nav a {
@@ -157,7 +148,6 @@
       position: relative;
     }
 
-    /* WATERMARK LOGO DI BACKGROUND CONTENT */
     .watermark-bg {
       position: absolute;
       top: 50%;
@@ -170,7 +160,6 @@
       z-index: 0;
     }
 
-    /* WIDGET CONTAINER & CARDS */
     .widget-container {
       border: 1px solid var(--border-color);
       background-color: var(--card-bg);
@@ -194,7 +183,6 @@
       justify-content: space-between;
     }
 
-    /* TABEL CUSTOM DARK */
     .table-dark-custom {
       --bs-table-bg: transparent !important;
       --bs-table-color: var(--text-main) !important;
@@ -218,7 +206,35 @@
       padding: 12px 16px;
     }
 
-    /* MODAL CUSTOM DARK */
+    .form-control-dark {
+      background-color: #0d1117 !important;
+      border: 1px solid var(--border-color) !important;
+      color: #ffffff !important;
+      font-size: 0.875rem;
+      color-scheme: dark;
+    }
+
+    .form-control-dark:focus {
+      background-color: #0d1117 !important;
+      border-color: var(--accent-green) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 0 0.25rem rgba(46, 160, 67, 0.25);
+    }
+
+    .btn-outline-neon {
+      border: 1px solid var(--accent-green-neon);
+      color: var(--accent-green-neon);
+      background: transparent;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .btn-outline-neon:hover {
+      background-color: var(--accent-green-neon);
+      color: #000000;
+    }
+
     .modal-content-dark {
       background-color: #161b22;
       border: 1px solid var(--border-color);
@@ -265,11 +281,12 @@
           <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
           <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
           <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/lembur"><i class="bi bi-stopwatch"></i> Input Lembur</a>
+          <a href="/payroll"><i class="bi bi-cash-stack"></i> Payroll / Gaji</a>
           <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
         </nav>
       </div>
-      
-      <!-- SIDEBAR FOOTER DENGAN DYNAMIC USER LOGIN & TOMBOL LOGOUT PRESISI DASHBOARD -->
+     
       <div class="sidebar-footer d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
           <i class="bi bi-person-circle text-success me-1"></i>
@@ -285,7 +302,6 @@
 
     <!-- KONTEN UTAMA -->
     <div class="main-content">
-      <!-- HEADER NAMA RUMAH SAKIT -->
       <div class="header-rs-center">
         <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
         <div class="text-center">
@@ -295,16 +311,31 @@
       </div>
 
       <div class="content-body">
-        <!-- WATERMARK LOGO DI BACKGROUND CONTENT -->
         <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
 
         <!-- WIDGET CONTAINER RIWAYAT TRANSAKSI -->
         <div class="widget-container">
-          <div class="widget-header">
+          <div class="widget-header d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
             <span><i class="bi bi-clock-history text-success me-2"></i> Riwayat Transaksi Selesai (Completed)</span>
-            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50">
-              Total: <%= (typeof transaksis !== 'undefined' && transaksis) ? transaksis.length : 0 %> Transaksi
-            </span>
+            
+            <!-- Form Filter Tanggal & Search -->
+            <form action="/riwayat-transaksi" method="GET" class="d-flex align-items-center flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-1">
+                <small class="text-white fw-semibold">Dari:</small>
+                <input type="date" name="tanggal_mulai" class="form-control form-control-dark form-control-sm" value="<%= typeof tanggal_mulai !== 'undefined' ? tanggal_mulai : '' %>">
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <small class="text-white fw-semibold">S/d:</small>
+                <input type="date" name="tanggal_selesai" class="form-control form-control-dark form-control-sm" value="<%= typeof tanggal_selesai !== 'undefined' ? tanggal_selesai : '' %>">
+              </div>
+              <div class="input-group input-group-sm" style="width: 200px;">
+                <input type="text" name="search" class="form-control form-control-dark" placeholder="Cari pasien..." value="<%= typeof search !== 'undefined' ? search : '' %>">
+                <button type="submit" class="btn btn-outline-neon"><i class="bi bi-search"></i></button>
+              </div>
+              <% if ((typeof search !== 'undefined' && search) || (typeof tanggal_mulai !== 'undefined' && tanggal_mulai) || (typeof tanggal_selesai !== 'undefined' && tanggal_selesai)) { %>
+                <a href="/riwayat-transaksi" class="btn btn-outline-secondary btn-sm" title="Reset Filter"><i class="bi bi-x-lg"></i></a>
+              <% } %>
+            </form>
           </div>
          
           <div class="table-responsive">
@@ -330,7 +361,7 @@
                   <% transaksis.forEach((t, index) => { %>
                     <% const itemId = t.id || t._id; %>
                     <tr>
-                      <td class="text-center"><%= index + 1 %></td>
+                      <td class="text-center"><%= ((typeof currentPage !== 'undefined' ? currentPage : 1) - 1) * 50 + (index + 1) %></td>
                       <td><%= t.tanggal_tindakan ? new Date(t.tanggal_tindakan).toLocaleDateString('id-ID') : '-' %></td>
                       <td><strong class="text-white"><%= t.nama_pasien || '-' %></strong></td>
                       <td><span class="badge bg-info text-dark"><%= t.jenis_tindakan || '-' %></span></td>
@@ -358,8 +389,27 @@
               </tbody>
             </table>
           </div>
-        </div>
 
+          <!-- Navigasi Pagination Halaman (Maks. 50 Baris/Halaman) -->
+          <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+            <div class="d-flex justify-content-between align-items-center p-3 border-top border-secondary bg-dark">
+              <small class="text-white">Menampilkan Halaman <strong><%= currentPage %></strong> dari <strong><%= totalPages %></strong> (Maks. 50 baris/halaman)</small>
+              <nav>
+                <ul class="pagination pagination-sm mb-0">
+                  <% for(let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                      <a class="page-link bg-dark text-white border-secondary <%= i === currentPage ? 'bg-success border-success' : '' %>" 
+                         href="/riwayat-transaksi?page=<%= i %><%= typeof search !== 'undefined' && search ? '&search=' + search : '' %><%= typeof tanggal_mulai !== 'undefined' && tanggal_mulai ? '&tanggal_mulai=' + tanggal_mulai : '' %><%= typeof tanggal_selesai !== 'undefined' && tanggal_selesai ? '&tanggal_selesai=' + tanggal_selesai : '' %>">
+                         <%= i %>
+                      </a>
+                    </li>
+                  <% } %>
+                </ul>
+              </nav>
+            </div>
+          <% } %>
+
+        </div>
       </div>
     </div>
   </div>
@@ -369,8 +419,6 @@
     <% transaksis.forEach((t) => { %>
       <%
         const itemId = t.id || t._id;
-
-        // Hitung Total Biaya Sewa Kamar OP berdasarkan jam / per jam
         const jamMasuk = t.jam_masuk_ok || '-';
         const jamKeluar = t.jam_keluar_ok || '-';
         const durasiJam = Number(t.durasi_operasi_jam || 0);
@@ -399,7 +447,7 @@
               </div>
               <div class="d-flex justify-content-between mb-1 text-danger">
                 <span>Diskon:</span>
-                <span class="font-monospace">- Rp <%= Math.round(Number(t.diskon || 0)).toLocaleString('id-ID') %></span>
+                <span class="font-monospace">Rp <%= Math.round(Number(t.diskon || 0)).toLocaleString('id-ID') %></span>
               </div>
               <div class="d-flex justify-content-between mb-3 fw-bold text-success border-bottom border-secondary pb-2">
                 <span>Total Nett:</span>
@@ -425,47 +473,40 @@
                     <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.fee_dokter2 || 0)).toLocaleString('id-ID') %></strong>
                   </li>
                 <% } %>
-                <% if (t.nama_dokter_anestesi) { %>
+               
+                <% if (t.dokter_anestesi_id || Number(t.biaya_anestesi || 0) > 0) { %>
                   <li class="list-group-item d-flex justify-content-between px-0">
-                    <span>Fee Dokter Anestesi (<%= t.nama_dokter_anestesi %>)</span>
+                    <span>Fee Dokter Anestesi <%= t.nama_dokter_anestesi ? '(' + t.nama_dokter_anestesi + ')' : '' %></span>
                     <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_anestesi || 0)).toLocaleString('id-ID') %></strong>
                   </li>
                 <% } %>
 
-                <!-- SUSTER OPERASI (OP) PER INDIVIDU -->
-                <% if (t.nama_suster_op1) { %>
+                <% if (t.suster_op1_id) { %>
                   <li class="list-group-item d-flex justify-content-between px-0">
-                    <span>Fee Suster OP 1 (<%= t.nama_suster_op1 %>)</span>
-                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.fee_suster_op1 || t.biaya_suster_op || 200000)).toLocaleString('id-ID') %></strong>
+                    <span>Fee Suster OP 1 <%= t.nama_suster_op1 ? '(' + t.nama_suster_op1 + ')' : '' %></span>
+                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_suster_op || 0)).toLocaleString('id-ID') %></strong>
                   </li>
                 <% } %>
-                <% if (t.nama_suster_op2) { %>
+                <% if (t.suster_op2_id) { %>
                   <li class="list-group-item d-flex justify-content-between px-0">
-                    <span>Fee Suster OP 2 (<%= t.nama_suster_op2 %>)</span>
-                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.fee_suster_op2 || 200000)).toLocaleString('id-ID') %></strong>
+                    <span>Fee Suster OP 2 <%= t.nama_suster_op2 ? '(' + t.nama_suster_op2 + ')' : '' %></span>
+                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_suster_op || 0)).toLocaleString('id-ID') %></strong>
                   </li>
                 <% } %>
-                <% if (t.nama_suster_op3) { %>
+                <% if (t.suster_op3_id) { %>
                   <li class="list-group-item d-flex justify-content-between px-0">
-                    <span>Fee Suster OP 3 (<%= t.nama_suster_op3 %>)</span>
-                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.fee_suster_op3 || 200000)).toLocaleString('id-ID') %></strong>
+                    <span>Fee Suster OP 3 <%= t.nama_suster_op3 ? '(' + t.nama_suster_op3 + ')' : '' %></span>
+                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_suster_op || 0)).toLocaleString('id-ID') %></strong>
                   </li>
                 <% } %>
 
-                <!-- SUSTER JAGA / RAWAT (1 ORANG PER PASIEN) -->
-                <% if (t.nama_suster_rawat) { %>
-                  <li class="list-group-item d-flex justify-content-between px-0">
-                    <span>Fee Suster Jaga/Rawat (<%= t.nama_suster_rawat %>)</span>
-                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.fee_suster_rawat || t.biaya_suster_rawat || 50000)).toLocaleString('id-ID') %></strong>
-                  </li>
-                <% } else if (Number(t.biaya_suster_rawat || 0) > 0) { %>
+                <% if (t.suster_rawat_id || Number(t.biaya_suster_rawat || 0) > 0) { %>
                   <li class="list-group-item d-flex justify-content-between px-0">
                     <span>Fee Suster Jaga/Rawat</span>
-                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_suster_rawat)).toLocaleString('id-ID') %></strong>
+                    <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_suster_rawat || 0)).toLocaleString('id-ID') %></strong>
                   </li>
                 <% } %>
 
-                <!-- SEWA KAMAR OPERASI BERDASARKAN JAM MASUK/KELUAR -->
                 <li class="list-group-item d-flex justify-content-between px-0">
                   <span>
                     Sewa Kamar OK
@@ -478,7 +519,6 @@
                   <strong class="text-white font-monospace">Rp <%= Math.round(totalSewaKamar).toLocaleString('id-ID') %></strong>
                 </li>
 
-                <!-- OBAT / ALKES -->
                 <li class="list-group-item d-flex justify-content-between px-0">
                   <span>Obat / Alkes</span>
                   <strong class="text-white font-monospace">Rp <%= Math.round(Number(t.biaya_obat || 0)).toLocaleString('id-ID') %></strong>

@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jadwal & Cek Dokter - RS Sakti Mandra Guna</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <!-- Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -146,9 +146,27 @@
         <span class="d-none d-md-inline"><i class="bi bi-clock-fill text-success me-2"></i> Layanan Informasi Dokter & Jadwal Praktek</span>
       </div>
       <div>
-        <a href="/login" class="btn btn-sm btn-outline-neon fw-semibold px-3">
-          <i class="bi bi-box-arrow-in-right me-1"></i> Login Sistem
-        </a>
+        <% if (typeof user !== 'undefined' && user) { %>
+          <!-- TAMPILAN JIKA USER SUDAH LOGIN -->
+          <div class="d-flex align-items-center gap-2">
+            <!-- Tombol Pintasan Portal Admin -->
+            <% if (user.role === 'administrator' || user.role === 'admin' || user.role === 'finance' || user.role === 'kasir') { %>
+              <a href="/dashboard" class="btn btn-sm btn-success px-2 py-0 fs-7 fw-semibold" title="Portal Admin">
+                <i class="bi bi-speedometer2"></i> Portal Admin
+              </a>
+            <% } %>
+
+            <span class="small text-light ms-2 me-1"><i class="bi bi-person-circle text-success me-1"></i> <%= user.nama || user.username %></span>
+            <a href="/logout" class="btn btn-sm btn-outline-danger px-2 py-0 fs-7" title="Keluar">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </div>
+        <% } else { %>
+          <!-- TOMBOL PEMICU MODAL LOGIN POP-UP JIKA BELUM LOGIN -->
+          <button type="button" class="btn btn-sm btn-outline-neon fw-semibold px-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Login Sistem
+          </button>
+        <% } %>
       </div>
     </div>
   </div>
@@ -157,7 +175,7 @@
   <nav class="navbar navbar-expand-lg navbar-main sticky-top">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="/">
-        <img src="/image/logors.png" alt="Logo RS" height="42" class="me-3">
+        <img src="/image/logors.png" alt="Logo RS" height="42" class="me-3" onerror="this.style.display='none'">
         <div>
           <span class="fw-bold text-white fs-5 d-block">RS SAKTI MANDRA GUNA</span>
           <small class="text-muted" style="font-size: 0.65rem; letter-spacing: 1px;">BEDAH PLASTIK & KECANTIKAN</small>
@@ -173,7 +191,15 @@
           <li class="nav-item"><a class="nav-link active" href="/cek-dokter">Cari Dokter</a></li>
           <li class="nav-item"><a class="nav-link" href="/fasilitas">Fasilitas</a></li>
           <li class="nav-item ms-lg-3">
-            <a href="/booking" class="btn btn-neon btn-sm px-3"><i class="bi bi-calendar-check me-1"></i> Buat Janji Temu</a>
+            <% if (typeof user !== 'undefined' && user) { %>
+              <button type="button" class="btn btn-neon btn-sm px-3" data-bs-toggle="modal" data-bs-target="#modalBooking">
+                <i class="bi bi-calendar-check me-1"></i> Buat Janji Temu
+              </button>
+            <% } else { %>
+              <button type="button" class="btn btn-neon btn-sm px-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="bi bi-calendar-check me-1"></i> Buat Janji Temu
+              </button>
+            <% } %>
           </li>
         </ul>
       </div>
@@ -204,7 +230,7 @@
 
       <!-- GRID DOKTER -->
       <div class="row g-4" id="dokterGrid">
-        <% if (dokterList && dokterList.length > 0) { %>
+        <% if (typeof dokterList !== 'undefined' && dokterList && dokterList.length > 0) { %>
           <% dokterList.forEach(dokter => { %>
             <div class="col-md-4 dokter-card-item">
               <div class="doctor-card">
@@ -236,9 +262,15 @@
                 </div>
 
                 <div>
-                  <a href="/booking?dokter=<%= encodeURIComponent(dokter.nama_dokter) %>" class="btn btn-outline-neon btn-sm w-100">
-                    <i class="bi bi-calendar-plus me-1"></i> Buat Janji dengan Dokter
-                  </a>
+                  <% if (typeof user !== 'undefined' && user) { %>
+                    <button type="button" class="btn btn-outline-neon btn-sm w-100 btn-pilih-dokter" data-dokter-id="<%= dokter.id %>" data-bs-toggle="modal" data-bs-target="#modalBooking">
+                      <i class="bi bi-calendar-plus me-1"></i> Buat Janji dengan Dokter
+                    </button>
+                  <% } else { %>
+                    <button type="button" class="btn btn-outline-neon btn-sm w-100" data-bs-toggle="modal" data-bs-target="#loginModal">
+                      <i class="bi bi-box-arrow-in-right me-1"></i> Login untuk Booking
+                    </button>
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -253,6 +285,51 @@
 
     </div>
   </section>
+
+  <!-- MODAL LOGIN POP-UP -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-light" style="background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;">
+        <div class="modal-header border-bottom-0 pb-0">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 pb-4">
+          <div class="text-center mb-4">
+            <img src="/image/logors.png" alt="Logo RS" height="50" class="mb-2" onerror="this.style.display='none'">
+            <h5 class="fw-bold text-white mb-0">RS SAKTI MANDRA GUNA</h5>
+            <small class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">BEDAH PLASTIK & KECANTIKAN</small>
+          </div>
+          <div id="loginAlert" class="alert alert-danger text-center py-2 fs-6 mb-3 d-none"></div>
+          <form id="formLoginPopup">
+            <div class="mb-3">
+              <label class="form-label text-light small fw-semibold">Username / Email</label>
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person"></i></span>
+                <input type="text" id="popupUsername" name="username" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan username" required>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label text-light small fw-semibold mb-0">Kata Sandi</label>
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-lock"></i></span>
+                <input type="password" id="popupPassword" name="password" class="form-control bg-dark border-secondary text-white" placeholder="Masukkan kata sandi" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-neon w-100 py-2 fw-semibold mb-3">
+              Masuk <i class="bi bi-box-arrow-in-right ms-1"></i>
+            </button>
+            <div class="text-center pt-3 border-top border-secondary">
+              <span class="small text-muted">Belum memiliki akun?</span>
+              <a href="#" class="small fw-bold text-success text-decoration-none ms-1" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Daftar Sekarang</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCLUDE ONLINE BOOKING MODAL (PARSIAL TERPUSAT) -->
+  <%- include('onlinebooking') %>
 
   <!-- FOOTER -->
   <footer class="bg-dark text-white-50 pt-5 pb-3 border-top border-secondary">
@@ -277,6 +354,50 @@
         }
       });
     });
+
+    // Otomatis pilih dokter di modal booking ketika tombol diklik
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.btn-pilih-dokter').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const dokterId = this.getAttribute('data-dokter-id');
+          const selectDokter = document.getElementById('selectDokter');
+          if (selectDokter) {
+            selectDokter.value = dokterId;
+            selectDokter.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+    });
+
+    // Handling AJAX Login
+    const formLoginPopup = document.getElementById('formLoginPopup');
+    if (formLoginPopup) {
+      formLoginPopup.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('popupUsername').value;
+        const password = document.getElementById('popupPassword').value;
+        const alertBox = document.getElementById('loginAlert');
+        alertBox.classList.add('d-none');
+
+        try {
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            window.location.reload();
+          } else {
+            alertBox.innerText = result.message || 'Username atau password salah.';
+            alertBox.classList.remove('d-none');
+          }
+        } catch (err) {
+          alertBox.innerText = 'Terjadi kesalahan sistem server.';
+          alertBox.classList.remove('d-none');
+        }
+      });
+    }
   </script>
 </body>
 </html>

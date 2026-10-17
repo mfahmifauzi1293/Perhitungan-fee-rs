@@ -12,7 +12,7 @@
   <!-- CSS Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  
+ 
   <style>
     :root {
       --bg-dark: #0d1117;
@@ -70,15 +70,6 @@
     .logo-menu {
       height: 30px;
       width: auto;
-    }
-
-    .nav-section-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--accent-green-neon);
-      padding: 14px 20px 4px;
     }
 
     .sidebar nav a {
@@ -157,7 +148,6 @@
       position: relative;
     }
 
-    /* WATERMARK LOGO DI BACKGROUND CONTENT */
     .watermark-bg {
       position: absolute;
       top: 50%;
@@ -170,7 +160,6 @@
       z-index: 0;
     }
 
-    /* WIDGET CONTAINER */
     .widget-container {
       border: 1px solid var(--border-color);
       background-color: var(--card-bg);
@@ -181,31 +170,32 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .widget-header {
-      background-color: rgba(255, 255, 255, 0.02);
-      color: var(--text-heading);
-      padding: 14px 20px;
+    .modal-label-custom {
+      color: #39FF14 !important;
       font-weight: 600;
-      font-size: 0.95rem;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      display: block;
     }
 
-    /* FORM STYLES & MODAL */
-    .form-control-dark {
-      background-color: #0d1117 !important;
+    .form-control-dark, 
+    input.form-control-dark, 
+    textarea.form-control-dark {
+      background-color: #010409 !important;
       border: 1px solid var(--border-color) !important;
       color: #ffffff !important;
-      font-size: 0.875rem;
+      font-size: 0.9rem !important;
     }
 
     .form-control-dark:focus {
-      background-color: #0d1117 !important;
-      border-color: var(--accent-green) !important;
+      background-color: #010409 !important;
+      border-color: var(--accent-green-neon) !important;
       color: #ffffff !important;
-      box-shadow: 0 0 0 0.25rem rgba(46, 160, 67, 0.25);
+      box-shadow: 0 0 0 0.2rem rgba(57, 255, 20, 0.2);
+    }
+
+    textarea.form-control-dark {
+      resize: none !important;
     }
 
     .btn-green-neon {
@@ -225,40 +215,46 @@
 
     .modal-content-dark {
       background-color: #161b22;
-      color: var(--text-main);
+      color: #ffffff !important;
       border: 1px solid var(--border-color);
       border-radius: 12px;
     }
 
-    /* TABEL CUSTOM DARK */
-    .table-dark-custom {
-      --bs-table-bg: transparent !important;
-      --bs-table-color: var(--text-main) !important;
-      width: 100%;
-      margin-bottom: 0;
-      font-size: 0.875rem;
+    /* CARD GRID STYLES */
+    .tindakan-card {
+      background-color: #0d1117;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    .table-dark-custom th {
-      background-color: rgba(0, 0, 0, 0.25) !important;
-      color: var(--accent-green-neon) !important;
-      border-bottom: 1px solid var(--border-color) !important;
-      padding: 12px 16px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .tindakan-card:hover {
+      border-color: var(--accent-green);
+      box-shadow: 0 4px 15px rgba(46, 160, 67, 0.15);
     }
 
-    .table-dark-custom td {
-      border-bottom: 1px solid var(--border-color) !important;
-      padding: 10px 16px;
+    .card-title-neon {
+      color: var(--accent-green-neon);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .card-desc-text {
+      color: #c9d1d9;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      min-height: 48px;
     }
   </style>
 </head>
 <body>
 
   <div class="app-container">
-    <!-- SIDEBAR NAVIGASI ADMINISTRATOR -->
+    <!-- SIDEBAR NAVIGASI -->
     <div class="sidebar">
       <div>
         <div class="sidebar-header">
@@ -275,11 +271,12 @@
           <a href="/tindakan" class="active"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
           <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
           <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/lembur"><i class="bi bi-stopwatch"></i> Input Lembur</a>
+          <a href="/payroll"><i class="bi bi-cash-stack"></i> Payroll / Gaji</a>
           <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
         </nav>
       </div>
-      
-      <!-- SIDEBAR FOOTER DENGAN DYNAMIC USER LOGIN & TOMBOL LOGOUT PRESISI DASHBOARD -->
+     
       <div class="sidebar-footer d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
           <i class="bi bi-person-circle text-success me-1"></i>
@@ -295,7 +292,6 @@
 
     <!-- KONTEN UTAMA -->
     <div class="main-content">
-      <!-- HEADER NAMA RUMAH SAKIT -->
       <div class="header-rs-center">
         <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
         <div class="text-center">
@@ -305,75 +301,122 @@
       </div>
 
       <div class="content-body">
-        <!-- WATERMARK LOGO DI BACKGROUND -->
         <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
 
-        <!-- KONTEN DAFTAR TINDAKAN -->
-        <div class="widget-container">
-          <div class="widget-header">
+        <div class="widget-container p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
             <div>
-              <i class="bi bi-journal-text text-info me-2"></i>
-              <span>Daftar Tarif Tindakan Medis</span>
-              <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 ms-2">
-                Total: <%= (typeof tindakans !== 'undefined') ? tindakans.length : 0 %>
-              </span>
+              <h5 class="fw-bold text-white mb-1">
+                <i class="bi bi-journal-text text-success me-2"></i>Daftar Tarif Tindakan Medis
+              </h5>
+              <p class="text-muted small mb-0">Kelola nama tindakan, deskripsi, dan standar tarif layanan rumah sakit.</p>
             </div>
-
-            <!-- Tombol Tambah Jenis Tindakan -->
             <button type="button" class="btn btn-green-neon" data-bs-toggle="modal" data-bs-target="#modalTambahTindakan">
               <i class="bi bi-plus-circle me-1"></i> Tambah Tindakan
             </button>
           </div>
 
-          <div class="table-responsive">
-            <table class="table table-dark-custom align-middle">
-              <thead>
-                <tr>
-                  <th style="width: 30%;">Nama Tindakan</th>
-                  <th style="width: 35%;">Deskripsi</th>
-                  <th style="width: 20%;">Harga Standar (Rp)</th>
-                  <th style="width: 15%; text-align: center;">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if (typeof tindakans === 'undefined' || tindakans.length === 0) { %>
-                  <tr>
-                    <td colspan="4" class="text-center py-4 text-muted">Belum ada data jenis tindakan.</td>
-                  </tr>
-                <% } else { %>
-                  <% tindakans.forEach(t => { %>
-                    <% const itemId = t._id || t.id; %>
-                    <tr>
-                      <form action="/tindakan/update/<%= itemId %>" method="POST">
-                        <td>
-                          <input type="text" name="nama_tindakan" class="form-control form-control-sm form-control-dark" value="<%= t.nama_tindakan %>" required>
-                        </td>
-                        <td>
-                          <input type="text" name="deskripsi" class="form-control form-control-sm form-control-dark" value="<%= t.deskripsi || '' %>" placeholder="Keterangan singkat...">
-                        </td>
-                        <td>
-                          <input type="number" name="harga_standar" class="form-control form-control-sm form-control-dark font-monospace" value="<%= t.harga_standar %>" required>
-                        </td>
-                        <td class="text-center">
-                          <button type="submit" class="btn btn-sm btn-success p-1 px-2 me-1" title="Simpan Perubahan">
-                            <i class="bi bi-check-lg"></i> Simpan
-                          </button>
-                          <a href="/tindakan/hapus/<%= itemId %>" onclick="return confirm('Hapus tindakan ini?')" class="btn btn-sm btn-outline-danger p-1 px-2" title="Hapus">
-                            <i class="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </form>
-                    </tr>
-                  <% }); %>
-                <% } %>
-              </tbody>
-            </table>
+          <!-- GRID CONTAINER CARD -->
+          <div class="row g-3">
+            <% if (typeof tindakans === 'undefined' || tindakans.length === 0) { %>
+              <div class="col-12 text-center py-5 text-muted">
+                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                Belum ada data jenis tindakan.
+              </div>
+            <% } else { %>
+              <% tindakans.forEach(t => { %>
+                <% const itemId = t._id || t.id; %>
+                <div class="col-md-6 col-xl-4">
+                  <div class="tindakan-card p-3">
+                    <div>
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="card-title-neon"><%= t.nama_tindakan %></span>
+                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-monospace">
+                          Rp <%= Math.round(Number(t.harga_standar || 0)).toLocaleString('id-ID') %>
+                        </span>
+                      </div>
+                      <p class="card-desc-text mb-3">
+                        <%= t.deskripsi || 'Tidak ada deskripsi.' %>
+                      </p>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 pt-2 border-top border-secondary">
+                      <button type="button" class="btn btn-sm btn-outline-success px-3" data-bs-toggle="modal" data-bs-target="#modalEditTindakan<%= itemId %>">
+                        <i class="bi bi-pencil-square me-1"></i> Edit
+                      </button>
+                      <!-- TOMBOL HAPUS MEMICU MODAL KONFIRMASI -->
+                      <button type="button" class="btn btn-sm btn-outline-danger px-2" data-bs-toggle="modal" data-bs-target="#modalHapusTindakan<%= itemId %>" title="Hapus">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+            <% } %>
           </div>
         </div>
 
       </div>
     </div>
   </div>
+
+  <!-- SEMUA MODAL EDIT & HAPUS DILETAKKAN DI LUAR KONTEN UTAMA -->
+  <% if (typeof tindakans !== 'undefined' && tindakans.length > 0) { %>
+    <% tindakans.forEach(t => { %>
+      <% const itemId = t._id || t.id; %>
+      
+      <!-- MODAL EDIT -->
+      <div class="modal fade" id="modalEditTindakan<%= itemId %>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content modal-content-dark">
+            <div class="modal-header border-secondary">
+              <h5 class="modal-title fw-bold text-success fs-6">
+                <i class="bi bi-pencil-square me-2"></i>Edit Tindakan
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/tindakan/update/<%= itemId %>" method="POST">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label class="modal-label-custom">Nama Tindakan</label>
+                  <input type="text" name="nama_tindakan" class="form-control form-control-dark fw-bold" value="<%= t.nama_tindakan %>" required>
+                </div>
+                <div class="mb-3">
+                  <label class="modal-label-custom">Deskripsi</label>
+                  <textarea name="deskripsi" class="form-control form-control-dark" rows="3" style="resize: none;" placeholder="Keterangan singkat tindakan..."><%= t.deskripsi || '' %></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="modal-label-custom">Harga Standar (Rp)</label>
+                  <input type="number" name="harga_standar" class="form-control form-control-dark font-monospace" value="<%= t.harga_standar %>" required>
+                </div>
+              </div>
+              <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-green-neon btn-sm px-4">Simpan Perubahan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL KONFIRMASI HAPUS (DENGAN TOMBOL YA & TIDAK) -->
+      <div class="modal fade" id="modalHapusTindakan<%= itemId %>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content modal-content-dark text-center p-3">
+            <div class="modal-body">
+              <i class="bi bi-exclamation-triangle text-warning fs-1 mb-2 d-block"></i>
+              <h6 class="fw-bold text-white mb-2">Konfirmasi Hapus</h6>
+              <p class="text-white small mb-3">Apakah Anda yakin ingin menghapus tindakan <strong class="text-success"><%= t.nama_tindakan %></strong>?</p>
+              <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Tidak</button>
+                <a href="/tindakan/hapus/<%= itemId %>" class="btn btn-danger btn-sm px-3">Ya, Hapus</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } %>
 
   <!-- MODAL TAMBAH TINDAKAN -->
   <div class="modal fade" id="modalTambahTindakan" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
@@ -388,15 +431,15 @@
         <form action="/tindakan/tambah" method="POST">
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label small text-muted">Nama Tindakan</label>
+              <label class="modal-label-custom">Nama Tindakan</label>
               <input type="text" name="nama_tindakan" class="form-control form-control-dark" required placeholder="misal: Operasi Rhinoplasty">
             </div>
             <div class="mb-3">
-              <label class="form-label small text-muted">Deskripsi</label>
-              <textarea name="deskripsi" class="form-control form-control-dark" rows="3" placeholder="Keterangan singkat tindakan..."></textarea>
+              <label class="modal-label-custom">Deskripsi</label>
+              <textarea name="deskripsi" class="form-control form-control-dark" rows="3" style="resize: none;" placeholder="Keterangan singkat tindakan..."></textarea>
             </div>
             <div class="mb-3">
-              <label class="form-label small text-muted">Harga Standar (Rp)</label>
+              <label class="modal-label-custom">Harga Standar (Rp)</label>
               <input type="number" name="harga_standar" class="form-control form-control-dark" required placeholder="0">
             </div>
           </div>

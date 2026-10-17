@@ -1,0 +1,254 @@
+<!-- POP-UP MODAL BOOKING ONLINE TERPUSAT -->
+<div class="modal fade" id="modalBooking" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content text-light" style="background-color: var(--card-bg, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 12px;">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fs-6 fw-bold text-white"><i class="bi bi-calendar-plus-fill text-success me-2"></i>Buat Janji Konsultasi Online</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/booking/simpan" method="POST">
+        <div class="modal-body">
+          <div class="row g-3">
+           
+            <div class="col-md-6">
+              <label class="form-label small text-muted">Nama Lengkap Pasien</label>
+              <input type="text" name="nama_pasien" class="form-control bg-dark text-white border-secondary" value="<%= typeof user !== 'undefined' && user ? (user.nama || user.username) : '' %>" placeholder="Masukkan nama lengkap" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small text-muted">Nomor KTP (NIK)</label>
+              <input type="text" name="no_ktp" class="form-control bg-dark text-white border-secondary" maxlength="16" placeholder="Masukkan 16 digit NIK" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small text-muted">Nomor HP / WhatsApp</label>
+              <input type="tel" name="no_hp" class="form-control bg-dark text-white border-secondary" value="<%= typeof user !== 'undefined' && user ? (user.no_hp || '') : '' %>" placeholder="08xxxxxxxxxx" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small text-muted">Pilih Dokter Spesialis</label>
+              <select name="dokter_id" id="selectDokter" class="form-select bg-dark text-white border-secondary" required>
+                <option value="">-- Pilih Dokter --</option>
+                <% if (typeof dokters !== 'undefined' && dokters.length > 0) { %>
+                  <% dokters.forEach(d => { %>
+                    <option value="<%= d.id %>" data-fokus="<%= (d.fokus || d.spesialis || '').toUpperCase() %>" data-jadwal="<%= d.jadwal || d.jadwal_praktek || '' %>">
+                      <%= d.nama || d.nama_dokter %> (<%= d.fokus || d.spesialis %>)
+                    </option>
+                  <% }); %>
+                <% } else { %>
+                  <option value="">Dokter tidak tersedia</option>
+                <% } %>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small text-muted">Pilih Layanan / Jenis Tindakan</label>
+              <select name="jenis_tindakan" id="selectLayanan" class="form-select bg-dark text-white border-secondary" required>
+                <option value="">-- Pilih Layanan --</option>
+                <% 
+                  let listTindakan = [];
+                  if (typeof layanan !== 'undefined' && layanan.length > 0) {
+                    listTindakan = layanan;
+                  } else if (typeof tindakans !== 'undefined' && tindakans.length > 0) {
+                    listTindakan = tindakans;
+                  } else if (typeof tindakanList !== 'undefined' && tindakanList.length > 0) {
+                    listTindakan = tindakanList;
+                  }
+                %>
+                <% if (listTindakan.length > 0) { %>
+                  <% listTindakan.forEach(t => { %>
+                    <option value="<%= t.nama_tindakan %>" data-kategori="<%= (t.kategori || '').trim().toUpperCase() %>">
+                      <%= t.nama_tindakan %> <% if (t.kategori) { %>(<%= t.kategori %>)<% } %>
+                    </option>
+                  <% }); %>
+                <% } else { %>
+                  <option value="">Layanan tidak tersedia</option>
+                <% } %>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small text-muted">Tanggal Rencana Konsultasi/Tindakan</label>
+              <input type="date" name="tanggal_tindakan" id="inputTanggal" class="form-control bg-dark text-white border-secondary" required>
+              <small id="infoJadwalDokter" class="text-success d-block mt-1" style="font-size: 0.75rem;"></small>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small text-muted">Alamat Domisili / Keluhan Singkat</label>
+              <textarea name="alamat_pasien" class="form-control bg-dark text-white border-secondary" rows="2" placeholder="Masukkan alamat domisili atau catatan keluhan..."></textarea>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer border-secondary">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-neon btn-sm px-4 fw-bold">Kirim Janji Temu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POP-UP PERINGATAN KUSTOM -->
+<div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-light text-center p-3" style="background-color: #161b22; border: 1px solid #30363d; border-radius: 12px;">
+      <div class="modal-body">
+        <i class="bi bi-exclamation-triangle-fill text-warning fs-1 mb-2"></i>
+        <h6 class="fw-bold text-white mb-2">Peringatan</h6>
+        <p id="alertModalMessage" class="small text-muted mb-3"></p>
+        <button type="button" class="btn btn-neon btn-sm w-100 fw-bold" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showCustomAlert(message) {
+    const msgEl = document.getElementById('alertModalMessage');
+    if (msgEl) msgEl.innerText = message;
+    const alertModalEl = document.getElementById('alertModal');
+    if (alertModalEl) {
+      const alertModal = new bootstrap.Modal(alertModalEl);
+      alertModal.show();
+    }
+  }
+
+  const selectDokter = document.getElementById('selectDokter');
+  const selectLayanan = document.getElementById('selectLayanan');
+
+  // 1. Filter Tindakan Berdasarkan Dokter yang Dipilih
+  if (selectDokter) {
+    selectDokter.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const fokusDokter = (selectedOption.getAttribute('data-fokus') || '').toUpperCase();
+      const jadwalDokter = selectedOption.getAttribute('data-jadwal') || '';
+
+      const infoJadwal = document.getElementById('infoJadwalDokter');
+      if (infoJadwal) {
+        infoJadwal.innerText = jadwalDokter ? "Jadwal Praktek: " + jadwalDokter : "Jadwal praktek belum diatur.";
+      }
+
+      if (selectLayanan && !selectLayanan.getAttribute('data-locked')) {
+        const opsiLayanan = selectLayanan.querySelectorAll('option');
+        opsiLayanan.forEach(opt => {
+          if (opt.value === "") return;
+          const kategoriTindakan = (opt.getAttribute('data-kategori') || '').toUpperCase();
+
+          if (fokusDokter.includes('TREATMENT')) {
+            opt.style.display = (kategoriTindakan === 'TREATMENT' || kategoriTindakan === 'KONSULTASI' || kategoriTindakan === 'KONTROL') ? 'block' : 'none';
+          } else if (fokusDokter.includes('BEDAH')) {
+            opt.style.display = (kategoriTindakan === 'BEDAH' || kategoriTindakan === 'KONSULTASI' || kategoriTindakan === 'KONTROL') ? 'block' : 'none';
+          } else {
+            opt.style.display = 'block';
+          }
+        });
+      }
+    });
+  }
+
+  // 2. Filter & Kunci Dokter Berdasarkan Tindakan yang Dipilih (Sinkronisasi Dua Arah)
+  if (selectLayanan) {
+    selectLayanan.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const kategoriTindakan = (selectedOption.getAttribute('data-kategori') || '').toUpperCase();
+
+      if (selectDokter && kategoriTindakan) {
+        const opsiDokter = selectDokter.querySelectorAll('option');
+        let dokterPertamaCocok = "";
+
+        opsiDokter.forEach(opt => {
+          if (opt.value === "") return;
+          const fokusDokter = (opt.getAttribute('data-fokus') || '').toUpperCase();
+
+          let cocok = false;
+          if (kategoriTindakan.includes('BEDAH')) {
+            if (fokusDokter.includes('BEDAH')) cocok = true;
+          } else if (kategoriTindakan.includes('TREATMENT')) {
+            if (fokusDokter.includes('TREATMENT')) cocok = true;
+          } else {
+            cocok = true;
+          }
+
+          if (cocok) {
+            opt.style.display = 'block';
+            if (!dokterPertamaCocok) dokterPertamaCocok = opt.value;
+          } else {
+            opt.style.display = 'none';
+          }
+        });
+
+        const dokterAktifOpt = selectDokter.options[selectDokter.selectedIndex];
+        const fokusDokterAktif = dokterAktifOpt ? (dokterAktifOpt.getAttribute('data-fokus') || '').toUpperCase() : '';
+        
+        let aktifCocok = false;
+        if (kategoriTindakan.includes('BEDAH') && fokusDokterAktif.includes('BEDAH')) aktifCocok = true;
+        if (kategoriTindakan.includes('TREATMENT') && fokusDokterAktif.includes('TREATMENT')) aktifCocok = true;
+        if (!kategoriTindakan.includes('BEDAH') && !kategoriTindakan.includes('TREATMENT')) aktifCocok = true;
+
+        if (!aktifCocok && dokterPertamaCocok) {
+          selectDokter.value = dokterPertamaCocok;
+          selectDokter.dispatchEvent(new Event('change'));
+        }
+      }
+    });
+  }
+
+  // 3. Listener Global untuk Tombol "Booking Tindakan Ini" di Halaman Layanan
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-pilih-tindakan').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const namaTindakan = this.getAttribute('data-nama-tindakan');
+        if (selectLayanan) {
+          selectLayanan.value = namaTindakan;
+          selectLayanan.setAttribute('data-locked', 'true');
+          // Picu event change agar dropdown dokter langsung ter-filter otomatis sesuai kategori tindakan
+          selectLayanan.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    // Reset atribut locked ketika modal ditutup
+    const modalBookingEl = document.getElementById('modalBooking');
+    if (modalBookingEl) {
+      modalBookingEl.addEventListener('hidden.bs.modal', function () {
+        if (selectLayanan) {
+          selectLayanan.removeAttribute('data-locked');
+          selectLayanan.value = "";
+        }
+        if (selectDokter) {
+          selectDokter.value = "";
+          const opsiDokter = selectDokter.querySelectorAll('option');
+          opsiDokter.forEach(opt => opt.style.display = 'block');
+        }
+        const infoJadwal = document.getElementById('infoJadwalDokter');
+        if (infoJadwal) infoJadwal.innerText = "";
+      });
+    }
+  });
+
+  // Validasi Tanggal Sesuai Jadwal Praktek Dokter
+  const inputTanggal = document.getElementById('inputTanggal');
+  if (inputTanggal) {
+    inputTanggal.addEventListener('change', function() {
+      if (!selectDokter || !selectDokter.value) {
+        showCustomAlert('Silakan pilih dokter spesialis terlebih dahulu sebelum menentukan tanggal.');
+        this.value = '';
+        return;
+      }
+
+      const selectedOption = selectDokter.options[selectDokter.selectedIndex];
+      const jadwalDokter = (selectedOption.getAttribute('data-jadwal') || '').toLowerCase();
+
+      const tanggalPilih = new Date(this.value);
+      const hariIndex = tanggalPilih.getDay();
+      const mappingHari = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
+      const namaHariPilihan = mappingHari[hariIndex];
+
+      if (jadwalDokter && !jadwalDokter.includes(namaHariPilihan)) {
+        showCustomAlert(`Peringatan: Dokter tidak memiliki jadwal praktek pada hari ${namaHariPilihan.toUpperCase()}. Harap pilih tanggal lain sesuai jadwal.`);
+        this.value = '';
+      }
+    });
+  }
+</script>

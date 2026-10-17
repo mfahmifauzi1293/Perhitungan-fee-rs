@@ -72,15 +72,6 @@
       width: auto;
     }
 
-    .nav-section-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--accent-green-neon);
-      padding: 14px 20px 4px;
-    }
-
     .sidebar nav a {
       color: var(--text-sub);
       text-decoration: none;
@@ -157,7 +148,6 @@
       position: relative;
     }
 
-    /* WATERMARK LOGO DI BACKGROUND CONTENT */
     .watermark-bg {
       position: absolute;
       top: 50%;
@@ -170,7 +160,6 @@
       z-index: 0;
     }
 
-    /* WIDGET CONTAINER & CARDS */
     .widget-container {
       border: 1px solid var(--border-color);
       background-color: var(--card-bg);
@@ -194,7 +183,6 @@
       justify-content: space-between;
     }
 
-    /* TABEL CUSTOM DARK */
     .table-dark-custom {
       --bs-table-bg: transparent !important;
       --bs-table-color: var(--text-main) !important;
@@ -218,7 +206,6 @@
       padding: 12px 16px;
     }
 
-    /* MODAL STYLES */
     .modal-content-dark {
       background-color: #161b22;
       border: 1px solid var(--border-color);
@@ -248,6 +235,7 @@
       border: 1px solid #30363d !important;
       color: #ffffff !important;
       font-size: 0.875rem;
+      color-scheme: dark;
     }
 
     .form-control-dark::placeholder {
@@ -284,6 +272,20 @@
       color: #ffffff;
     }
 
+    .btn-outline-neon {
+      border: 1px solid var(--accent-green-neon);
+      color: var(--accent-green-neon);
+      background: transparent;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .btn-outline-neon:hover {
+      background-color: var(--accent-green-neon);
+      color: #000000;
+    }
+
     .calc-card {
       background: #090d12;
       border: 1px dashed #30363d;
@@ -312,11 +314,12 @@
           <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
           <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
           <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/lembur"><i class="bi bi-stopwatch"></i> Input Lembur</a>
+          <a href="/payroll"><i class="bi bi-cash-stack"></i> Payroll / Gaji</a>
           <a href="/laporan"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
         </nav>
       </div>
-      
-      <!-- SIDEBAR FOOTER PRESISI 1:1 DASHBOARD & BOOKING -->
+     
       <div class="sidebar-footer d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
           <i class="bi bi-person-circle text-success me-1"></i>
@@ -332,7 +335,6 @@
 
     <!-- KONTEN UTAMA -->
     <div class="main-content">
-      <!-- HEADER NAMA RUMAH SAKIT -->
       <div class="header-rs-center">
         <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
         <div class="text-center">
@@ -342,14 +344,33 @@
       </div>
 
       <div class="content-body">
-        <!-- WATERMARK LOGO DI BACKGROUND CONTENT -->
         <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
 
         <!-- WIDGET CONTAINER DAFTAR PASIEN FINALISASI -->
         <div class="widget-container">
-          <div class="widget-header">
+          <div class="widget-header d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
             <span><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Daftar Pasien Finalisasi Tindakan Medis</span>
-            <span class="badge bg-warning text-dark px-3 py-2">Antrean: <%= typeof transaksis !== 'undefined' ? transaksis.length : 0 %></span>
+            
+            <!-- Form Filter Tanggal & Search -->
+            <form action="/finalisasi" method="GET" class="d-flex align-items-center flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-1">
+                <small class="text-white fw-semibold">Dari:</small>
+                <input type="date" name="tanggal_mulai" class="form-control form-control-dark form-control-sm" value="<%= typeof tanggal_mulai !== 'undefined' ? tanggal_mulai : '' %>">
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <small class="text-white fw-semibold">S/d:</small>
+                <input type="date" name="tanggal_selesai" class="form-control form-control-dark form-control-sm" value="<%= typeof tanggal_selesai !== 'undefined' ? tanggal_selesai : '' %>">
+              </div>
+              <div class="input-group input-group-sm" style="width: 200px;">
+                <input type="text" name="search" class="form-control form-control-dark" placeholder="Cari pasien..." value="<%= typeof search !== 'undefined' ? search : '' %>">
+                <button type="submit" class="btn btn-outline-neon"><i class="bi bi-search"></i></button>
+              </div>
+              <% if ((typeof search !== 'undefined' && search) || (typeof tanggal_mulai !== 'undefined' && tanggal_mulai) || (typeof tanggal_selesai !== 'undefined' && tanggal_selesai)) { %>
+                <a href="/finalisasi" class="btn btn-outline-secondary btn-sm" title="Reset Filter"><i class="bi bi-x-lg"></i></a>
+              <% } %>
+            </form>
+
+            <span class="badge bg-warning text-dark px-3 py-2">Halaman: <%= typeof currentPage !== 'undefined' ? currentPage : 1 %></span>
           </div>
 
           <div class="table-responsive">
@@ -383,7 +404,7 @@
                       const kategoriTindakan = (t.kategori_tindakan || t.kategori || '').toUpperCase();
                     %>
                     <tr>
-                      <td><%= index + 1 %></td>
+                      <td><%= ((typeof currentPage !== 'undefined' ? currentPage : 1) - 1) * 50 + (index + 1) %></td>
                       <td><%= new Date(t.tanggal_tindakan).toLocaleDateString('id-ID') %></td>
                       <td><strong class="text-white"><%= t.nama_pasien %></strong></td>
                       <td><span class="badge bg-info text-dark"><%= t.jenis_tindakan %></span></td>
@@ -440,6 +461,26 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Navigasi Pagination Halaman (Maks. 50 Baris/Halaman) -->
+          <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+            <div class="d-flex justify-content-between align-items-center p-3 border-top border-secondary bg-dark">
+              <small class="text-white">Menampilkan Halaman <strong><%= currentPage %></strong> dari <strong><%= totalPages %></strong> (Maks. 50 baris/halaman)</small>
+              <nav>
+                <ul class="pagination pagination-sm mb-0">
+                  <% for(let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                      <a class="page-link bg-dark text-white border-secondary <%= i === currentPage ? 'bg-success border-success' : '' %>" 
+                         href="/finalisasi?page=<%= i %><%= typeof search !== 'undefined' && search ? '&search=' + search : '' %><%= typeof tanggal_mulai !== 'undefined' && tanggal_mulai ? '&tanggal_mulai=' + tanggal_mulai : '' %><%= typeof tanggal_selesai !== 'undefined' && tanggal_selesai ? '&tanggal_selesai=' + tanggal_selesai : '' %>">
+                         <%= i %>
+                      </a>
+                    </li>
+                  <% } %>
+                </ul>
+              </nav>
+            </div>
+          <% } %>
+
         </div>
       </div>
     </div>
@@ -713,7 +754,7 @@
         document.getElementById('fnTindakan').innerText = data.jenisTindakan;
         document.getElementById('fnTotalNett').innerText = 'Rp ' + currentTotalNett.toLocaleString('id-ID');
 
-        // Populate Form Values (Mendukung Edit / Pre-fill)
+        // Populate Form Values
         document.getElementById('selectDokter2').value = data.dokter2Id || '';
         document.getElementById('persenDokter1').value = data.persenDokter1 || 100;
         document.getElementById('persenDokter2').value = data.persenDokter2 || 0;
@@ -721,7 +762,6 @@
         document.getElementById('selectTipeAnestesi').value = data.tipeAnestesi || '';
         document.getElementById('inputBiayaAnestesi').value = data.biayaAnestesi || 0;
        
-        // Handling Biaya Ruang Operasi OK
         const durasi = Number(data.durasiOk) || 0;
         const tarif = Number(data.tarifOk) || 0;
         const totalOK = Number(data.biayaOk) || (durasi * tarif);
@@ -739,7 +779,6 @@
         document.getElementById('selectSusterOp3').value = data.susterOp3 || '';
         document.getElementById('selectSusterRawat').value = data.susterRawat || '';
 
-        // Dokter Utama
         if (data.dokterId) {
           document.getElementById('fnDokterId').value = data.dokterId;
           document.getElementById('fnDokterIdHidden').value = data.dokterId;
@@ -748,10 +787,7 @@
           document.getElementById('fnDokterIdHidden').value = '';
         }
 
-        // Filter Pilihan Dokter Sesuai Kategori
         filterDokterOptions(data.kategoriTindakan);
-
-        // Kalkulasi Porsi Real-time
         recalculatePorsi();
 
         const modalFinal = new bootstrap.Modal(document.getElementById('modalFinalisasi'));
@@ -827,7 +863,6 @@
 
     function filterDokterOptions(kategori) {
       const kat = (kategori || '').toUpperCase();
-     
       const selectDokter2 = document.getElementById('selectDokter2');
 
       const isBedah = kat === 'BEDAH';

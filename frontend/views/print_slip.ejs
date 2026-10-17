@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Slip Gaji - <%= slip.nama_karyawan %></title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 13px; color: #333; margin: 30px; position: relative; }
+    
+    /* Watermark di tengah halaman */
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      opacity: 0.20;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Header & Logo di atas */
+    .header { text-align: center; margin-bottom: 50px; border-bottom: 2px solid #333; padding-bottom: 50px; position: relative; }
+    .logo-print { height: 70px; width: auto; position: absolute; left: 50px; top: 0; }
+    .header h2 { margin: 0; font-size: 18px; }
+    .header p { margin: 5px 0 0 0; font-size: 12px; color: #555; }
+    
+    .info-table, .salary-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .info-table td { padding: 4px 8px; border: none; }
+    
+    .salary-table th, .salary-table td { border: 1px solid #333; padding: 6px 10px; text-align: left; }
+    .salary-table th { background-color: #f2f2f2; }
+    .text-end { text-align: right; }
+    .fw-bold { font-weight: bold; }
+
+    /* Pengaturan untuk halaman kedua / rincian fee dokter & suster */
+    .page-break { page-break-before: always; margin-top: 40px; }
+    
+    @media print {
+      button { display: none; }
+      .watermark { opacity: 0.05 !important; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body onload="window.print()">
+
+  <!-- Watermark Logo di Tengah -->
+  <img src="/image/logors.png" alt="Watermark" class="watermark" onerror="this.style.display='none'">
+
+  <!-- HALAMAN 1 : SLIP GAJI KOMPREHENSIF -->
+  <div class="header">
+    <img src="/image/logors.png" alt="Logo RS" class="logo-print" onerror="this.style.display='none'">
+    <h2>RUMAH SAKIT SAKTI MANDRA GUNA</h2>
+    <p>SLIP GAJI PEGAWAI - PERIODE: <%= bulan %> / <%= tahun %></p>
+  </div>
+
+  <table class="info-table">
+    <tr>
+      <td style="width: 15%;"><strong>NIK</strong></td>
+      <td style="width: 35%;">: <%= slip.nik || '-' %></td>
+      <td style="width: 15%;"><strong>Jabatan</strong></td>
+      <td style="width: 35%;">: <%= slip.jabatan %></td>
+    </tr>
+    <tr>
+      <td><strong>Nama</strong></td>
+      <td>: <strong><%= slip.nama_karyawan %></strong></td>
+      <td><strong>Periode</strong></td>
+      <td>: <%= bulan %> / <%= tahun %></td>
+    </tr>
+  </table>
+
+  <table class="salary-table">
+    <thead>
+      <tr>
+        <th>Komponen Gaji</th>
+        <th class="text-end" style="width: 200px;">Jumlah (Rp)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Gaji Pokok</strong></td>
+        <td class="text-end"><%= Number(slip.gaji_pokok || 0).toLocaleString('id-ID') %></td>
+      </tr>
+      <tr style="background-color: #fafafa;">
+        <td colspan="2"><strong>PENAMBAHAN :</strong></td>
+      </tr>
+      <tr>
+        <td style="padding-left: 20px;">Tunjangan Jabatan</td>
+        <td class="text-end"><%= Number(slip.tunjangan_jabatan || 0).toLocaleString('id-ID') %></td>
+      </tr>
+      <tr>
+        <td style="padding-left: 20px;">Lembur</td>
+        <td class="text-end"><%= Number(slip.lembur || 0).toLocaleString('id-ID') %></td>
+      </tr>
+      <tr>
+        <td style="padding-left: 20px;">Fee Tindakan / Medis</td>
+        <td class="text-end"><%= Number(slip.fee_tindakan || 0).toLocaleString('id-ID') %></td>
+      </tr>
+      <tr style="background-color: #fafafa;">
+        <td colspan="2"><strong>PENGURANGAN :</strong></td>
+      </tr>
+      <tr>
+        <td style="padding-left: 20px;">BPJS Kesehatan</td>
+        <td class="text-end text-danger">(<%= Number(slip.potongan_bpjs_kes || 0).toLocaleString('id-ID') %>)</td>
+      </tr>
+      <tr>
+        <td style="padding-left: 20px;">BPJS Ketenagakerjaan (TK)</td>
+        <td class="text-end text-danger">(<%= Number(slip.potongan_bpjs_tk || 0).toLocaleString('id-ID') %>)</td>
+      </tr>
+      <tr>
+        <td style="padding-left: 20px;">PPh 21</td>
+        <td class="text-end text-danger">(<%= Number(slip.potongan_pph21 || 0).toLocaleString('id-ID') %>)</td>
+      </tr>
+      <tr style="background-color: #e6f4ea; font-size: 14px;">
+        <td><strong>TAKE HOME PAY (THP)</strong></td>
+        <td class="text-end fw-bold text-success">Rp <%= Number(slip.take_home_pay || 0).toLocaleString('id-ID') %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 40px; float: right; text-align: center; width: 250px;">
+    <p>Bagian Keuangan / Payroll</p>
+    <br><br><br>
+    <p>( _______________________ )</p>
+  </div>
+
+  <!-- JIKA DOKTER ATAU SUSTER, CETAK HALAMAN KEDUA (RINCIAN FEE TINDAKAN) -->
+  <% if (isMedis) { %>
+    <div class="page-break"></div>
+
+    <div class="header">
+      <img src="/image/logors.png" alt="Logo RS" class="logo-print" onerror="this.style.display='none'">
+      <h2>RUMAH SAKIT SAKTI MANDRA GUNA</h2>
+      <p>RINCIAN DETAIL FEE TINDAKAN MEDIS - PERIODE: <%= bulan %> / <%= tahun %></p>
+    </div>
+
+    <table class="info-table" style="margin-bottom: 15px;">
+      <tr>
+        <td style="width: 15%;"><strong>Nama</strong></td>
+        <td>: <strong><%= slip.nama_karyawan %></strong> (<%= slip.jabatan %>)</td>
+      </tr>
+    </table>
+
+    <table class="salary-table">
+      <thead>
+        <tr>
+          <th style="width: 40px; text-align: center;">No</th>
+          <th style="width: 90px; text-align: center;">Tanggal</th>
+          <th>Nama Pasien</th>
+          <th>Jenis Tindakan</th>
+          <th class="text-end" style="width: 150px;">Nominal Fee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (rincianFee && rincianFee.length > 0) { %>
+          <% let subtotalFee = 0; %>
+          <% rincianFee.forEach((item, idx) => { %>
+            <% subtotalFee += Number(item.fee_nominal || 0); %>
+            <tr>
+              <td style="text-align: center;"><%= idx + 1 %></td>
+              <<td style="text-align: center;">
+            <% 
+                const tgl = new Date(item.tanggal_tindakan);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = !isNaN(tgl) ? tgl.toLocaleDateString('id-ID', options) : item.tanggal_tindakan;
+            %>
+            <%= formattedDate %>
+            </td>
+              <td><%= item.nama_pasien %></td>
+              <td><%= item.jenis_tindakan %></td>
+              <td class="text-end">Rp <%= Number(item.fee_nominal || 0).toLocaleString('id-ID') %></td>
+            </tr>
+          <% }); %>
+          <tr style="background-color: #f9f9f9; font-weight: bold;">
+            <td colspan="4" class="text-end">TOTAL FEE TINDAKAN :</td>
+            <td class="text-end text-success">Rp <%= subtotalFee.toLocaleString('id-ID') %></td>
+          </tr>
+        <% } else { %>
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 20px; color: #777;">Tidak ada rincian fee tindakan pada periode ini.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 40px; float: right; text-align: center; width: 250px;">
+      <p>Verifikasi Keuangan</p>
+      <br><br><br>
+      <p>( _______________________ )</p>
+    </div>
+  <% } %>
+
+  <div style="clear: both; margin-top: 50px; text-align: center;">
+    <button onclick="window.print()" style="padding: 10px 25px; cursor: pointer; font-weight: bold;">Cetak Ulang / Simpan PDF</button>
+  </div>
+</body>
+</html>

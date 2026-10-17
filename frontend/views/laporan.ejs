@@ -12,7 +12,7 @@
   <!-- CSS Bootstrap 5 & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  
+ 
   <style>
     :root {
       --bg-dark: #0d1117;
@@ -33,6 +33,20 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden;
+    }
+
+    /* VISIBILITAS TEKS INPUT TANGGAL DI DARK MODE */
+    input[type="date"].custom-date-input {
+      color-scheme: dark !important;
+      color: #ffffff !important;
+      background-color: #161b22 !important;
+      border: 1px solid #30363d !important;
+      font-weight: 600 !important;
+    }
+
+    input[type="date"].custom-date-input::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(1.5) !important;
+      cursor: pointer;
     }
 
     .app-container {
@@ -70,15 +84,6 @@
     .logo-menu {
       height: 30px;
       width: auto;
-    }
-
-    .nav-section-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--accent-green-neon);
-      padding: 14px 20px 4px;
     }
 
     .sidebar nav a {
@@ -157,7 +162,6 @@
       position: relative;
     }
 
-    /* WATERMARK LOGO DI BACKGROUND CONTENT */
     .watermark-bg {
       position: absolute;
       top: 50%;
@@ -170,7 +174,6 @@
       z-index: 0;
     }
 
-    /* WIDGET CONTAINER */
     .widget-container {
       border: 1px solid var(--border-color);
       background-color: var(--card-bg);
@@ -194,7 +197,6 @@
       justify-content: space-between;
     }
 
-    /* TABEL CUSTOM DARK */
     .table-dark-custom {
       --bs-table-bg: transparent !important;
       --bs-table-color: var(--text-main) !important;
@@ -218,6 +220,10 @@
       padding: 12px 16px;
     }
 
+    .table-hover-custom tbody tr:hover {
+      background-color: rgba(46, 160, 67, 0.08) !important;
+    }
+
     .btn-tab-active {
       background-color: var(--accent-green) !important;
       color: #ffffff !important;
@@ -239,7 +245,7 @@
 <body>
 
   <div class="app-container">
-    <!-- SIDEBAR NAVIGASI ADMINISTRATOR -->
+    <!-- SIDEBAR NAVIGASI -->
     <div class="sidebar">
       <div>
         <div class="sidebar-header">
@@ -256,11 +262,12 @@
           <a href="/tindakan"><i class="bi bi-hospital"></i> Layanan / Tindakan</a>
           <a href="/dokter"><i class="bi bi-person-badge"></i> Dokter</a>
           <a href="/suster"><i class="bi bi-heart-pulse"></i> Suster</a>
+          <a href="/payroll"><i class="bi bi-cash-stack"></i> Payroll / Gaji</a>
+          <a href="/lembur"><i class="bi bi-stopwatch"></i> Input Lembur</a>
           <a href="/laporan" class="active"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
         </nav>
       </div>
-      
-      <!-- SIDEBAR FOOTER DENGAN DYNAMIC USER LOGIN & TOMBOL LOGOUT PRESISI DASHBOARD -->
+     
       <div class="sidebar-footer d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-1 overflow-hidden me-2">
           <i class="bi bi-person-circle text-success me-1"></i>
@@ -276,7 +283,6 @@
 
     <!-- KONTEN UTAMA -->
     <div class="main-content">
-      <!-- HEADER NAMA RUMAH SAKIT -->
       <div class="header-rs-center">
         <img src="/image/logors.png" alt="Logo RS" class="logo-header" onerror="this.style.display='none'">
         <div class="text-center">
@@ -286,25 +292,36 @@
       </div>
 
       <div class="content-body">
-        <!-- WATERMARK LOGO DI BACKGROUND CONTENT -->
         <img src="/image/logors.png" alt="Watermark RS" class="watermark-bg" onerror="this.style.display='none'">
 
-        <!-- TOGGLE SWITCH LAPORAN -->
-        <div class="d-flex align-items-center justify-content-between mb-4" style="position: relative; z-index: 1;">
+        <!-- TOGGLE SWITCH & FILTER RENTANG TANGGAL CUTOFF -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4" style="position: relative; z-index: 1;">
           <div class="btn-group">
-            <a href="/laporan?jenis=dokter&bulan=<%= (typeof bulan !== 'undefined') ? bulan : '' %>"
+            <a href="/laporan?jenis=dokter&tanggal_mulai=<%= typeof tanggalMulai !== 'undefined' ? tanggalMulai : '' %>&tanggal_selesai=<%= typeof tanggalSelesai !== 'undefined' ? tanggalSelesai : '' %>"
                class="btn btn-sm <%= (typeof jenis !== 'undefined' && jenis === 'dokter') ? 'btn-tab-active' : 'btn-tab-inactive' %> fw-bold px-3">
               <i class="bi bi-person-badge me-1"></i> Laporan Dokter (All Dokter)
             </a>
-            <a href="/laporan?jenis=suster&bulan=<%= (typeof bulan !== 'undefined') ? bulan : '' %>"
+            <a href="/laporan?jenis=suster&tanggal_mulai=<%= typeof tanggalMulai !== 'undefined' ? tanggalMulai : '' %>&tanggal_selesai=<%= typeof tanggalSelesai !== 'undefined' ? tanggalSelesai : '' %>"
                class="btn btn-sm <%= (typeof jenis !== 'undefined' && jenis === 'suster') ? 'btn-tab-active' : 'btn-tab-inactive' %> fw-bold px-3">
               <i class="bi bi-heart-pulse me-1"></i> Laporan Suster (All Suster)
             </a>
           </div>
 
-          <span class="badge bg-dark border border-secondary text-info px-3 py-2">
-            <i class="bi bi-calendar3 me-1"></i> Periode: <%= (typeof bulan !== 'undefined') ? bulan : 'Semua Bulan' %>
-          </span>
+          <!-- FORM FILTER TANGGAL CUTOFF -->
+          <form action="/laporan" method="GET" class="d-flex align-items-center gap-2 bg-dark p-2 rounded border border-secondary">
+            <input type="hidden" name="jenis" value="<%= typeof jenis !== 'undefined' ? jenis : 'dokter' %>">
+            <div class="d-flex align-items-center gap-1">
+              <small class="text-light fw-bold">Dari:</small>
+              <input type="date" name="tanggal_mulai" value="<%= typeof tanggalMulai !== 'undefined' ? tanggalMulai : '' %>" class="form-control form-control-sm custom-date-input">
+            </div>
+            <div class="d-flex align-items-center gap-1">
+              <small class="text-light fw-bold">s/d:</small>
+              <input type="date" name="tanggal_selesai" value="<%= typeof tanggalSelesai !== 'undefined' ? tanggalSelesai : '' %>" class="form-control form-control-sm custom-date-input">
+            </div>
+            <button type="submit" class="btn btn-sm btn-success fw-bold">
+              <i class="bi bi-filter"></i> Filter
+            </button>
+          </form>
         </div>
 
         <!-- WIDGET REKAPITULASI -->
@@ -312,13 +329,13 @@
           <div class="widget-header">
             <span>
               <i class="bi bi-bar-chart-line text-success me-2"></i>
-              Daftar Rekap <%= (typeof jenis !== 'undefined' && jenis === 'dokter') ? 'Dokter' : 'Suster' %> - Periode <%= (typeof bulan !== 'undefined') ? bulan : '' %>
+              Daftar Rekap <%= (typeof jenis !== 'undefined' && jenis === 'dokter') ? 'Dokter' : 'Suster' %> — Periode: <%= (typeof tanggalMulai !== 'undefined' ? tanggalMulai : '') %> s/d <%= (typeof tanggalSelesai !== 'undefined' ? tanggalSelesai : '') %>
             </span>
             <span class="badge bg-secondary"><%= (typeof laporans !== 'undefined') ? laporans.length : 0 %> Record</span>
           </div>
 
           <div class="table-responsive">
-            <table class="table table-dark-custom align-middle">
+            <table class="table table-dark-custom table-hover-custom align-middle">
               <thead>
                 <tr>
                   <th class="text-center" style="width: 50px;">No</th>
@@ -327,30 +344,33 @@
                   <th>Total Tindakan Completed</th>
                   <% if (typeof jenis !== 'undefined' && jenis === 'dokter') { %>
                     <th>Total Fee Diterima</th>
+                  <% } else { %>
+                    <th>Total Fee Diterima</th>
                   <% } %>
                 </tr>
               </thead>
               <tbody>
                 <% if (typeof laporans === 'undefined' || laporans.length === 0) { %>
                   <tr>
-                    <td colspan="<%= (typeof jenis !== 'undefined' && jenis === 'dokter') ? 5 : 4 %>" class="text-center py-4 text-muted">
-                      Belum ada data rekapitulasi laporan untuk periode ini.
+                    <td colspan="5" class="text-center py-4 text-muted">
+                      Belum ada data rekapitulasi laporan untuk rentang tanggal ini.
                     </td>
                   </tr>
                 <% } else { %>
                   <% laporans.forEach((l, idx) => { %>
-                    <tr>
+                    <tr onclick="lihatRincian('<%= l.id %>', '<%= l.nama.replace(/'/g, "\\'") %>', '<%= jenis %>', '<%= tanggalMulai %>', '<%= tanggalSelesai %>')" style="cursor: pointer;" title="Klik untuk melihat rincian tindakan">
                       <td class="text-center"><%= idx + 1 %></td>
-                      <td><strong class="text-white"><%= l.nama %></strong></td>
+                      <td>
+                        <strong class="text-white"><%= l.nama %></strong>
+                        <i class="bi bi-box-arrow-up-right text-muted fs-7 ms-1"></i>
+                      </td>
                       <td>
                         <span class="badge bg-secondary"><%= l.fokus || l.peran || '-' %></span>
                       </td>
                       <td><%= l.total_tindakan || 0 %> Kali</td>
-                      <% if (typeof jenis !== 'undefined' && jenis === 'dokter') { %>
-                        <td class="fw-bold text-success font-monospace">
-                          Rp <%= Number(l.total_fee || 0).toLocaleString('id-ID') %>
-                        </td>
-                      <% } %>
+                      <td class="fw-bold text-success font-monospace">
+                        Rp <%= Number(l.total_fee || 0).toLocaleString('id-ID') %>
+                      </td>
                     </tr>
                   <% }); %>
                 <% } %>
@@ -363,7 +383,85 @@
     </div>
   </div>
 
+  <!-- MODAL RINCIAN TINDAKAN -->
+  <div class="modal fade" id="modalRincian" tabindex="-1" aria-labelledby="modalRincianLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background-color: #161b22; border: 1px solid #30363d; color: #c9d1d9;">
+        <div class="modal-header border-bottom border-secondary bg-black">
+          <h5 class="modal-title fs-6 text-white fw-bold" id="modalRincianLabel">
+            <i class="bi bi-journal-text text-success me-2"></i> Rincian Tindakan: <span id="namaPetugasModal" class="text-info"></span>
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table table-dark-custom align-middle">
+              <thead>
+                <tr>
+                  <th class="text-center" style="width: 50px;">No</th>
+                  <th>Tgl Tindakan</th>
+                  <th>Nama Pasien</th>
+                  <th>Jenis Tindakan</th>
+                  <th class="text-end">Fee Diterima</th>
+                </tr>
+              </thead>
+              <tbody id="tabelRincianBody">
+                <tr>
+                  <td colspan="5" class="text-center py-3 text-muted">Memuat data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer border-top border-secondary bg-black">
+          <button type="button" class="btn btn-secondary btn-sm fw-bold" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- SCRIPT AJAX UNTUK MODAL RINCIAN -->
+  <script>
+    function lihatRincian(id, nama, jenis, mulai, selesai) {
+      document.getElementById('namaPetugasModal').innerText = nama;
+      const tbody = document.getElementById('tabelRincianBody');
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center py-3 text-muted">Memuat data...</td></tr>`;
+
+      const myModal = new bootstrap.Modal(document.getElementById('modalRincian'));
+      myModal.show();
+
+      fetch(`/api/laporan/rincian?id=${id}&jenis=${jenis}&mulai=${mulai}&selesai=${selesai}`)
+        .then(response => response.json())
+        .then(data => {
+          if (!data || data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-3 text-muted">Tidak ada rincian tindakan pada rentang tanggal ini.</td></tr>`;
+            return;
+          }
+
+          let html = '';
+          data.forEach((item, index) => {
+            const tgl = item.tanggal_tindakan ? new Date(item.tanggal_tindakan).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-';
+            const fee = Math.round(Number(item.fee_diterima || 0)).toLocaleString('id-ID');
+            html += `
+              <tr>
+                <td class="text-center">${index + 1}</td>
+                <td>${tgl}</td>
+                <td><strong class="text-white">${item.nama_pasien || '-'}</strong></td>
+                <td><span class="badge bg-secondary text-light">${item.jenis_tindakan || '-'}</span></td>
+                <td class="text-end fw-bold text-success font-monospace">Rp ${fee}</td>
+              </tr>
+            `;
+          });
+          tbody.innerHTML = html;
+        })
+        .catch(err => {
+          console.error(err);
+          tbody.innerHTML = `<tr><td colspan="5" class="text-center py-3 text-danger">Gagal memuat data rincian.</td></tr>`;
+        });
+    }
+  </script>
 </body>
 </html>
