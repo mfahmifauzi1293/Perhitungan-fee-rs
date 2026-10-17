@@ -6,8 +6,9 @@
         <h5 class="modal-title fs-6 fw-bold text-white"><i class="bi bi-calendar-plus-fill text-success me-2"></i>Buat Janji Konsultasi Online</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="/booking/simpan" method="POST">
+      <form id="formBookingOnline">
         <div class="modal-body">
+          <div id="bookingAlert" class="alert alert-danger text-center py-2 fs-6 mb-3 d-none"></div>
           <div class="row g-3">
            
             <div class="col-md-6">
@@ -17,7 +18,7 @@
 
             <div class="col-md-6">
               <label class="form-label small text-muted">Nomor KTP (NIK)</label>
-              <input type="text" name="no_ktp" class="form-control bg-dark text-white border-secondary" maxlength="16" placeholder="Masukkan 16 digit NIK" required>
+              <input type="text" name="nik" class="form-control bg-dark text-white border-secondary" maxlength="16" placeholder="Masukkan 16 digit NIK" required>
             </div>
 
             <div class="col-md-6">
@@ -251,4 +252,65 @@
       }
     });
   }
+
+  // Handling AJAX Kirim Janji Temu Menggunakan Event Delegation & SweetAlert2 Dark Mode
+  document.addEventListener('submit', async function(e) {
+    if (e.target && e.target.id === 'formBookingOnline') {
+      e.preventDefault(); // Mencegah reload halaman penuh / membuka teks JSON mentah
+
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      const alertBox = document.getElementById('bookingAlert');
+      if (alertBox) alertBox.classList.add('d-none');
+
+      try {
+        const response = await fetch('/booking/simpan', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          // 1. Tutup modal booking
+          const modalBookingEl = document.getElementById('modalBooking');
+          if (modalBookingEl) {
+            const modalBooking = bootstrap.Modal.getInstance(modalBookingEl);
+            if (modalBooking) modalBooking.hide();
+          }
+
+          // 2. Reset form
+          form.reset();
+
+          // 3. Tampilkan Pop-up SweetAlert2 Dark Mode
+          Swal.fire({
+            icon: 'success',
+            title: 'Booking Berhasil!',
+            text: result.message || 'Janji temu Anda telah berhasil dibuat dan terdata di sistem.',
+            background: '#161b22',
+            color: '#c9d1d9',
+            confirmButtonColor: '#2ea043'
+          }).then(() => {
+            // Kembali ke homepage (atau tetap di halaman utama)
+            window.location.href = '/';
+          });
+        } else {
+          if (alertBox) {
+            alertBox.innerText = result.message || 'Gagal menyimpan janji temu.';
+            alertBox.classList.remove('d-none');
+          }
+        }
+      } catch (err) {
+        if (alertBox) {
+          alertBox.innerText = 'Terjadi kesalahan sistem saat menyimpan data.';
+          alertBox.classList.remove('d-none');
+        }
+      }
+    }
+  });
 </script>
