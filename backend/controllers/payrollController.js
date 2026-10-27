@@ -76,7 +76,6 @@ exports.cetakSlipGaji = (req, res) => {
     return res.status(400).send("Parameter cetak slip tidak lengkap.");
   }
 
-  // Cari periode payroll terlebih dahulu
   const qPeriode = `SELECT id FROM payroll_periode WHERE bulan = ? AND tahun = ?`;
   db.query(qPeriode, [bulan, tahun], (err, pRes) => {
     if (err || pRes.length === 0) {
@@ -84,7 +83,6 @@ exports.cetakSlipGaji = (req, res) => {
     }
     const periodeId = pRes[0].id;
 
-    // Ambil data ringkasan gaji dari tabel payroll_detail
     const querySlip = `
       SELECT * FROM payroll_detail 
       WHERE payroll_periode_id = ? AND pegawai_id = ? AND pegawai_tipe = ?
@@ -98,7 +96,6 @@ exports.cetakSlipGaji = (req, res) => {
       const slipData = slipRows[0];
       const isMedis = pegawai_tipe === 'DOKTER' || pegawai_tipe === 'SUSTER';
 
-      // Jika Dokter atau Suster, ambil juga rincian fee tindakan di halaman kedua dan seterusnya
       if (isMedis) {
         const queryRincianFee = `
           SELECT f.*, t.nama_pasien, t.jenis_tindakan
@@ -123,7 +120,6 @@ exports.cetakSlipGaji = (req, res) => {
           });
         });
       } else {
-        // Jika Karyawan biasa, cukup cetak slip ringkasan 1 lembar
         res.render('print_slip', {
           slip: slipData,
           rincianFee: [],
@@ -136,43 +132,111 @@ exports.cetakSlipGaji = (req, res) => {
   });
 };
 
-// PPh 21 TER Karyawan & Suster
+// ==========================================
+// PENGELOMPOKAN & KALKULASI TARIF PPh 21 TER (A, B, C)
+// ==========================================
 function hitungTarifPph21Ter(bruto, statusPtkp) {
-  const kategori = (statusPtkp || 'TK/0').toUpperCase().trim();
+  const ptkp = (statusPtkp || 'TK/0').toUpperCase().trim();
   let tarif = 0;
-  if (bruto > 5400000 && bruto <= 5650000) tarif = 0.0025;
-  else if (bruto > 5650000 && bruto <= 5950000) tarif = 0.005;
-  else if (bruto > 5950000 && bruto <= 6300000) tarif = 0.0075;
-  else if (bruto > 6300000 && bruto <= 6750000) tarif = 0.01;
-  else if (bruto > 6750000 && bruto <= 7500000) tarif = 0.0125;
-  else if (bruto > 7500000 && bruto <= 8550000) tarif = 0.015;
-  else if (bruto > 8550000 && bruto <= 9650000) tarif = 0.0175;
-  else if (bruto > 9650000 && bruto <= 10050000) tarif = 0.02;
-  else if (bruto > 10050000 && bruto <= 10350000) tarif = 0.0225;
-  else if (bruto > 10350000 && bruto <= 10700000) tarif = 0.025;
-  else if (bruto > 10700000 && bruto <= 11050000) tarif = 0.03;
-  else if (bruto > 11050000 && bruto <= 11600000) tarif = 0.035;
-  else if (bruto > 11600000 && bruto <= 12500000) tarif = 0.04;
-  else if (bruto > 12500000 && bruto <= 13750000) tarif = 0.05;
-  else if (bruto > 13750000 && bruto <= 15100000) tarif = 0.06;
-  else if (bruto > 15100000 && bruto <= 16950000) tarif = 0.07;
-  else if (bruto > 16950000 && bruto <= 19750000) tarif = 0.08;
-  else if (bruto > 19750000 && bruto <= 24150000) tarif = 0.09;
-  else if (bruto > 24150000 && bruto <= 26450000) tarif = 0.10;
-  else if (bruto > 26450000 && bruto <= 28000000) tarif = 0.11;
-  else if (bruto > 28000000 && bruto <= 30050000) tarif = 0.12;
-  else if (bruto > 30050000 && bruto <= 32400000) tarif = 0.13;
-  else if (bruto > 32400000 && bruto <= 35400000) tarif = 0.14;
-  else if (bruto > 35400000 && bruto <= 39100000) tarif = 0.15;
-  else if (bruto > 39100000 && bruto <= 43850000) tarif = 0.16;
-  else if (bruto > 43850000 && bruto <= 47800000) tarif = 0.17;
-  else if (bruto > 47800000 && bruto <= 51400000) tarif = 0.18;
-  else if (bruto > 51400000 && bruto <= 56300000) tarif = 0.19;
-  else if (bruto > 56300000 && bruto <= 62200000) tarif = 0.20;
-  else if (bruto > 62200000 && bruto <= 68600000) tarif = 0.21;
-  else if (bruto > 68600000 && bruto <= 77500000) tarif = 0.22;
-  else if (bruto > 77500000 && bruto <= 89000000) tarif = 0.23;
-  else if (bruto > 89000000) tarif = 0.24;
+
+  // 1. Kategori TER A: TK/0, TK/1, K/0[cite: 7]
+  if (['TK/0', 'TK1', 'TK/1', 'K/0', 'K0'].includes(ptkp)) {
+    if (bruto > 5400000 && bruto <= 5650000) tarif = 0.0025;
+    else if (bruto > 5650000 && bruto <= 5950000) tarif = 0.0050;
+    else if (bruto > 5950000 && bruto <= 6300000) tarif = 0.0075;
+    else if (bruto > 6300000 && bruto <= 6750000) tarif = 0.0100;
+    else if (bruto > 6750000 && bruto <= 7500000) tarif = 0.0125;
+    else if (bruto > 7500000 && bruto <= 8550000) tarif = 0.0150;
+    else if (bruto > 8550000 && bruto <= 9650000) tarif = 0.0175;
+    else if (bruto > 9650000 && bruto <= 10050000) tarif = 0.0200;
+    else if (bruto > 10050000 && bruto <= 10350000) tarif = 0.0225;
+    else if (bruto > 10350000 && bruto <= 10700000) tarif = 0.0250;
+    else if (bruto > 10700000 && bruto <= 11050000) tarif = 0.0300;
+    else if (bruto > 11050000 && bruto <= 11600000) tarif = 0.0350;
+    else if (bruto > 11600000 && bruto <= 12500000) tarif = 0.0400;
+    else if (bruto > 12500000 && bruto <= 13750000) tarif = 0.0500;
+    else if (bruto > 13750000 && bruto <= 15100000) tarif = 0.0600;
+    else if (bruto > 15100000 && bruto <= 16950000) tarif = 0.0700;
+    else if (bruto > 16950000 && bruto <= 19750000) tarif = 0.0800;
+    else if (bruto > 19750000 && bruto <= 24150000) tarif = 0.0900;
+    else if (bruto > 24150000 && bruto <= 26450000) tarif = 0.1000;
+    else if (bruto > 26450000 && bruto <= 28000000) tarif = 0.1100;
+    else if (bruto > 28000000 && bruto <= 30050000) tarif = 0.1200;
+    else if (bruto > 30050000 && bruto <= 32400000) tarif = 0.1300;
+    else if (bruto > 32400000 && bruto <= 35400000) tarif = 0.1400;
+    else if (bruto > 35400000 && bruto <= 39100000) tarif = 0.1500;
+    else if (bruto > 39100000 && bruto <= 43850000) tarif = 0.1600;
+    else if (bruto > 43850000 && bruto <= 47800000) tarif = 0.1700;
+    else if (bruto > 47800000 && bruto <= 51400000) tarif = 0.1800;
+    else if (bruto > 51400000 && bruto <= 56300000) tarif = 0.1900;
+    else if (bruto > 56300000 && bruto <= 62200000) tarif = 0.2000;
+    else if (bruto > 62200000 && bruto <= 68600000) tarif = 0.2100;
+    else if (bruto > 68600000 && bruto <= 75000000) tarif = 0.2200;
+    else if (bruto > 75000000) tarif = 0.2200;
+  }
+  // 2. Kategori TER B: TK/2, TK/3, K/1, K/2[cite: 7]
+  else if (['TK/2', 'TK2', 'TK/3', 'TK3', 'K/1', 'K1', 'K/2', 'K2'].includes(ptkp)) {
+    if (bruto > 6200000 && bruto <= 6500000) tarif = 0.0025;
+    else if (bruto > 6500000 && bruto <= 6850000) tarif = 0.0050;
+    else if (bruto > 6850000 && bruto <= 7300000) tarif = 0.0075;
+    else if (bruto > 7300000 && bruto <= 9200000) tarif = 0.0100;
+    else if (bruto > 9200000 && bruto <= 10750000) tarif = 0.0150;
+    else if (bruto > 10750000 && bruto <= 11250000) tarif = 0.0200;
+    else if (bruto > 11250000 && bruto <= 11600000) tarif = 0.0250;
+    else if (bruto > 11600000 && bruto <= 12600000) tarif = 0.0300;
+    else if (bruto > 12600000 && bruto <= 13600000) tarif = 0.0400;
+    else if (bruto > 13600000 && bruto <= 14950000) tarif = 0.0500;
+    else if (bruto > 14950000 && bruto <= 16400000) tarif = 0.0600;
+    else if (bruto > 16400000 && bruto <= 18450000) tarif = 0.0700;
+    else if (bruto > 18450000 && bruto <= 21850000) tarif = 0.0800;
+    else if (bruto > 21850000 && bruto <= 26000000) tarif = 0.0900;
+    else if (bruto > 26000000 && bruto <= 27700000) tarif = 0.1000;
+    else if (bruto > 27700000 && bruto <= 29350000) tarif = 0.1100;
+    else if (bruto > 29350000 && bruto <= 31450000) tarif = 0.1200;
+    else if (bruto > 31450000 && bruto <= 33950000) tarif = 0.1300;
+    else if (bruto > 33950000 && bruto <= 37100000) tarif = 0.1400;
+    else if (bruto > 37100000 && bruto <= 41100000) tarif = 0.1500;
+    else if (bruto > 41100000 && bruto <= 45800000) tarif = 0.1600;
+    else if (bruto > 45800000 && bruto <= 49500000) tarif = 0.1700;
+    else if (bruto > 49500000 && bruto <= 53800000) tarif = 0.1800;
+    else if (bruto > 53800000 && bruto <= 58500000) tarif = 0.1900;
+    else if (bruto > 58500000 && bruto <= 64000000) tarif = 0.2000;
+    else if (bruto > 64000000 && bruto <= 71000000) tarif = 0.2100;
+    else if (bruto > 71000000 && bruto <= 75000000) tarif = 0.2200;
+    else if (bruto > 75000000) tarif = 0.2200;
+  }
+  // 3. Kategori TER C: K/3[cite: 7]
+  else if (['K/3', 'K3'].includes(ptkp)) {
+    if (bruto > 6600000 && bruto <= 6950000) tarif = 0.0025;
+    else if (bruto > 6950000 && bruto <= 7350000) tarif = 0.0050;
+    else if (bruto > 7350000 && bruto <= 7800000) tarif = 0.0075;
+    else if (bruto > 7800000 && bruto <= 8850000) tarif = 0.0100;
+    else if (bruto > 8850000 && bruto <= 9800000) tarif = 0.0125;
+    else if (bruto > 9800000 && bruto <= 10950000) tarif = 0.0150;
+    else if (bruto > 10950000 && bruto <= 11200000) tarif = 0.0175;
+    else if (bruto > 11200000 && bruto <= 12050000) tarif = 0.0200;
+    else if (bruto > 12050000 && bruto <= 12950000) tarif = 0.0300;
+    else if (bruto > 12950000 && bruto <= 14150000) tarif = 0.0400;
+    else if (bruto > 14150000 && bruto <= 15550000) tarif = 0.0500;
+    else if (bruto > 15550000 && bruto <= 17050000) tarif = 0.0600;
+    else if (bruto > 17050000 && bruto <= 19500000) tarif = 0.0700;
+    else if (bruto > 19500000 && bruto <= 22700000) tarif = 0.0800;
+    else if (bruto > 22700000 && bruto <= 26600000) tarif = 0.0900;
+    else if (bruto > 26600000 && bruto <= 28100000) tarif = 0.1000;
+    else if (bruto > 28100000 && bruto <= 30100000) tarif = 0.1100;
+    else if (bruto > 30100000 && bruto <= 32600000) tarif = 0.1200;
+    else if (bruto > 32600000 && bruto <= 35400000) tarif = 0.1300;
+    else if (bruto > 35400000 && bruto <= 38900000) tarif = 0.1400;
+    else if (bruto > 38900000 && bruto <= 43000000) tarif = 0.1500;
+    else if (bruto > 43000000 && bruto <= 47400000) tarif = 0.1600;
+    else if (bruto > 47400000 && bruto <= 51200000) tarif = 0.1700;
+    else if (bruto > 51200000 && bruto <= 55800000) tarif = 0.1800;
+    else if (bruto > 55800000 && bruto <= 60400000) tarif = 0.1900;
+    else if (bruto > 60400000 && bruto <= 66700000) tarif = 0.2000;
+    else if (bruto > 66700000 && bruto <= 74500000) tarif = 0.2100;
+    else if (bruto > 74500000 && bruto <= 75000000) tarif = 0.2200;
+    else if (bruto > 75000000) tarif = 0.2200;
+  }
 
   return Math.round(bruto * tarif);
 }
@@ -198,7 +262,7 @@ function hitungPph21DokterProgresif(dppBulanIni, dppKumulatifSebelumnya) {
   return Math.round(hitungPajakKumulatif(totalDppKumulatif) - hitungPajakKumulatif(dppKumulatifSebelumnya));
 }
 
-// Proses Kalkulasi Utama Menggunakan Tabel transaksi_fee_detail & master_lembur
+// Proses Kalkulasi Utama
 function processPayrollCalculation(periodeId, bulan, tahun, res) {
   const clearOld = `DELETE FROM payroll_detail WHERE payroll_periode_id = ?`;
   
@@ -206,7 +270,7 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
     if (err) console.error("Error clearing old payroll detail:", err);
 
     try {
-      // 0. Ambil Data Lembur Berdasarkan Tabel master_lembur untuk Bulan & Tahun Terkait
+      // 0. Ambil Data Lembur Berdasarkan Tabel master_lembur
       const lemburRes = await new Promise((resolve, reject) => {
         const qLembur = `
           SELECT nik, COALESCE(SUM(nominal_lembur), 0) AS total_lembur 
@@ -219,7 +283,6 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
         });
       });
 
-      // Pemetaan total lembur per NIK pegawai
       const mapLembur = {};
       lemburRes.forEach(row => {
         mapLembur[row.nik] = Number(row.total_lembur || 0);
@@ -319,11 +382,14 @@ function processPayrollCalculation(periodeId, bulan, tahun, res) {
       if (semuaPegawai.length === 0) return res.redirect('/payroll/detail?periode_id=' + periodeId);
 
       for (const p of semuaPegawai) {
-        // Pendapatan kotor dihitung dari: Gaji Pokok + Tunjangan Jabatan + Fee Tindakan + Nominal Lembur
+        // Pendapatan kotor / bruto = Gaji Pokok + Tunjangan + Fee Tindakan + Lembur
         const pendapatanKotor = p.gaji_pokok + p.tunjangan_jabatan + p.fee_tindakan + p.lembur;
         const potonganBpjsKes = p.is_dokter ? 0 : Math.min(p.gaji_pokok, 12000000) * 0.01;
         const potonganBpjsTk = p.is_dokter ? 0 : Math.min(p.gaji_pokok, 11086300) * 0.03;
-        const potonganPph21 = p.is_dokter ? p.potongan_pph21 : hitungTarifPph21Ter(p.gaji_pokok + p.tunjangan_jabatan, p.status_ptkp);
+        
+        // PPh 21 menggunakan Bruto total sebagai dasar pengenaan tarif TER (A, B, atau C berdasarkan status PTKP)
+        const potonganPph21 = p.is_dokter ? p.potongan_pph21 : hitungTarifPph21Ter(pendapatanKotor, p.status_ptkp);
+        
         const totalPotongan = potonganBpjsKes + potonganBpjsTk + potonganPph21;
         const takeHomePay = pendapatanKotor - totalPotongan;
 
